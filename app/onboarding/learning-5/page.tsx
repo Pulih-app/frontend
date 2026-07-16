@@ -24,12 +24,12 @@ export default function OnboardingPage() {
             {/* Text content */}
             <div className="text-center px-2 mb-10">
                 <h1 className="text-3xl font-bold text-gray-900 leading-snug mb-4">
-                    Wajar Jika Kamu merasa Terjebak
+                    It's Normal If You Feel Trapped
                 </h1>
                 <p className="text-gray-400 text-base leading-relaxed">
-                    Semakin banyak pornografi yang kamu
-                    tonton, semakin banyak dopamin yang dibutuhkan otak kamu untuk merasa baik.
-                    Inilah sebabnya pornografi tidak memuaskanmu seperti dulu.
+                    The more pornography you
+                    watch, the more dopamine your brain needs to feel good.
+                    This is why pornography is not as satisfying as it used to be.
                 </p>
             </div>
 

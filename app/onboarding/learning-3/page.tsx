@@ -22,12 +22,12 @@ export default function Onboarding3Page() {
       {/* Text content */}
       <div className="text-center px-2 mt-8 mb-10">
         <h1 className="text-4xl font-bold text-gray-900 leading-snug mb-5">
-          Ini akan memburuk
+          It gets worse
         </h1>
         <p className="text-gray-400 text-base leading-relaxed">
-          Seiring waktu, otak kamu mulai mengaitkan pornografi dengan kesenangan.
-          Hal ini dapat menyebabkan kurangnya minat pada pasangan potensial,
-          penurunan libido, dan masalah hubungan.
+          Over time, your brain starts associating pornography with pleasure.
+          This can lead to a lack of interest in potential partners,
+          decreased libido, and relationship problems.
         </p>
       </div>
 
@@ -35,7 +35,7 @@ export default function Onboarding3Page() {
       <div className="mt-auto w-full pb-8 pt-4 flex items-center justify-between">
         <Link href="/onboarding/learning-2">
           <button
-            aria-label="Kembali"
+            aria-label="Back"
             className="w-16 h-16 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 active:bg-gray-100 transition-colors shadow-sm"
           >
             <svg
@@ -55,7 +55,7 @@ export default function Onboarding3Page() {
 
         <Link href="/onboarding/learning-4">
           <button
-            aria-label="Lanjutkan"
+            aria-label="Continue"
             className="w-16 h-16 rounded-full bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] flex items-center justify-center transition-colors shadow-sm"
           >
             <svg

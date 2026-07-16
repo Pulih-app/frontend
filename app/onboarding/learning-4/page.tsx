@@ -22,12 +22,12 @@ export default function Onboarding4Page() {
             {/* Text content */}
             <div className="text-center px-2 mt-8 mb-10">
                 <h1 className="text-4xl font-bold text-gray-900 leading-snug mb-5">
-                    Saya butuh lebih banyak
+                    I need more
                 </h1>
                 <p className="text-gray-400 text-base leading-relaxed">
-                    Semakin banyak pornografi yang kamu
-                    tonton, semakin banyak dopamin yang dibutuhkan otak kamu untuk merasa baik.
-                    Inilah sebabnya pornografi tidak memuaskanmu seperti dulu.
+                    The more pornography you
+                    watch, the more dopamine your brain needs to feel good.
+                    This is why pornography is not as satisfying as it used to be.
                 </p>
             </div>
 
@@ -35,7 +35,7 @@ export default function Onboarding4Page() {
             <div className="mt-auto w-full pb-8 pt-4 flex items-center justify-between">
                 <Link href="/onboarding/learning-3">
                     <button
-                        aria-label="Kembali"
+                        aria-label="Back"
                         className="w-16 h-16 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 active:bg-gray-100 transition-colors shadow-sm"
                     >
                         <svg
@@ -55,7 +55,7 @@ export default function Onboarding4Page() {
 
                 <Link href="/onboarding/learning-5">
                     <button
-                        aria-label="Lanjutkan"
+                        aria-label="Continue"
                         className="w-16 h-16 rounded-full bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] flex items-center justify-center transition-colors shadow-sm"
                     >
                         <svg

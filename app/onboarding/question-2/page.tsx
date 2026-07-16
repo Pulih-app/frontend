@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Button from "@/components/Button";
 
 export default function Question2Page() {
     const [age, setAge] = useState<string>("");
@@ -18,11 +19,11 @@ export default function Question2Page() {
             </Link>
 
             {/* Question label */}
-            <p className="mt-4 text-[#2e7d32] font-semibold text-base">Pertanyaan 2 / 8</p>
+            <p className="mt-4 text-[#2e7d32] font-semibold text-base">Question 2 / 8</p>
 
             {/* Question heading */}
             <h1 className="mt-3 text-[2rem] font-extrabold text-gray-900 leading-tight">
-                Berapa umur kamu sekarang?
+                How old are you now?
             </h1>
 
             {/* Number input */}
@@ -33,7 +34,7 @@ export default function Question2Page() {
                     max={120}
                     value={age}
                     onChange={(e) => setAge(e.target.value)}
-                    placeholder="Masukkan umur kamu"
+                    placeholder="Enter your age"
                     className="w-full px-5 py-5 rounded-2xl bg-gray-100 text-gray-900 text-base font-normal outline-none focus:ring-2 focus:ring-[#2e7d32] transition-shadow [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
             </div>
@@ -41,18 +42,9 @@ export default function Question2Page() {
             {/* Continue button */}
             <div className="mt-auto w-full pb-8 pt-6">
                 {isValid ? (
-                    <Link href="/onboarding/question-3">
-                        <button className="w-full bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm">
-                            Continue
-                        </button>
-                    </Link>
+                    <Button href="/onboarding/question-3">Continue</Button>
                 ) : (
-                    <button
-                        disabled
-                        className="w-full bg-gray-300 text-white font-bold text-lg rounded-2xl py-4 cursor-not-allowed"
-                    >
-                        Continue
-                    </button>
+                    <Button disabled className="!bg-gray-300 !hover:bg-gray-300 !active:bg-gray-300 cursor-not-allowed">Continue</Button>
                 )}
             </div>
         </main>

@@ -24,11 +24,11 @@ export default function OnboardingPage() {
       {/* Text content */}
       <div className="text-center px-2 mb-10">
         <h1 className="text-3xl font-bold text-gray-900 leading-snug mb-4">
-          Mengapa Saya Menonton Begitu Banyak Pornografi?
+          Why do I watch so much pornography?
         </h1>
         <p className="text-gray-400 text-base leading-relaxed">
-          Mari kita pelajari bersama tentang dampak dan cara mengatasi kecanduan
-          pornografi
+          Let's learn together about the impact and how to overcome pornography
+          addiction
         </p>
       </div>
 

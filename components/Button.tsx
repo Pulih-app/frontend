@@ -4,6 +4,7 @@ import { ReactNode, ButtonHTMLAttributes, AnchorHTMLAttributes } from 'react';
 type BaseProps = {
   children: ReactNode;
   className?: string;
+  variant?: 'primary' | 'custom';
 };
 
 type ButtonAsButtonProps = BaseProps & ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -17,9 +18,11 @@ type ButtonAsLinkProps = BaseProps & AnchorHTMLAttributes<HTMLAnchorElement> & {
 type ButtonProps = ButtonAsButtonProps | ButtonAsLinkProps;
 
 export default function Button(props: ButtonProps) {
-  const { children, className = '', href, ...rest } = props;
+  const { children, className = '', href, variant = 'primary', ...rest } = props;
   
-  const baseClasses = "w-full bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-semibold text-lg rounded-2xl py-4 transition-colors shadow-sm text-center block";
+  const baseClasses = variant === 'primary' 
+    ? "w-full bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-semibold text-lg rounded-2xl py-4 transition-colors shadow-sm text-center block"
+    : "";
   const combinedClasses = `${baseClasses} ${className}`.trim();
 
   if (href) {
