@@ -98,8 +98,8 @@ export function ScheduleCalendar({
                             type="button"
                             onClick={() => onSelectDay?.(dateStr)}
                             className={`h-8 rounded-xl border transition-all ${
-                                selected ? "border-[#1B5E4C] bg-[#1B5E4C] font-bold text-white shadow-sm shadow-[#1B5E4C]/25" : "border-transparent"
-                            } ${active ? "bg-[#1B5E4C] font-bold text-white shadow-sm shadow-[#1B5E4C]/25" : "text-gray-300"} ${
+                                selected ? "border-[#2e7d32] bg-[#2e7d32] font-bold text-white shadow-sm shadow-[#2e7d32]/25" : "border-transparent"
+                            } ${active ? "bg-[#2e7d32] font-bold text-white shadow-sm shadow-[#2e7d32]/25" : "text-gray-300"} ${
                                 available && !active && !selected ? "border-gray-200 bg-gray-50 text-black hover:bg-gray-100" : ""
                             } ${onSelectDay ? "cursor-pointer" : "cursor-default"}`}
                         >

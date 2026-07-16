@@ -38,9 +38,9 @@ export default function SetUpPricingPage() {
             </header>
             <section className="px-8 pt-6">
                 <div className="mx-auto mb-10 flex w-40 items-center justify-center">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1B5E4C] text-xs font-bold text-white">1</span>
-                    <span className="h-0.5 flex-1 bg-[#1B5E4C]" />
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1B5E4C] text-xs font-bold text-white">2</span>
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
+                    <span className="h-0.5 flex-1 bg-[#2e7d32]" />
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">2</span>
                 </div>
                 <div className="space-y-4">
                     {variants.map((variant, index) => (
@@ -52,11 +52,11 @@ export default function SetUpPricingPage() {
                                 value={variant.price}
                                 onChange={(event) => updateVariant(variant.id, "price", event.target.value)}
                                 placeholder="Enter price (e.g., Rp 200.000)"
-                                className="mt-3 w-full rounded-2xl border border-[#1B5E4C] bg-white px-4 py-3 text-sm outline-none"
+                                className="mt-3 w-full rounded-2xl border border-[#2e7d32] bg-white px-4 py-3 text-sm outline-none"
                             />
                             <div className="mt-2 flex gap-2">
                                 {["300000", "200000"].map((value) => (
-                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "price", value)} className="rounded-full bg-[#1B5E4C] px-3 py-1 text-[8px] font-bold text-white">
+                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "price", value)} className="rounded-full bg-[#2e7d32] px-3 py-1 text-[8px] font-bold text-white">
                                         Rp {Number(value).toLocaleString("id-ID")}
                                     </button>
                                 ))}
@@ -68,11 +68,11 @@ export default function SetUpPricingPage() {
                                 value={variant.duration}
                                 onChange={(event) => updateVariant(variant.id, "duration", event.target.value)}
                                 placeholder="Select or type duration (e.g., 60 mins)"
-                                className="mt-3 w-full rounded-2xl border border-[#1B5E4C] bg-white px-4 py-3 text-sm outline-none"
+                                className="mt-3 w-full rounded-2xl border border-[#2e7d32] bg-white px-4 py-3 text-sm outline-none"
                             />
                             <div className="mt-2 flex gap-2">
                                 {["30", "60"].map((value) => (
-                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "duration", value)} className="rounded-full bg-[#1B5E4C] px-3 py-1 text-[8px] font-bold text-white">
+                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "duration", value)} className="rounded-full bg-[#2e7d32] px-3 py-1 text-[8px] font-bold text-white">
                                         {value === "60" ? "1 Jam" : "30 Menit"}
                                     </button>
                                 ))}
@@ -82,16 +82,16 @@ export default function SetUpPricingPage() {
                 </div>
                 <div className="mt-14 text-center">
                     <p className="mb-2 text-[10px]">Want to offer different rates or durations?</p>
-                    <button type="button" onClick={addVariant} className="rounded-full bg-[#1B5E4C] px-3 py-1 text-[8px] font-bold text-white">
+                    <button type="button" onClick={addVariant} className="rounded-full bg-[#2e7d32] px-3 py-1 text-[8px] font-bold text-white">
                         + Add Another Variant
                     </button>
                 </div>
             </section>
             <div className="mt-auto grid grid-cols-2 gap-8 px-6 pt-10">
-                <Button type="button" onClick={() => router.back()} className="rounded-2xl bg-[#1B5E4C] py-4 shadow-md shadow-green-900/30 hover:bg-[#164d3f] active:bg-[#164d3f]">
+                <Button type="button" onClick={() => router.back()} className="rounded-2xl bg-[#2e7d32] py-4 shadow-md shadow-green-900/30 hover:bg-[#1b5e20] active:bg-[#1b5e20]">
                     Back
                 </Button>
-                <Button type="button" onClick={savePackage} className="rounded-2xl bg-[#1B5E4C] py-4 shadow-md shadow-green-900/30 hover:bg-[#164d3f] active:bg-[#164d3f]">
+                <Button type="button" onClick={savePackage} className="rounded-2xl bg-[#2e7d32] py-4 shadow-md shadow-green-900/30 hover:bg-[#1b5e20] active:bg-[#1b5e20]">
                     Continue
                 </Button>
             </div>

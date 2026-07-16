@@ -63,15 +63,15 @@ export default function PracticeSchedulePage() {
             </header>
             <section className="px-5 pt-6">
                 <div className="mx-auto mb-8 flex w-40 items-center justify-center">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1B5E4C] text-xs font-bold text-white">1</span>
-                    <span className="h-0.5 flex-1 bg-[#1B5E4C]" />
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#1B5E4C] text-xs font-bold text-white">2</span>
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
+                    <span className="h-0.5 flex-1 bg-[#2e7d32]" />
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">2</span>
                 </div>
                 <ScheduleCalendar
                     availableDays={selectedDays}
                     selectedDays={selectedDays}
                     onSelectDay={selectDay}
-                    className="border-4 border-[#1B5E4C]"
+                    className="border-4 border-[#2e7d32]"
                 />
                 <h2 className="mt-4 text-xl font-bold">Select Date Range</h2>
                 <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3">
@@ -84,7 +84,7 @@ export default function PracticeSchedulePage() {
                                 setStartDate(event.target.value);
                                 setEndDate(event.target.value);
                             }}
-                            className="mt-2 w-full rounded-2xl border border-[#1B5E4C] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none"
+                            className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none"
                         />
                     </label>
                     <span className="pb-4 text-xl">-</span>
@@ -94,7 +94,7 @@ export default function PracticeSchedulePage() {
                             type="date"
                             value={endDate}
                             onChange={(event) => setEndDate(event.target.value)}
-                            className="mt-2 w-full rounded-2xl border border-[#1B5E4C] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none"
+                            className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none"
                         />
                     </label>
                 </div>
@@ -102,17 +102,17 @@ export default function PracticeSchedulePage() {
                 <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3">
                     <label className="text-sm font-semibold text-gray-400">
                         Start Time
-                        <input type="time" className="mt-2 w-full rounded-2xl border border-[#1B5E4C] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none" />
+                        <input type="time" className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none" />
                     </label>
                     <span className="pb-4 text-xl">-</span>
                     <label className="text-sm font-semibold text-gray-400">
                         End Time
-                        <input type="time" className="mt-2 w-full rounded-2xl border border-[#1B5E4C] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none" />
+                        <input type="time" className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none" />
                     </label>
                 </div>
             </section>
             <div className="mt-auto px-5 pt-10">
-                <Button type="button" onClick={continueToPricing} className="rounded-2xl bg-[#1B5E4C] py-4 shadow-md shadow-green-900/30">
+                <Button type="button" onClick={continueToPricing} className="rounded-2xl bg-[#2e7d32] py-4 shadow-md shadow-[#2e7d32]/30 hover:bg-[#1b5e20] active:bg-[#1b5e20]">
                     Continue
                 </Button>
             </div>
