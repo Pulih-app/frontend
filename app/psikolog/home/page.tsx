@@ -42,12 +42,12 @@ export default function PsychologistHomePage() {
                             Lihat Semua
                         </Link>
                     </div>
-                    <section className="mb-5 rounded-2xl bg-[#f0f0f0] p-5">
+                    <Link href="/psikolog/session-detail" className="block mb-5 rounded-2xl bg-[#f0f0f0] p-5 hover:bg-gray-200/50 active:scale-[0.99] transition-all text-left">
                         <h3 className="text-sm font-bold">Nama Pasien</h3>
                         <span className="mt-1 inline-flex rounded-full bg-[#00996e] px-3 py-1 text-[9px] font-bold text-white">1 Jam</span>
                         <p className="mt-2 text-xs">13.00 - 14.00 WIB</p>
                         <p className="mt-1 text-[10px]">Keluhan blablabla</p>
-                    </section>
+                    </Link>
                     <div className="mb-3 flex items-center justify-between">
                         <h2 className="text-xl font-bold">Jadwal Praktek</h2>
                         <Link href="/psikolog/practice-schedule" className="text-[10px] font-medium text-[#19b75b]">
