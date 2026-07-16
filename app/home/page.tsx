@@ -2,20 +2,20 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Bell, BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from "lucide-react";
+import { BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
 
 const navItems = [
   { label: "Home", href: "/home", icon: Home },
-  { label: "Progress", href: "/onboarding/analysis-result", icon: TrendingUp },
-  { label: "Community", href: "/psikolog/home", icon: UsersRound },
-  { label: "Learning", href: "/onboarding/learning-1", icon: BookOpen },
+  { label: "Stats", href: "/stats", icon: TrendingUp },
+  { label: "Help", href: "/help", icon: UsersRound },
+  { label: "Learn", href: "/education", icon: BookOpen },
   { label: "Profile", href: "/profile", icon: CircleDot },
 ];
 
 export default function UserHomePage() {
   return (
-    <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col overflow-hidden border bg-white px-6 pb-24 pt-8">
+    <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col overflow-hidden bg-white px-6 pb-24">
       <section className="mt-6">
         <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">Halo, Alex! <span className="text-xl">👋</span></h1>
         <p className="mt-2 text-[13px] font-semibold leading-tight text-[#7f8b92]">Proud of you for showing up today</p>
@@ -55,13 +55,13 @@ export default function UserHomePage() {
         <h2 className="text-xl font-bold tracking-[-0.02em] text-gray-900">Daily Routine</h2>
 
         <Link href="/onboarding/daily-checkin" className="mt-4 flex items-center relative overflow-hidden rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
-          <div className="w-8 h-8 shrink-0  mr-2">
-            <Image src="/assets/billy_checkin.png" width={500} height={500} alt="Billy Checkin" className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
+          <div className="w-8 h-8 shrink-0  mr-3">
+            <Image src="/assets/billy_checkin.png" width={500} height={500} alt="Billy Checkin" className="object-contain absolute -left-5 -bottom-4 w-20 h-20" />
           </div>
 
           <span className="min-w-0 flex-1 ">
-            <span className="block text-[15px] font-extrabold leading-tight text-gray-900">Daily Check-In scheduled at 6 PM</span>
-            <span className="mt-2 block text-xs font-semibold text-[#8b8b8b]">Click to Check-In earlier</span>
+            <span className="block text-[15px] font-extrabold leading-tight text-gray-900">Daily Check-In</span>
+            <span className="mt-2 block text-xs font-semibold text-[#8b8b8b]">Click to Check-In </span>
           </span>
           <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0 ml-1" />
 
@@ -69,8 +69,8 @@ export default function UserHomePage() {
         </Link>
 
         <Link href="/onboarding/set-target" className="mt-4 flex items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
-          <div className="w-8 h-8 shrink-0 mr-2">
-            <Image src="/assets/billy_relapse.png" alt="Billy Relapse" width={500} height={500} className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
+          <div className="w-8 h-8 shrink-0 mr-3">
+            <Image src="/assets/billy_relapse.png" alt="Billy Relapse" width={500} height={500} className="object-contain absolute -left-4 -bottom-4 w-20 h-20" />
           </div>
           <span className="min-w-0 flex-1 ">
             <span className="block text-[15px] font-extrabold leading-tight">Relapse</span>
@@ -82,8 +82,8 @@ export default function UserHomePage() {
         </Link>
 
         <button className="mt-4 flex w-full items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] border border-[#d2f3df]/30 px-5 py-3.5 text-left active:scale-[0.99] transition-transform cursor-pointer">
-          <div className="w-8 h-8 shrink-0  mr-2">
-            <Image src="/assets/billy_panik.png" alt="Billy Panik" width={500} height={500} className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
+          <div className="w-8 h-8 shrink-0  mr-3">
+            <Image src="/assets/billy_panik.png" alt="Billy Panik" width={500} height={500} className="object-contain absolute -left-4 -bottom-4 w-20 h-20" />
           </div>
           <span className="min-w-0 flex-1 ">
             <span className="block text-sm font-black leading-tight text-gray-900">Emergency Button</span>
