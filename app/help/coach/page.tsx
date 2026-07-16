@@ -2,40 +2,20 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ChevronDown, Send } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 
-const PERSONAS = [
-  {
-    key: "direct",
-    title: "Direct Billy",
-    avatarPath: "/assets/directBilly.png",
-  },
-  {
-    key: "supportive",
-    title: "Supportive Billy",
-    avatarPath: "/assets/supportiveBilly.png",
-  },
-  {
-    key: "friendly",
-    title: "Friendly Billy",
-    avatarPath: "/assets/friendlyBilly.png",
-  },
-];
-
-const DEFAULT_AVATAR = "/assets/billy.png";
+const DEFAULT_AVATAR = "/assets/supportiveBilly.png";
 
 const MESSAGES = [
   {
     isAI: true,
-    personaKey: "supportive",
-    text: "Halo, aku Billy. Ceritakan apa yang sedang kamu rasakan.",
+    text: "Hello, I'm Billy. Tell me what you're feeling right now.",
     time: "JUST NOW",
   },
 ];
 
 export default function CoachPage() {
   const router = useRouter();
-  const selected = PERSONAS[0];
 
   return (
     <div className="flex flex-col h-screen bg-white max-w-sm mx-auto border overflow-hidden">
@@ -46,48 +26,19 @@ export default function CoachPage() {
           <button
             onClick={() => router.back()}
             className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+            aria-label="Back"
           >
             <ArrowLeft size={20} className="text-[#1E293B]" />
           </button>
           <h1 className="flex-1 text-center text-[18px] font-bold text-[#0F172A]">
             Chat With Billy
           </h1>
-          <div className="w-9 h-9 flex items-center justify-center">
-            <Image
-              src={selected.avatarPath}
-              alt={selected.title}
-              width={36}
-              height={36}
-              className="object-contain"
-              onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_AVATAR; }}
-            />
-          </div>
-        </div>
-
-        {/* ── Persona row ─────────────────────────────────────────────── */}
-        <div className="flex items-center gap-3 px-4 pb-3">
-          <Image
-            src={selected.avatarPath}
-            alt={selected.title}
-            width={40}
-            height={40}
-            className="object-contain flex-shrink-0"
-            onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_AVATAR; }}
-          />
-          <span className="flex-1 text-sm font-semibold text-[#475569]">
-            {selected.title}
-          </span>
-          <span className="w-8 h-8 flex items-center justify-center rounded-xl bg-[#F1F5F9]">
-            <ChevronDown size={16} className="text-[#0F172A]" />
-          </span>
         </div>
       </div>
 
       {/* ── Messages ────────────────────────────────────────────────────── */}
       <div className="flex-1 overflow-y-auto px-4 py-5 flex flex-col gap-6">
         {MESSAGES.map((msg, i) => {
-          const persona = PERSONAS.find((p) => p.key === msg.personaKey) ?? PERSONAS[0];
-
           if (!msg.isAI) {
             return (
               <div key={i} className="flex flex-col items-end gap-1.5">
@@ -105,14 +56,13 @@ export default function CoachPage() {
             <div key={i} className="flex flex-col gap-2">
               <div className="flex items-center gap-2">
                 <Image
-                  src={persona.avatarPath}
-                  alt={persona.title}
+                  src={DEFAULT_AVATAR}
+                  alt="Billy"
                   width={36}
                   height={36}
                   className="object-contain flex-shrink-0"
-                  onError={(e) => { (e.target as HTMLImageElement).src = DEFAULT_AVATAR; }}
                 />
-                <span className="text-sm font-semibold text-[#475569]">{persona.title}</span>
+                <span className="text-sm font-semibold text-[#475569]">Billy</span>
               </div>
               <div className="bg-[#F4F8FA] rounded-2xl px-4 py-3 max-w-[85%]">
                 <p className="text-sm text-[#1E293B] leading-relaxed">{msg.text}</p>
