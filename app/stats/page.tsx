@@ -88,7 +88,6 @@ export default function StatsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-24 border">
-
       {/* ── Header banner ─────────────────────────────────────────────────── */}
       <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-2 pt-10 pb-8 min-h-[170px]">
         <div className="max-w-[58%]">

@@ -1,27 +1,46 @@
-@import "tailwindcss";
+﻿@import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Colors */
+  --dark-green: #1B5E4C;
+  --bright-green: #7ED957;
+  --bg: #F3F3F1;
+  --card-sage: #E2EDE7;
+  --card-lavender: #DEE1F5;
+  --card-tan: #EAE0D2;
+  --pill-track: #E7E7E4;
+  --text-primary: #1A1A1A;
+  --text-secondary: #8B8B8B;
+  --white: #FFFFFF;
+
+  /* Border Radius */
+  --r-lg: 24px;
+  --r-md: 18px;
+  --r-sm: 12px;
+  --r-full: 999px;
+
+  /* Typography */
+  --font-family: var(--font-poppins), Poppins, Inter, -apple-system, sans-serif;
+  --fs-h1: 26px;
+  --fs-h2: 20px;
+  --fs-stat: 32px;
+  --fs-body: 15px;
+  --fs-caption: 13px;
+
+  --background: #F3F3F1;
+  --foreground: #1A1A1A;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-sans: var(--font-family);
 }
 
 body {
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--text-primary);
+  background-color: var(--bg);
+  font-family: var(--font-family);
 }
 
 @keyframes fade-in {
