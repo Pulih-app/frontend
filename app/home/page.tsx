@@ -81,16 +81,16 @@ export default function UserHomePage() {
 
         </Link>
 
-        <button className="mt-4 flex w-full items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] border border-[#d2f3df]/30 px-5 py-3.5 text-left active:scale-[0.99] transition-transform cursor-pointer">
-          <div className="w-8 h-8 shrink-0  mr-3">
+        <Link href="/emergency" className="mt-4 flex items-center relative overflow-hidden rounded-2xl bg-[#effbf4] border border-[#d2f3df]/30 px-5 py-3.5 text-left active:scale-[0.99] transition-transform text-gray-900">
+          <div className="w-8 h-8 shrink-0 mr-3">
             <Image src="/assets/billy_panik.png" alt="Billy Panik" width={500} height={500} className="object-contain absolute -left-4 -bottom-4 w-20 h-20" />
           </div>
-          <span className="min-w-0 flex-1 ">
+          <span className="min-w-0 flex-1">
             <span className="block text-sm font-black leading-tight text-gray-900">Emergency Button</span>
             <span className="mt-1 block text-[11px] font-semibold leading-snug text-[#8b8b8b]">Get instant help when you feel tempted</span>
           </span>
           <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0 ml-1" />
-        </button>
+        </Link>
       </section>
 
       {/* Today Insight */}
