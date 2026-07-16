@@ -135,7 +135,7 @@ export default function CommunityPage() {
   const filtered = POSTS.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto border">
+    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto ">
 
       {/* ── AppBar ──────────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
@@ -187,7 +187,7 @@ export default function CommunityPage() {
       {/* ── FAB ─────────────────────────────────────────────────────────── */}
       <div className="fixed bottom-8 right-1/2 translate-x-[calc(192px-20px)] z-20">
         <Link
-          href="/help/community/tambah"
+          href="/help/community/create"
           className="w-14 h-14 rounded-full bg-[#1a5c3a] flex items-center justify-center shadow-lg active:scale-95 transition-transform"
           aria-label="Create Post"
         >
