@@ -54,7 +54,7 @@ export default function UserHomePage() {
       <section className="mt-6">
         <h2 className="text-xl font-bold tracking-[-0.02em] text-gray-900">Daily Routine</h2>
 
-        <Link href="/onboarding/daily-checkin" className="mt-4 flex items-center relative overflow-hidden rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
+        <Link href="/daily-checkin" className="mt-4 flex items-center relative overflow-hidden rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
           <div className="w-8 h-8 shrink-0  mr-2">
             <Image src="/assets/billy_checkin.png" width={500} height={500} alt="Billy Checkin" className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
           </div>
@@ -68,7 +68,7 @@ export default function UserHomePage() {
 
         </Link>
 
-        <Link href="/onboarding/relapse" className="mt-4 flex items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
+        <Link href="/relapse" className="mt-4 flex items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
           <div className="w-8 h-8 shrink-0 mr-2">
             <Image src="/assets/billy_relapse.png" alt="Billy Relapse" width={500} height={500} className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
           </div>
