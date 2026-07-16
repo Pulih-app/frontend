@@ -93,25 +93,30 @@ export default function PsychologistHomePage() {
 
                         <Link 
                             href="/psikolog/session-detail" 
-                            className="mt-4 flex items-center relative overflow-hidden rounded-2xl bg-[#effbf4] border border-[#d2f3df]/30 px-5 py-4 active:scale-[0.99] transition-transform text-gray-900 text-left w-full cursor-pointer"
+                            className="mt-4 block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-full cursor-pointer shadow-sm hover:bg-[#eaeaea]"
                         >
-                            {/* Patient Initial Bubble */}
-                            <div className="w-11 h-11 shrink-0 mr-3.5 rounded-full bg-[#0b744f]/10 border border-[#0b744f]/20 flex items-center justify-center text-[#0b744f] font-black text-sm">
-                                AM
-                            </div>
-
-                            <span className="min-w-0 flex-1">
-                                <span className="block text-[15px] font-black leading-tight">
+                            <span className="relative z-10 flex flex-col items-start min-w-0">
+                                <span className="block text-[18px] font-black leading-none text-gray-900 border-b-[3px] border-[#0b744f] pb-1 w-fit">
                                     Alex Morgan
                                 </span>
-                                <span className="mt-1.5 inline-flex items-center rounded-full bg-[#0b744f] px-2.5 py-0.5 text-[9px] font-black tracking-wider uppercase text-white">
+                                <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
                                     1 Hour
                                 </span>
-                                <span className="mt-2 block text-xs font-semibold text-[#8b8b8b] leading-relaxed">
-                                    13:00 - 14:00 WIB • Seeking relapse prevention & emotional guidance.
+                                <span className="mt-3 block text-sm font-black text-gray-800">
+                                    13:00 - 14:00 WIB
+                                </span>
+                                <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[200px] leading-relaxed">
+                                    Keluhan: Seeking relapse prevention & emotional guidance.
                                 </span>
                             </span>
-                            <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0 ml-1.5" />
+
+                            {/* Green decorative quarter circle segment with gradient */}
+                            <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tr from-[#35b863] to-[#2e7d32] rounded-tl-full pointer-events-none z-0" />
+                            
+                            {/* Chevron inside the green corner */}
+                            <div className="absolute bottom-4 right-4 text-white z-10 pointer-events-none">
+                                <ChevronRight size={20} strokeWidth={3} />
+                            </div>
                         </Link>
                     </section>
 
