@@ -64,8 +64,8 @@ export default function PracticeSchedulePage() {
             <section className="px-5 pt-6">
                 <div className="mx-auto mb-8 flex w-40 items-center justify-center">
                     <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
-                    <span className="h-0.5 flex-1 bg-[#2e7d32]" />
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">2</span>
+                    <span className="h-0.5 flex-1 bg-gray-200" />
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-500">2</span>
                 </div>
                 <ScheduleCalendar
                     availableDays={selectedDays}
