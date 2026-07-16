@@ -61,37 +61,34 @@ export default function UserHomePage() {
       <section className="mt-6">
         <h2 className="text-xl font-bold tracking-[-0.02em] text-gray-900">Daily Routine</h2>
 
-        <Link href="/onboarding/daily-checkin" className="mt-4 flex items-center rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
-          <div className="mr-4 w-12 h-12 relative shrink-0">
-            <Image src="/assets/billy_checkin.png" alt="Billy Checkin" fill className="object-contain" />
+        <Link href="/onboarding/daily-checkin" className="relative mt-4 block rounded-[24px] bg-[#effbf4] border border-[#d2f3df]/30 px-6 py-5 overflow-hidden active:scale-[0.99] transition-transform">
+          <div className="pr-[84px]">
+            <span className="block text-[15px] font-extrabold leading-tight text-gray-900">Daily Check-In scheduled at 6 PM</span>
+            <span className="mt-2 block text-xs font-semibold text-[#8b8b8b]">Click to Check-In earlier</span>
           </div>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-black leading-tight text-gray-900">Daily Check-In scheduled at 6 PM</span>
-            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Click to Check-In earlier</span>
-          </span>
-          <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0" />
+          <div className="absolute right-0 bottom-0 w-[94px] h-[76px]">
+            <Image src="/assets/billy_checkin.png" alt="Billy Checkin" fill className="object-contain object-bottom" />
+          </div>
         </Link>
 
-        <Link href="/onboarding/set-target" className="mt-4 flex items-center rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
-          <div className="mr-4 w-12 h-12 relative shrink-0">
-            <Image src="/assets/billy_relapse.png" alt="Billy Relapse" fill className="object-contain" />
+        <Link href="/onboarding/set-target" className="relative mt-4 block rounded-[24px] bg-[#effbf4] border border-[#d2f3df]/30 px-6 py-5 overflow-hidden active:scale-[0.99] transition-transform text-gray-900">
+          <div className="pr-[84px]">
+            <span className="block text-[15px] font-extrabold leading-tight">Relapse</span>
+            <span className="mt-2 block text-xs font-semibold text-[#8b8b8b]">Acknowledge, evaluate, and reset your progress.</span>
           </div>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-black leading-tight text-gray-900">Relapse</span>
-            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Acknowledge, evaluate, and reset your progress.</span>
-          </span>
-          <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0" />
+          <div className="absolute right-0 bottom-0 w-[94px] h-[76px]">
+            <Image src="/assets/billy_relapse.png" alt="Billy Relapse" fill className="object-contain object-bottom" />
+          </div>
         </Link>
 
-        <button className="mt-4 flex w-full items-center rounded-2xl bg-[#effbf4] border border-[#d2f3df]/30 px-5 py-3.5 text-left active:scale-[0.99] transition-transform cursor-pointer">
-          <div className="mr-4 w-12 h-12 relative shrink-0">
-            <Image src="/assets/billy_panik.png" alt="Billy Panik" fill className="object-contain" />
+        <button className="relative mt-4 block w-full text-left rounded-[24px] bg-[#effbf4] border border-[#d2f3df]/30 px-6 py-5 overflow-hidden active:scale-[0.99] transition-transform cursor-pointer">
+          <div className="pr-[84px]">
+            <span className="block text-[15px] font-extrabold leading-tight text-gray-900">Emergency Button</span>
+            <span className="mt-2 block text-xs font-semibold leading-snug text-[#8b8b8b]">Get instant help when you feel tempted</span>
           </div>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-black leading-tight text-gray-900">Emergency Button</span>
-            <span className="mt-1 block text-[11px] font-semibold leading-snug text-[#8b8b8b]">Get instant help when you feel tempted</span>
-          </span>
-          <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0 ml-1" />
+          <div className="absolute right-0 bottom-0 w-[94px] h-[76px]">
+            <Image src="/assets/billy_panik.png" alt="Billy Panik" fill className="object-contain object-bottom" />
+          </div>
         </button>
       </section>
 
