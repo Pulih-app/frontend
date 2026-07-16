@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { X, Rewind, Accessibility, PenLine, Play } from "lucide-react";
+import { X, Rewind, Accessibility, PenLine, Play, File } from "lucide-react";
 
 export default function EmergencyPage() {
     const router = useRouter();
@@ -35,6 +35,16 @@ export default function EmergencyPage() {
 
             {/* Action Cards */}
             <section className="mt-8 flex flex-col gap-4">
+                <button
+                    onClick={() => router.push("/stats#prevention-plan")}
+                    className="w-full bg-[#085a3d]/80 hover:bg-[#074c33] active:scale-[0.99] border border-white/5 px-6 py-5 rounded-[20px] flex items-center gap-4 text-left transition-all cursor-pointer shadow-md"
+                >
+                    <File size={22} className="shrink-0 text-white" />
+                    <span className="text-[15px] font-extrabold leading-snug">
+                        View Personalized 3D Prevention Plan
+                    </span>
+          </button>
+
                 <button
                     onClick={() => router.push("/manifesto")}
                     className="w-full bg-[#085a3d]/80 hover:bg-[#074c33] active:scale-[0.99] border border-white/5 px-6 py-5 rounded-[20px] flex items-center gap-4 text-left transition-all cursor-pointer shadow-md"
@@ -78,7 +88,7 @@ export default function EmergencyPage() {
                 {/* Horizontal Scroll list */}
                 <div className="mt-5 flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory">
                     {/* Video Card 1 */}
-                    <div 
+                    <div
                         onClick={() => handleVideoClick("https://www.youtube.com/watch?v=kYJv1n4FmTM")}
                         className="w-[220px] shrink-0 snap-start bg-[#085a3d]/80 border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:bg-[#074c33] transition-colors"
                     >
@@ -95,7 +105,7 @@ export default function EmergencyPage() {
                                     Regulating Emotions
                                 </span>
                             </div>
-                            
+
                             {/* Play Button Overlay */}
                             <div className="absolute inset-0 m-auto w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                                 <Play size={16} fill="white" className="text-white ml-0.5" />
@@ -110,7 +120,7 @@ export default function EmergencyPage() {
                     </div>
 
                     {/* Video Card 2 */}
-                    <div 
+                    <div
                         onClick={() => handleVideoClick("https://www.youtube.com/watch?v=S09F57M6t8E")}
                         className="w-[220px] shrink-0 snap-start bg-[#085a3d]/80 border border-white/5 rounded-2xl overflow-hidden cursor-pointer hover:bg-[#074c33] transition-colors"
                     >

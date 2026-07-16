@@ -22,7 +22,7 @@ export default function UserHomePage() {
       </section>
 
       {/* Streak Card */}
-      <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-6 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
+      <section className="relative mt-6 overflow-hidden rounded-[16px] bg-[#0b744f] px-6 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
         <div className="relative z-10 max-w-[220px]">
           <p className="text-[18px] font-black">Your Streak</p>
           <h2 className="mt-2 text-[44px] font-bold leading-none tracking-[-0.03em]">23 Days</h2>
@@ -42,7 +42,7 @@ export default function UserHomePage() {
         </div>
 
         {/* White bottom Progress bar container */}
-        <div className="absolute bottom-0 left-0 right-0 rounded-t-[24px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
+        <div className="absolute bottom-0 left-0 right-0 rounded-t-[16px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
           <p className="text-sm font-black">Progress: 11 / 32 Days</p>
           <div className="mt-3.5 h-[16px] overflow-hidden rounded-full bg-[#e6e6e6]">
             <div className="h-full w-[34%] rounded-full bg-[#35b863]" />

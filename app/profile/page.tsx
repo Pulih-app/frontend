@@ -85,13 +85,14 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Mascot */}
-                <div className="w-12 h-12 shrink-0">
+                <div className="w-12 h-12 shrink-0 ">
                   <Image
                     src={item.mascot}
                     alt={item.title}
                     width={48}
                     height={48}
-                    className="object-contain w-full h-full"
+                    priority
+                    className="object-contain w-full h-full absolute top-0 -right-32"
                   />
                 </div>
               </button>

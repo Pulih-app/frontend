@@ -342,6 +342,83 @@ export default function StatsPage() {
                         <InfoNote text="Night (9PM-5AM) is your highest risk period. Creating a specific routine during these hours c..." />
                     </section>
 
+                    {/* ── Relapse Prevention Plan ─────────────────────────────────── */}
+                    <section id="prevention-plan">
+                        <h2 className="text-2xl font-bold text-gray-900">Prevention Plan</h2>
+                        <p className="text-gray-400 text-sm mt-0.5">
+                            Your personal 3D strategy — Delay, Distract, Decide
+                        </p>
+
+                        <div className="mt-4 space-y-3">
+
+                            {/* ── DELAY ── */}
+                            <div className="bg-[#e8f5ee] rounded-2xl p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="bg-[#1a5c3a] text-white text-xs font-bold px-2.5 py-1 rounded-full">1 · Delay</span>
+                                    <span className="text-[#1a5c3a] text-sm font-semibold">Pause before acting</span>
+                                </div>
+                                <ol className="space-y-2">
+                                    {[
+                                        "Notice the urge and name it — say to yourself: \"This is a craving, not a command.\"",
+                                        "Set a 20-minute timer on your phone. Commit to waiting it out before doing anything.",
+                                        "Drink a full glass of water, then take 5 slow, deep breaths to lower your heart rate.",
+                                    ].map((step, i) => (
+                                        <li key={i} className="flex items-start gap-2.5">
+                                            <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#1a5c3a] text-white text-[10px] font-bold flex items-center justify-center">{i + 1}</span>
+                                            <p className="text-xs text-[#1a5c3a] leading-relaxed">{step}</p>
+                                        </li>
+                                    ))}
+                                </ol>
+                            </div>
+
+                            {/* ── DISTRACT ── */}
+                            <div className="bg-[#eef2ff] rounded-2xl p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="bg-[#3730a3] text-white text-xs font-bold px-2.5 py-1 rounded-full">2 · Distract</span>
+                                    <span className="text-[#3730a3] text-sm font-semibold">Replace the urge</span>
+                                </div>
+                                <ol className="space-y-2">
+                                    {[
+                                        "Boredom hit? Open your journal, read a book, or step outside for a 10-minute walk.",
+                                        "Feeling stressed? Try 4-7-8 breathing: inhale 4 s, hold 7 s, exhale 8 s — repeat 4×.",
+                                        "Change your physical space — move to a different room or call a trusted friend.",
+                                        "During evening / night hours, queue a short video, podcast, or calming music playlist.",
+                                    ].map((step, i) => (
+                                        <li key={i} className="flex items-start gap-2.5">
+                                            <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#3730a3] text-white text-[10px] font-bold flex items-center justify-center">{i + 1}</span>
+                                            <p className="text-xs text-[#3730a3] leading-relaxed">{step}</p>
+                                        </li>
+                                    ))}
+                                </ol>
+                            </div>
+
+                            {/* ── DECIDE ── */}
+                            <div className="bg-[#f5f3ff] rounded-2xl p-4">
+                                <div className="flex items-center gap-2 mb-3">
+                                    <span className="bg-[#7c3aed] text-white text-xs font-bold px-2.5 py-1 rounded-full">3 · Decide</span>
+                                    <span className="text-[#7c3aed] text-sm font-semibold">Make a conscious choice</span>
+                                </div>
+                                <ol className="space-y-2">
+                                    {[
+                                        "When the timer ends, ask yourself: \"Is the urge still there, or did it pass?\" Most urges fade.",
+                                        "Remind yourself of your progress — 33 clean days and a 23-day streak are real achievements worth protecting.",
+                                        "If the urge persists, open the Help tab and reach out to your support group or a trusted person.",
+                                        "Log how you handled it. Seeing your wins builds confidence for the next time.",
+                                    ].map((step, i) => (
+                                        <li key={i} className="flex items-start gap-2.5">
+                                            <span className="shrink-0 mt-0.5 w-5 h-5 rounded-full bg-[#7c3aed] text-white text-[10px] font-bold flex items-center justify-center">{i + 1}</span>
+                                            <p className="text-xs text-[#7c3aed] leading-relaxed">{step}</p>
+                                        </li>
+                                    ))}
+                                </ol>
+                            </div>
+
+                        </div>
+
+                        {/* Insight note */}
+                        <InfoNote text="Urges typically peak at 3-5 minutes and fade within 20. Your biggest threats are Boredom and Stress in the evenings — the 3D plan keeps you one deliberate step ahead." />
+                    </section>
+
                 </div>
             )}
 
