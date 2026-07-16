@@ -3,6 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Bell, BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from "lucide-react";
+import BottomNavbar from "@/components/BottomNavbar";
+
+const navItems = [
+  { label: "Home", href: "/home", icon: Home },
+  { label: "Progress", href: "/onboarding/analysis-result", icon: TrendingUp },
+  { label: "Community", href: "/psikolog/home", icon: UsersRound },
+  { label: "Learning", href: "/onboarding/learning-1", icon: BookOpen },
+  { label: "Profile", href: "/profile", icon: CircleDot },
+];
 
 export default function UserHomePage() {
   return (
@@ -95,26 +104,7 @@ export default function UserHomePage() {
         </div>
       </section>
 
-      {/* Proportional Bottom Navigation */}
-      <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 border-x bg-white px-10 pb-7 pt-3 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
-        <div className="flex items-center justify-between">
-          <Link href="/home" className="text-[#2e7d32] hover:opacity-85 transition-opacity" aria-label="Home">
-            <Home size={26} strokeWidth={1.8} fill="currentColor" />
-          </Link>
-          <Link href="/onboarding/analysis-result" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Progress">
-            <TrendingUp size={26} strokeWidth={1.8} />
-          </Link>
-          <Link href="/psikolog/home" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Community">
-            <UsersRound size={26} strokeWidth={1.8} />
-          </Link>
-          <Link href="/onboarding/learning-1" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Learning">
-            <BookOpen size={26} strokeWidth={1.8} />
-          </Link>
-          <Link href="/profile" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Profile">
-            <CircleDot size={26} strokeWidth={1.8} />
-          </Link>
-        </div>
-      </nav>
+      <BottomNavbar items={navItems} />
     </main>
   );
 }
