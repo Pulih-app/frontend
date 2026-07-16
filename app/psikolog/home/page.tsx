@@ -38,7 +38,7 @@ export default function PsychologistHomePage() {
                 <>
                     <div className="mb-4 flex items-center justify-between">
                         <h2 className="text-xl font-bold">Jadwal Hari Ini</h2>
-                        <Link href="/psikolog/practice-schedule" className="text-[10px] font-medium text-[#19b75b]">
+                        <Link href="/psikolog/sessions" className="text-[10px] font-medium text-[#19b75b]">
                             Lihat Semua
                         </Link>
                     </div>
