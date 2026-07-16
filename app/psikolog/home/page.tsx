@@ -33,6 +33,37 @@ export default function PsychologistHomePage() {
     const hasSchedule = availableDays.length > 0;
     const displayDays = hasSchedule ? availableDays : fallbackDays;
 
+    const todayPatients = [
+        {
+            id: "1",
+            name: "Alex Morgan",
+            duration: "1 Hour",
+            time: "13:00 - 14:00 WIB",
+            complaint: "Seeking relapse prevention & emotional guidance.",
+        },
+        {
+            id: "2",
+            name: "Budi Santoso",
+            duration: "1 Hour",
+            time: "14:30 - 15:30 WIB",
+            complaint: "Dealing with work-related stress and anxiety triggers.",
+        },
+        {
+            id: "3",
+            name: "Siti Rahma",
+            duration: "30 Mins",
+            time: "16:00 - 16:30 WIB",
+            complaint: "Needs support to manage sudden panic attacks.",
+        },
+        {
+            id: "4",
+            name: "Jane Smith",
+            duration: "1 Hour",
+            time: "17:00 - 18:00 WIB",
+            complaint: "First onboarding counseling and goal setting.",
+        },
+    ];
+
     return (
         <PsychologistShell>
             {/* Welcome Greeting */}
@@ -91,33 +122,38 @@ export default function PsychologistHomePage() {
                             </Link>
                         </div>
 
-                        <Link 
-                            href="/psikolog/session-detail" 
-                            className="mt-4 block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-full cursor-pointer shadow-sm hover:bg-[#eaeaea]"
-                        >
-                            <span className="relative z-10 flex flex-col items-start min-w-0">
-                                <span className="block text-[18px] font-black leading-none text-gray-900 w-fit">
-                                    Alex Morgan
-                                </span>
-                                <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
-                                    1 Hour
-                                </span>
-                                <span className="mt-3 block text-sm font-black text-gray-800">
-                                    13:00 - 14:00 WIB
-                                </span>
-                                <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[200px] leading-relaxed">
-                                    Keluhan: Seeking relapse prevention & emotional guidance.
-                                </span>
-                            </span>
+                        <div className="mt-4 flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory -mx-6 px-6">
+                            {todayPatients.map((patient) => (
+                                <Link 
+                                    key={patient.id}
+                                    href="/psikolog/session-detail" 
+                                    className="block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-[285px] shrink-0 snap-start cursor-pointer shadow-sm hover:bg-[#eaeaea]"
+                                >
+                                    <span className="relative z-10 flex flex-col items-start min-w-0">
+                                        <span className="block text-[18px] font-black leading-none text-gray-900 w-fit">
+                                            {patient.name}
+                                        </span>
+                                        <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
+                                            {patient.duration}
+                                        </span>
+                                        <span className="mt-3 block text-sm font-black text-gray-800">
+                                            {patient.time}
+                                        </span>
+                                        <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[210px] leading-relaxed line-clamp-2">
+                                            Keluhan: {patient.complaint}
+                                        </span>
+                                    </span>
 
-                            {/* Green decorative quarter circle segment with gradient */}
-                            <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tr from-[#35b863] to-[#2e7d32] rounded-tl-full pointer-events-none z-0" />
-                            
-                            {/* Chevron inside the green corner */}
-                            <div className="absolute bottom-4 right-4 text-white z-10 pointer-events-none">
-                                <ChevronRight size={20} strokeWidth={3} />
-                            </div>
-                        </Link>
+                                    {/* Green decorative quarter circle segment with gradient */}
+                                    <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tr from-[#35b863] to-[#2e7d32] rounded-tl-full pointer-events-none z-0" />
+                                    
+                                    {/* Chevron inside the green corner */}
+                                    <div className="absolute bottom-4 right-4 text-white z-10 pointer-events-none">
+                                        <ChevronRight size={20} strokeWidth={3} />
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
                     </section>
 
                     {/* Practice Calendar Section */}
