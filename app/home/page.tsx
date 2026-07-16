@@ -20,29 +20,29 @@ export default function UserHomePage() {
       </section>
 
       {/* Streak Card */}
-      <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-6 pb-[116px] pt-6 text-white shadow-[0_12px_24px_rgba(0,0,0,0.12)] border border-[#095f40]">
-        <div className="relative z-10 max-w-[200px]">
-          <p className="text-sm font-extrabold tracking-wide uppercase opacity-90">Streak Kamu</p>
-          <h2 className="mt-1 text-[38px] font-black leading-none tracking-[-0.03em]">23 Hari</h2>
-          <p className="mt-3 text-[10px] font-medium leading-normal text-white/90">Setelah Melakukan Daily Check-in streak kamu akan terupdate di tengah malam</p>
+      <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-8 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)] border border-[#095f40]">
+        <div className="relative z-10 max-w-[220px]">
+          <p className="text-[18px] font-black">Streak Kamu</p>
+          <h2 className="mt-2 text-[44px] font-black leading-none tracking-[-0.03em]">23 Hari</h2>
+          <p className="mt-4 text-xs font-semibold leading-relaxed text-white/95">Setelah Melakukan Daily Check-in streak kamu akan terupdate di tengah malam</p>
         </div>
 
         {/* Mountain illustration */}
-        <div className="absolute bottom-[86px] right-[-20px] h-[160px] w-[210px] opacity-95">
+        <div className="absolute bottom-[40px] right-[-24px] h-[175px] w-[225px] opacity-95">
           <Image
             src="/assets/gunung.png"
             alt="Gunung streak"
             fill
             className="object-contain object-bottom"
             priority
-            sizes="210px"
+            sizes="225px"
           />
         </div>
 
         {/* White bottom Progress bar container */}
-        <div className="absolute bottom-0 left-0 right-0 bg-white px-6 pb-5 pt-4 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.02)]">
-          <p className="text-xs font-black">Progress: 11 / 32 Days</p>
-          <div className="mt-2.5 h-2.5 overflow-hidden rounded-full bg-[#e8e8e8]">
+        <div className="absolute bottom-0 left-0 right-0 rounded-t-[24px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
+          <p className="text-sm font-black">Progress: 11 / 32 Days</p>
+          <div className="mt-3.5 h-[16px] overflow-hidden rounded-full bg-[#e6e6e6]">
             <div className="h-full w-[34%] rounded-full bg-[#35b863]" />
           </div>
         </div>
