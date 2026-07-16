@@ -28,7 +28,7 @@ export default function UserHomePage() {
         </div>
 
         {/* Mountain illustration */}
-        <div className="absolute bottom-[35px] right-[-28px] h-[200px] w-[255px] opacity-95">
+        <div className="absolute bottom-[60px] right-[-28px] h-[200px] w-[255px] opacity-95">
           <Image
             src="/assets/gunung.png"
             alt="Gunung streak"
@@ -98,20 +98,38 @@ export default function UserHomePage() {
       {/* Proportional Bottom Navigation */}
       <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 border-x bg-white px-10 pb-7 pt-3 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
         <div className="flex items-center justify-between">
-          <Link href="/home" className="grid h-9 w-9 place-items-center rounded-xl bg-[#2e7d32] text-white shadow-sm shadow-[#2e7d32]/25" aria-label="Home">
-            <Home size={18} fill="currentColor" strokeWidth={0} />
+          <Link href="/home" className="text-[#2e7d32] hover:opacity-80 transition-opacity" aria-label="Home">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3c-.5 0-1 .2-1.4.6L4.3 9.4c-.8.8-1.3 2-1.3 3.1v6c0 2.2 1.8 4 4 4h10c2.2 0 4-1.8 4-4v-6c0-1.1-.5-2.3-1.3-3.1l-6.3-5.8c-.4-.4-.9-.6-1.4-.6z" fill="#2e7d32"/>
+              <path d="M9.5 15.5c1 1.2 4 1.2 5 0" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </Link>
-          <Link href="/onboarding/analysis-result" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Progress">
-            <ChartNoAxesCombined size={24} strokeWidth={1.8} />
+          <Link href="/onboarding/analysis-result" className="text-black hover:opacity-75 transition-opacity" aria-label="Progress">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M6 5v12a3 3 0 0 0 3 3h12" />
+              <path d="M9 13.5l3.5-4 4 3.5 3.5-5.5" />
+            </svg>
           </Link>
-          <Link href="/psikolog/home" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Community">
-            <UsersRound size={24} strokeWidth={1.8} />
+          <Link href="/psikolog/home" className="text-black hover:opacity-75 transition-opacity" aria-label="Community">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+              <circle cx="12" cy="8.2" r="3.2" />
+              <ellipse cx="12" cy="16.5" rx="5.2" ry="2.8" />
+              <path d="M6.8 6.5A2.8 2.8 0 0 0 6.8 11" />
+              <path d="M6.2 14.5A4.5 4.5 0 0 0 3.5 17" />
+              <path d="M17.2 6.5A2.8 2.8 0 0 1 17.2 11" />
+              <path d="M17.8 14.5A4.5 4.5 0 0 1 20.5 17" />
+            </svg>
           </Link>
-          <Link href="/onboarding/learning-1" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Learning">
-            <BookOpen size={24} strokeWidth={1.8} />
+          <Link href="/onboarding/learning-1" className="text-black hover:opacity-75 transition-opacity" aria-label="Learning">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 19.5c-1.5-1-4-1.5-6-1.5H3V4.5h3c2 0 4.5.5 6 1.5M12 19.5c1.5-1 4-1.5 6-1.5h3V4.5h-3c-2 0-4.5.5-6 1.5M12 6v13.5" />
+            </svg>
           </Link>
-          <Link href="/profile" className="text-gray-400 hover:text-gray-900 active:text-gray-900 transition-colors" aria-label="Profile">
-            <CircleDot size={24} strokeWidth={1.8} />
+          <Link href="/profile" className="text-black hover:opacity-75 transition-opacity" aria-label="Profile">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z" />
+              <circle cx="12" cy="11.25" r="2.5" />
+            </svg>
           </Link>
         </div>
       </nav>
