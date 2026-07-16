@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Video, Calendar, X } from "lucide-react";
 import Button from "@/components/Button";
+import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 
 interface Appointment {
     id: string;
@@ -41,10 +42,18 @@ export default function SessionsPage() {
     ]);
 
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+    // Accept Modal States
     const [activeModalApp, setActiveModalApp] = useState<{ id: string; name: string } | null>(null);
     const [meetLink, setMeetLink] = useState("");
     const [selectedSchedule, setSelectedSchedule] = useState("");
     const [profession, setProfession] = useState<"umum" | "klinis">("klinis");
+
+    // Reschedule Modal States
+    const [activeRescheduleApp, setActiveRescheduleApp] = useState<{ id: string; name: string } | null>(null);
+    const [rescheduleDate, setRescheduleDate] = useState("");
+    const [rescheduleStartTime, setRescheduleStartTime] = useState("13:00");
+    const [rescheduleEndTime, setRescheduleEndTime] = useState("14:00");
 
     // Load profession from localStorage
     useEffect(() => {
@@ -80,14 +89,53 @@ export default function SessionsPage() {
         setTimeout(() => setToastMessage(null), 4000);
     };
 
-    const handleReschedule = (id: string) => {
-        router.push("/psikolog/practice-schedule");
+    const handleRescheduleClick = (id: string, name: string, currentTimeSlot: string) => {
+        setActiveRescheduleApp({ id, name });
+        setRescheduleDate("");
+
+        // Parse default times from timeslot if possible (e.g. "13.00 - 14.00 WIB" -> start "13:00", end "14:00")
+        const times = currentTimeSlot.replace(/\./g, ":").match(/(\d{2}:\d{2})/g);
+        if (times && times.length >= 2) {
+            setRescheduleStartTime(times[0]);
+            setRescheduleEndTime(times[1]);
+        } else {
+            setRescheduleStartTime("13:00");
+            setRescheduleEndTime("14:00");
+        }
     };
 
-    const isFormValid =
+    const handleConfirmReschedule = () => {
+        if (!activeRescheduleApp) return;
+        const { id, name } = activeRescheduleApp;
+
+        const formattedDate = new Date(rescheduleDate).toLocaleDateString("id-ID", {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+        });
+
+        const newTimeSlot = `${rescheduleStartTime.replace(/:/g, ".")} - ${rescheduleEndTime.replace(/:/g, ".")} WIB (${formattedDate})`;
+
+        setAppointments((prev) =>
+            prev.map((app) =>
+                app.id === id
+                    ? { ...app, status: "rescheduled", timeSlot: newTimeSlot }
+                    : app
+            )
+        );
+
+        setToastMessage(`Reschedule untuk ${name} berhasil diajukan ke tanggal ${formattedDate} jam ${rescheduleStartTime} - ${rescheduleEndTime}!`);
+        setActiveRescheduleApp(null);
+        setTimeout(() => setToastMessage(null), 4000);
+    };
+
+    const isAcceptFormValid =
         profession === "klinis"
             ? meetLink.trim().startsWith("http") || meetLink.trim().length > 5
             : selectedSchedule !== "";
+
+    const isRescheduleFormValid = rescheduleDate !== "" && rescheduleStartTime !== "" && rescheduleEndTime !== "";
 
     return (
         <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border pb-8 relative">
@@ -167,10 +215,14 @@ export default function SessionsPage() {
                                 <span className="text-xs font-bold text-[#2e7d32] bg-[#2e7d32]/10 py-1.5 px-4 rounded-xl">
                                     Sesi Disetujui
                                 </span>
+                            ) : app.status === "rescheduled" ? (
+                                <span className="text-xs font-bold text-[#054b37] bg-[#054b37]/10 py-1.5 px-4 rounded-xl">
+                                    Jadwal Diubah
+                                </span>
                             ) : (
                                 <>
                                     <button
-                                        onClick={() => handleReschedule(app.id)}
+                                        onClick={() => handleRescheduleClick(app.id, app.patientName, app.timeSlot)}
                                         className="bg-[#054b37] hover:bg-[#033023] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-colors cursor-pointer shadow-sm"
                                     >
                                         Re Schedule
@@ -266,10 +318,101 @@ export default function SessionsPage() {
                             </button>
                             <button
                                 onClick={handleConfirmAccept}
-                                disabled={!isFormValid}
+                                disabled={!isAcceptFormValid}
                                 className="flex-1 bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-sm py-3 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-[#2e7d32]/10"
                             >
                                 Setujui
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Reschedule Popout Calendar Modal */}
+            {activeRescheduleApp && (
+                <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 overflow-y-auto">
+                    <div className="bg-white rounded-3xl p-6 w-full max-w-[340px] shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200 my-auto">
+                        {/* Modal Header */}
+                        <div className="flex justify-between items-center">
+                            <div className="flex flex-col">
+                                <h3 className="text-lg font-bold text-gray-900 leading-tight">
+                                    Reschedule Sesi
+                                </h3>
+                                <p className="text-[11px] font-semibold text-gray-400 mt-0.5">
+                                    Pasien: {activeRescheduleApp.name}
+                                </p>
+                            </div>
+                            <button
+                                onClick={() => setActiveRescheduleApp(null)}
+                                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="h-px bg-gray-100 w-full" />
+
+                        {/* Reusable Calendar Component */}
+                        <ScheduleCalendar
+                            selectedDays={rescheduleDate ? [rescheduleDate] : []}
+                            onSelectDay={(dateStr) => setRescheduleDate(dateStr)}
+                            className="border border-gray-200/80 rounded-2xl shadow-sm overflow-hidden"
+                        />
+
+                        {/* Selected Date & Time Inputs */}
+                        <div className="flex flex-col gap-3">
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
+                                    Tanggal Terpilih
+                                </label>
+                                <input
+                                    type="date"
+                                    value={rescheduleDate}
+                                    onChange={(e) => setRescheduleDate(e.target.value)}
+                                    className="w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800"
+                                />
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
+                                    Pilih Jam Sesi Baru
+                                </label>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <label className="text-[9px] font-semibold text-gray-400">
+                                        Mulai
+                                        <input
+                                            type="time"
+                                            value={rescheduleStartTime}
+                                            onChange={(e) => setRescheduleStartTime(e.target.value)}
+                                            className="mt-1 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800"
+                                        />
+                                    </label>
+                                    <label className="text-[9px] font-semibold text-gray-400">
+                                        Selesai
+                                        <input
+                                            type="time"
+                                            value={rescheduleEndTime}
+                                            onChange={(e) => setRescheduleEndTime(e.target.value)}
+                                            className="mt-1 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800"
+                                        />
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Modal Action Buttons */}
+                        <div className="flex gap-3 pt-2">
+                            <button
+                                onClick={() => setActiveRescheduleApp(null)}
+                                className="flex-1 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 active:bg-gray-100 font-bold text-sm py-3 rounded-2xl transition-colors cursor-pointer"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={handleConfirmReschedule}
+                                disabled={!isRescheduleFormValid}
+                                className="flex-1 bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-sm py-3 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-[#2e7d32]/10"
+                            >
+                                Simpan
                             </button>
                         </div>
                     </div>

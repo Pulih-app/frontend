@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Button from "@/components/Button";
-import { ScheduleCalendar, dateValue, dayFromDate } from "../_components/ScheduleCalendar";
+import { ScheduleCalendar, dateValue, dayFromDate } from "@/components/ScheduleCalendar";
 
 function rangeDays(startDate: string, endDate: string) {
     if (!startDate || !endDate) return [];

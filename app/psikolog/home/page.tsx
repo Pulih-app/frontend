@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { PsychologistShell } from "../_components/PsychologistShell";
-import { ScheduleCalendar } from "../_components/ScheduleCalendar";
+import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 
 const fallbackDays = [
     "2026-07-16",
