@@ -59,10 +59,14 @@ export default function SetUpPricingPage() {
             </h1>
 
             {/* Progress Step Dots */}
-            <div className="mx-auto mb-8 mt-6 flex w-40 items-center justify-center">
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
-                <span className="h-0.5 flex-1 bg-[#2e7d32]" />
-                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">2</span>
+            <div className="flex items-center justify-center w-full max-w-[180px] mx-auto mb-8 mt-6 relative">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm z-10 transition-colors bg-[#2e7d32] text-white">
+                    1
+                </div>
+                <div className="flex-1 h-0.5 z-0 -mx-1 transition-colors bg-[#2e7d32]" />
+                <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm z-10 transition-colors bg-[#2e7d32] text-white">
+                    2
+                </div>
             </div>
 
             <section className="space-y-6">
