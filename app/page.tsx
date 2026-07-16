@@ -33,7 +33,7 @@ export default function LoginPage() {
 
       {/* Subtitle */}
       <p className="text-center text-gray-500 text-sm leading-relaxed mb-8 px-2 z-90">
-        Your data security matters. We only store whats truly needed, nothing more. See how its handled on this <a href="/privacy" className="underline">privacy policy</a>.
+        Your data security matters. We only store whats truly needed, nothing more. See how its handled on this <Link href="/privacy" className="underline">privacy policy</Link>.
       </p>
       {/* Email / Username input */}
       <div className="relative mb-4 z-90">
