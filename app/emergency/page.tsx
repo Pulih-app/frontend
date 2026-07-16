@@ -21,13 +21,13 @@ export default function EmergencyPage() {
                         Emergency
                     </h1>
                     <p className="text-sm font-semibold text-white/80 mt-2 leading-relaxed max-w-[260px]">
-                        Kamu merasa tergoda? coba salah satu dari hal ini
+                        Feeling tempted? Try one of these options
                     </p>
                 </div>
                 <button
                     onClick={() => router.push("/home")}
                     className="text-white p-1 hover:bg-white/10 rounded-full transition-colors cursor-pointer mt-1"
-                    aria-label="Tutup"
+                    aria-label="Close"
                 >
                     <X size={24} />
                 </button>
@@ -41,7 +41,7 @@ export default function EmergencyPage() {
                 >
                     <Rewind size={22} className="shrink-0 text-white" />
                     <span className="text-[15px] font-extrabold leading-snug">
-                        Review Manifesto Yang Kamu Tulis
+                        Review the Manifesto You Wrote
                     </span>
                 </button>
 
@@ -51,7 +51,7 @@ export default function EmergencyPage() {
                 >
                     <Accessibility size={22} className="shrink-0 text-white" />
                     <span className="text-[15px] font-extrabold leading-snug">
-                        Lakukan latihan fisik sederhana
+                        Do a simple physical exercise
                     </span>
                 </button>
 
@@ -61,7 +61,7 @@ export default function EmergencyPage() {
                 >
                     <PenLine size={22} className="shrink-0 text-white" />
                     <span className="text-[15px] font-extrabold leading-snug">
-                        Tulis Apa yang kamu rasakan sekarang
+                        Write about what you feel right now
                     </span>
                 </button>
             </section>
@@ -69,10 +69,10 @@ export default function EmergencyPage() {
             {/* Video Regulation Section */}
             <section className="mt-10">
                 <h2 className="text-[20px] font-black text-white tracking-tight">
-                    Video Regulasi Emosi
+                    Emotion Regulation Videos
                 </h2>
                 <p className="text-xs font-semibold text-white/80 mt-1 leading-snug">
-                    Tonton video untuk membantumu mengelola emosi dan godaan
+                    Watch these videos to help manage your emotions and temptations
                 </p>
 
                 {/* Horizontal Scroll list */}

@@ -20,24 +20,24 @@ export default function RelapsePage() {
     const [dateString, setDateString] = useState("");
     const [showSuccessToast, setShowSuccessToast] = useState(false);
 
-    // Set today's date in Indonesian format (client-side only to match SSR)
+    // Set today's date in English format
     useEffect(() => {
         const today = new Date();
-        const formatted = today.toLocaleDateString("id-ID", {
+        const formatted = today.toLocaleDateString("en-US", {
             weekday: "long",
-            day: "numeric",
             month: "long",
+            day: "numeric",
             year: "numeric",
         });
         setDateString(formatted);
     }, []);
 
     const moods: MoodOption[] = [
-        { label: "Sangat Buruk", emoji: "😢", value: 1 },
-        { label: "Buruk", emoji: "😟", value: 2 },
-        { label: "Biasa", emoji: "😐", value: 3 },
-        { label: "Baik", emoji: "😊", value: 4 },
-        { label: "Sangat Baik", emoji: "🤩", value: 5 },
+        { label: "Very Bad", emoji: "😢", value: 1 },
+        { label: "Bad", emoji: "😟", value: 2 },
+        { label: "Neutral", emoji: "😐", value: 3 },
+        { label: "Good", emoji: "😊", value: 4 },
+        { label: "Very Good", emoji: "🤩", value: 5 },
     ];
 
     const handleTriggerToggle = (trigger: string) => {
@@ -63,12 +63,12 @@ export default function RelapsePage() {
                 <button
                     onClick={() => router.back()}
                     className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors cursor-pointer"
-                    aria-label="Kembali"
+                    aria-label="Back"
                 >
                     <ChevronLeft size={20} strokeWidth={2.5} />
                 </button>
                 <span className="text-[14px] font-bold text-gray-400">
-                    {dateString || "Selasa, 16 Juni 2026"}
+                    {dateString || "Tuesday, June 16, 2026"}
                 </span>
                 <div className="w-10" /> {/* Spacer */}
             </header>
@@ -87,16 +87,16 @@ export default function RelapsePage() {
                 </div>
                 
                 <h2 className="mt-4 text-2xl font-black tracking-tight text-center">
-                    Tidak Apa-Apa
+                    It&apos;s Okay
                 </h2>
                 <span className="mt-1 text-sm font-extrabold tracking-wide text-white/90 text-center">
-                    Jatuh bukan berarti gagal
+                    Falling doesn&apos;t mean failing
                 </span>
 
                 {/* Quotes box */}
                 <div className="mt-6 w-full rounded-2xl bg-[#095f40] px-4 py-3.5 border border-[#0c7f56]/30">
                     <p className="text-[11px] font-medium leading-relaxed text-center italic text-white/90">
-                        &ldquo;Yang penting adalah kamu jujur pada dirimu sendiri dan bangkit kembali.&ldquo;
+                        &ldquo;What matters is that you are honest with yourself and rise again.&ldquo;
                     </p>
                 </div>
             </section>
@@ -104,10 +104,10 @@ export default function RelapsePage() {
             {/* Mood Selector Section */}
             <section className="mt-8">
                 <h2 className="text-[18px] font-black tracking-tight text-gray-900">
-                    Bagaimana Mood Kamu?
+                    How is Your Mood?
                 </h2>
                 <p className="text-xs font-semibold text-gray-400 mt-1 leading-snug">
-                    Pilih yang paling menggambarkan perasaanmu saat ini
+                    Choose the one that best describes your feelings right now
                 </p>
 
                 <div className="mt-4 rounded-[24px] bg-[#effbf4] border border-[#d2f3df]/30 px-2 py-3">
@@ -144,10 +144,10 @@ export default function RelapsePage() {
             {/* Relapse Triggers Section */}
             <section className="mt-8">
                 <h2 className="text-[18px] font-black tracking-tight text-gray-900">
-                    Apa pemicu Relapse Kamu?
+                    What is your Relapse trigger?
                 </h2>
                 <p className="text-xs font-semibold text-gray-400 mt-1 leading-snug">
-                    Pilih salah satu atau lebih pemicu yang kamu hadapi
+                    Select one or more triggers you encountered
                 </p>
                 <div className="flex flex-wrap gap-2.5 mt-4">
                     {["Boredom", "Stress", "Media", "Mood", "Location"].map((trigger) => {
@@ -172,15 +172,15 @@ export default function RelapsePage() {
             {/* Commitment Message Section */}
             <section className="mt-8">
                 <h2 className="text-[18px] font-black tracking-tight text-gray-900">
-                    Pesan Komitmen
+                    Commitment Message
                 </h2>
                 <p className="text-xs font-semibold text-gray-400 mt-1 leading-snug">
-                    Tulis janji atau komitmen untuk dirimu sendiri agar bangkit kembali
+                    Write a promise or commitment to yourself to rise again
                 </p>
                 <textarea
                     value={commitmentMessage}
                     onChange={(e) => setCommitmentMessage(e.target.value)}
-                    placeholder="Contoh: Saya akan bangkit lebih kuat dan berkomitmen untuk menghindari pemicu..."
+                    placeholder="Example: I will rise stronger and commit to avoiding triggers..."
                     className="w-full min-h-[90px] rounded-[24px] border-2 border-transparent bg-gray-100 p-5 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800 placeholder-gray-400 mt-4 resize-none leading-relaxed"
                 />
             </section>
@@ -191,10 +191,10 @@ export default function RelapsePage() {
                     <div className="bg-white rounded-3xl p-6 w-full max-w-[280px] shadow-2xl border border-gray-100 flex flex-col items-center gap-3 animate-in fade-in zoom-in duration-200">
                         <CheckCircle2 size={44} className="text-[#0b744f] animate-bounce" />
                         <h3 className="text-base font-bold text-gray-900 text-center">
-                            Relapse Tercatat
+                            Relapse Recorded
                         </h3>
                         <p className="text-xs font-semibold text-gray-400 text-center leading-relaxed">
-                            Kemajuan Anda telah direset. Ayo bangkit kembali lebih kuat!
+                            Your progress has been reset. Let&apos;s rise back stronger!
                         </p>
                     </div>
                 </div>
