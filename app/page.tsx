@@ -4,11 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { User, Lock } from "lucide-react";
 import { TextField } from "@/components/TextField";
+import SplashScreen from "@/components/SplashScreen";
+
 
 export default function LoginPage() {
 
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
+      <SplashScreen />
       {/* Logo badge */}
       <div className="flex justify-center mb-6">
         <div className="w-16 h-16  flex items-center justify-center ">
