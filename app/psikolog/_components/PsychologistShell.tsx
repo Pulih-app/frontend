@@ -9,18 +9,14 @@ const navItems = [
 
 export function PsychologistShell({ children }: { children: React.ReactNode }) {
     return (
-        <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col border bg-white px-5 pb-28 pt-7 text-black">
-            <Image src="/assets/logo.png" width={34} height={34} alt="Pulih" className="mb-5 ml-2" priority />
-            <section className="mb-7 flex items-center gap-4 rounded-2xl bg-[#d9d9d9] px-4 py-4">
-                <div className="h-16 w-16 shrink-0 rounded-full bg-white" />
-                <div>
-                    <h1 className="text-sm font-bold">Nama Psikolog</h1>
-                    <span className="mt-1 inline-flex rounded-full bg-[#008762] px-2 py-1 text-[9px] font-semibold text-white">
-                        Psikolog Klinis
-                    </span>
-                </div>
-            </section>
+        <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col border-x bg-white px-6 pb-28 pt-6 text-black">
+            {/* Header */}
+            <header className="mb-6 flex justify-start items-center">
+                <Image src="/assets/logo.png" width={32} height={32} alt="Pulih Logo" className="object-contain" priority />
+            </header>
+            
             {children}
+            
             <BottomNavbar items={navItems} />
         </main>
     );

@@ -38,7 +38,7 @@ export default function ProfilePage() {
           {/* Green top */}
           <div className="bg-[#1a5c3a] px-5 pt-5 pb-6 flex flex-col items-center justify-center">
 
-                        <div className="w-32 h-32 rounded-full bg-white overflow-hidden flex items-center justify-center shadow-md">
+              <div className="w-32 h-32 rounded-full bg-white overflow-hidden flex items-center justify-center shadow-md">
               <Image
                 src="/assets/profile.png"
                 alt="Avatar"
