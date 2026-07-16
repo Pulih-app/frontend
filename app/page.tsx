@@ -26,9 +26,14 @@ export default function LoginPage() {
       </div>
 
       {/* Heading */}
-      <h1 className="text-4xl font-bold text-center text-gray-900 mb-6">
+      <h1 className="text-4xl font-bold text-center text-gray-900 mb-2">
         Login
       </h1>
+
+      {/* Subtitle */}
+      <p className="text-center text-gray-500 text-sm leading-relaxed mb-6 px-2 z-90">
+        Welcome back. Let's continue your journey to healing.
+      </p>
       {/* Email / Username input */}
       <TextField
         icon={User}
@@ -84,13 +89,23 @@ export default function LoginPage() {
       </button>
 
       {/* Register link */}
-      <p className="text-center text-gray-500 text-sm mt-5 mb-4 z-90">
+      <p className="text-center text-gray-500 text-sm mt-5 mb-2 z-90">
         Don't have an account yet?{" "}
         <Link
           href="/register"
           className="text-[#2e7d32] font-bold hover:underline"
         >
           Register here.
+        </Link>
+      </p>
+
+      <p className="text-center text-gray-500 text-sm mb-4 z-90">
+        Are you a professional?{" "}
+        <Link
+          href="/login/psikolog"
+          className="text-[#2e7d32] font-bold hover:underline"
+        >
+          Login as a Psychologist.
         </Link>
       </p>
 

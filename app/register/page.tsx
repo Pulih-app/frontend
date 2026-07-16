@@ -26,9 +26,14 @@ export default function RegisterPage() {
       </div>
 
       {/* Heading */}
-      <h1 className="text-4xl font-bold text-center text-gray-900 mb-6">
+      <h1 className="text-4xl font-bold text-center text-gray-900 mb-2">
         Register
       </h1>
+
+      {/* Subtitle */}
+      <p className="text-center text-gray-500 text-sm leading-relaxed mb-6 px-2 z-90">
+        Take the first step toward your healing journey with us.
+      </p>
       {/* Email / Username input */}
       <TextField
         icon={User}
@@ -90,13 +95,23 @@ export default function RegisterPage() {
       </button>
 
       {/* Register link */}
-      <p className="text-center text-gray-500 text-sm mt-5 mb-4 z-90">
+      <p className="text-center text-gray-500 text-sm mt-5 mb-2 z-90">
         Already have an account?{" "}
         <Link
           href="/"
           className="text-[#2e7d32] font-bold hover:underline"
         >
           Login Here.
+        </Link>
+      </p>
+
+      <p className="text-center text-gray-500 text-sm mb-4 z-90">
+        Are you a professional?{" "}
+        <Link
+          href="/register/psikolog"
+          className="text-[#2e7d32] font-bold hover:underline"
+        >
+          Register as a Psychologist.
         </Link>
       </p>
 
