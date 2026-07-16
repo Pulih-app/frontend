@@ -14,6 +14,8 @@ interface MoodOption {
 export default function RelapsePage() {
     const router = useRouter();
     const [selectedMood, setSelectedMood] = useState<number | null>(null);
+    const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
+    const [commitmentMessage, setCommitmentMessage] = useState("");
     const [journalText, setJournalText] = useState("");
     const [dateString, setDateString] = useState("");
     const [showSuccessToast, setShowSuccessToast] = useState(false);
@@ -37,6 +39,14 @@ export default function RelapsePage() {
         { label: "Baik", emoji: "😊", value: 4 },
         { label: "Sangat Baik", emoji: "🤩", value: 5 },
     ];
+
+    const handleTriggerToggle = (trigger: string) => {
+        setSelectedTriggers(prev =>
+            prev.includes(trigger)
+                ? prev.filter(t => t !== trigger)
+                : [...prev, trigger]
+        );
+    };
 
     const handleSubmit = () => {
         setShowSuccessToast(true);
@@ -129,6 +139,50 @@ export default function RelapsePage() {
                         })}
                     </div>
                 </div>
+            </section>
+
+            {/* Relapse Triggers Section */}
+            <section className="mt-8">
+                <h2 className="text-[18px] font-black tracking-tight text-gray-900">
+                    Apa pemicu Relapse Kamu?
+                </h2>
+                <p className="text-xs font-semibold text-gray-400 mt-1 leading-snug">
+                    Pilih salah satu atau lebih pemicu yang kamu hadapi
+                </p>
+                <div className="flex flex-wrap gap-2.5 mt-4">
+                    {["Boredom", "Stress", "Media", "Mood", "Location"].map((trigger) => {
+                        const isSelected = selectedTriggers.includes(trigger.toLowerCase());
+                        return (
+                            <button
+                                key={trigger}
+                                onClick={() => handleTriggerToggle(trigger.toLowerCase())}
+                                className={`px-4 py-2.5 rounded-full text-xs font-bold transition-all border cursor-pointer ${
+                                    isSelected
+                                        ? "bg-[#0b744f] border-[#0b744f] text-white shadow-sm shadow-[#0b744f]/20 scale-105"
+                                        : "bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100/50"
+                                }`}
+                            >
+                                {trigger}
+                            </button>
+                        );
+                    })}
+                </div>
+            </section>
+
+            {/* Commitment Message Section */}
+            <section className="mt-8">
+                <h2 className="text-[18px] font-black tracking-tight text-gray-900">
+                    Pesan Komitmen
+                </h2>
+                <p className="text-xs font-semibold text-gray-400 mt-1 leading-snug">
+                    Tulis janji atau komitmen untuk dirimu sendiri agar bangkit kembali
+                </p>
+                <textarea
+                    value={commitmentMessage}
+                    onChange={(e) => setCommitmentMessage(e.target.value)}
+                    placeholder="Contoh: Saya akan bangkit lebih kuat dan berkomitmen untuk menghindari pemicu..."
+                    className="w-full min-h-[90px] rounded-[24px] border-2 border-transparent bg-gray-100 p-5 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800 placeholder-gray-400 mt-4 resize-none leading-relaxed"
+                />
             </section>
 
             {/* Daily Journal Section */}

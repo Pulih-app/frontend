@@ -55,8 +55,8 @@ export default function UserHomePage() {
         <h2 className="text-xl font-bold tracking-[-0.02em] text-gray-900">Daily Routine</h2>
 
         <Link href="/daily-checkin" className="mt-4 flex items-center relative overflow-hidden rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
-          <div className="w-8 h-8 shrink-0  mr-2">
-            <Image src="/assets/billy_checkin.png" width={500} height={500} alt="Billy Checkin" className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
+          <div className="w-8 h-8 shrink-0  mr-3">
+            <Image src="/assets/billy_checkin.png" width={500} height={500} alt="Billy Checkin" className="object-contain absolute -left-5 -bottom-4 w-20 h-20" />
           </div>
 
           <span className="min-w-0 flex-1 ">
