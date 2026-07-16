@@ -18,7 +18,7 @@ export default function BottomNavbar({ items }: BottomNavbarProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 border-x bg-white px-10 pb-7 pt-3 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
+    <nav className="fixed bottom-0 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 bg-white px-10 pb-7 pt-3 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
       <div className="flex items-center justify-between">
         {items.map((item) => {
           const Icon = item.icon;

@@ -2,7 +2,16 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Bell, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from "lucide-react";
+import BottomNavbar from "@/components/BottomNavbar";
+
+const navItems = [
+  { label: "Home", href: "/home", icon: Home },
+  { label: "Stats", href: "/stats", icon: TrendingUp },
+  { label: "Help", href: "/help", icon: UsersRound },
+  { label: "Learn", href: "/education", icon: BookOpen },
+  { label: "Profile", href: "/profile", icon: CircleDot },
+];
 
 interface HelpCardProps {
   title: string;
@@ -50,20 +59,18 @@ function HelpCard({ title, description, href, imageSrc }: HelpCardProps) {
 
 export default function HelpPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-24 border">
-      {/* ── Header banner ───────────────────────────────────────────────── */}
-      <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-2 pt-10 pb-8 min-h-[170px]">
+    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-24 border border-slate-100">
+      {/* ── Header banner ─────────────────────────────────────────────────── */}
+      <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-6 pt-10 pb-8 min-h-[170px]">
         <div className="max-w-[58%]">
           <h1 className="text-white font-bold text-xl leading-snug">
-            Kamu tidak berjuang sendirian
+            Your'e not alone
           </h1>
-          <p className="text-green-200 text-xs mt-2">
-            dapatkan bantuan dari teman seperjuangan di komunitas, atau bantuan dari ai coach kami
-          </p>
+          <p className="text-green-200 text-xs mt-2">Get help from an AI coach, fellow companion on the journey, and experts.</p>
         </div>
 
         {/* Mascot placeholder */}
-        <div className="absolute -right-2 -bottom-0 h-40 w-40">
+        <div className="absolute -right-8 -bottom-8 h-44 w-44">
           <Image
             src="/assets/help.png"
             alt="Mascot"
@@ -84,19 +91,22 @@ export default function HelpPage() {
         />
 
         <HelpCard
-          href="/help/komunitas"
+          href="/help/community"
           title="Temukan Komunitas"
           description="temukan teman seperjuangan di komunitas"
           imageSrc="/assets/comunity.png"
         />
 
         <HelpCard
-          href="/help/konsultasi"
+          href="/help/consultation"
           title="Konsultasi Dengan Ahli"
           description="konsultasi secara gratis maupun berbayar dengan ahli"
           imageSrc="/assets/consult.png"
         />
       </div>
+
+      <BottomNavbar items={navItems} />
+
     </div>
   );
 }
