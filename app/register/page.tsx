@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock } from "lucide-react";
+import { TextField } from "@/components/TextField";
 
 export default function RegisterPage() {
-  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
@@ -36,50 +35,26 @@ export default function RegisterPage() {
         Your data security matters. We only store whats truly needed, nothing more. See how its handled on this <Link href="/privacy" className="underline">privacy policy</Link>.
       </p>
       {/* Email / Username input */}
-      <div className="relative mb-4 z-90">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-          <User size={20} strokeWidth={1.8} />
-        </span>
-        <input
-          type="text"
-          placeholder="Username"
-          className="w-full bg-gray-100 rounded-2xl py-4 pl-12 pr-4 text-gray-700 placeholder-gray-400 text-sm outline-none border-2 border-transparent focus:border-[#4caf50] transition-colors"
-        />
-      </div>
-      <div className="relative mb-4 z-90">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-          <Mail size={20} strokeWidth={1.8} />
-        </span>
-        <input
-          type="email"
-          placeholder="Email"
-          className="w-full bg-gray-100 rounded-2xl py-4 pl-12 pr-4 text-gray-700 placeholder-gray-400 text-sm outline-none border-2 border-transparent focus:border-[#4caf50] transition-colors"
-        />
-      </div>
+      <TextField
+        icon={User}
+        type="text"
+        placeholder="Username"
+        containerClassName="mb-4"
+      />
+      <TextField
+        icon={Mail}
+        type="email"
+        placeholder="Email"
+        containerClassName="mb-4"
+      />
 
       {/* Password input */}
-      <div className="relative mb-8 z-90">
-        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-          <Lock size={20} strokeWidth={1.8} />
-        </span>
-        <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Password"
-          className="w-full bg-gray-100 rounded-2xl py-4 pl-12 pr-12 text-gray-700 placeholder-gray-400 text-sm outline-none border-2 border-transparent focus:border-[#4caf50] transition-colors"
-        />
-        <button
-          type="button"
-          onClick={() => setShowPassword((prev) => !prev)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-          aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
-        >
-          {showPassword ? (
-            <Eye size={20} strokeWidth={1.8} />
-          ) : (
-            <EyeOff size={20} strokeWidth={1.8} />
-          )}
-        </button>
-      </div>
+      <TextField
+        icon={Lock}
+        type="password"
+        placeholder="Password"
+        containerClassName="mb-8"
+      />
 
       {/* Submit button */}
       <button
