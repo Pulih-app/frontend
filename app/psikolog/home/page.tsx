@@ -125,8 +125,8 @@ export default function PsychologistHomePage() {
                                 Edit
                             </Link>
                         </div>
-                        <div className="mt-4 bg-white border border-gray-100 rounded-3xl p-4 shadow-sm">
-                            <ScheduleCalendar availableDays={displayDays} selectedDays={displayDays} />
+                        <div className="mt-4">
+                            <ScheduleCalendar availableDays={displayDays} selectedDays={displayDays} className="shadow-sm border-gray-100" />
                         </div>
                     </section>
                 </>
