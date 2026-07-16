@@ -2,7 +2,16 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { Bot, ChevronRight } from "lucide-react";
+import { BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from "lucide-react";
+import BottomNavbar from "@/components/BottomNavbar";
+
+const navItems = [
+  { label: "Home", href: "/home", icon: Home },
+  { label: "Stats", href: "/stats", icon: TrendingUp },
+  { label: "Help", href: "/help", icon: UsersRound },
+  { label: "Learn", href: "/education", icon: BookOpen },
+  { label: "Profile", href: "/profile", icon: CircleDot },
+];
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -94,7 +103,7 @@ export default function EducationPage() {
     const [activeQuote, setActiveQuote] = useState(0);
 
     return (
-        <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-10 border">
+        <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-10">
 
             {/* ── Header banner ─────────────────────────────────────────────────── */}
             <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-2 pt-10 pb-8 min-h-[170px]">
@@ -160,6 +169,9 @@ export default function EducationPage() {
                     ))}
                 </div>
             </div>
+
+                  <BottomNavbar items={navItems} />
+            
 
         </div>
     );
