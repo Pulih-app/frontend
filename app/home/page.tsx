@@ -22,9 +22,9 @@ export default function UserHomePage() {
       {/* Streak Card */}
       <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-8 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
         <div className="relative z-10 max-w-[220px]">
-          <p className="text-[18px] font-black">Streak Kamu</p>
-          <h2 className="mt-2 text-[44px] font-black leading-none tracking-[-0.03em]">23 Hari</h2>
-          <p className="mt-4 text-xs font-semibold leading-relaxed text-white/95">Setelah Melakukan Daily Check-in streak kamu akan terupdate di tengah malam</p>
+          <p className="text-[18px] font-black">Your Streak</p>
+          <h2 className="mt-2 text-[44px] font-black leading-none tracking-[-0.03em]">23 Days</h2>
+          <p className="mt-4 text-xs font-semibold leading-relaxed text-white/95">After completing the Daily Check-in, your streak will update at midnight</p>
         </div>
 
         {/* Mountain illustration */}
@@ -57,8 +57,8 @@ export default function UserHomePage() {
             <Image src="/assets/billy_checkin.png" alt="Billy Checkin" fill className="object-contain" />
           </div>
           <span className="min-w-0 flex-1">
-            <span className="block text-sm font-black leading-tight text-gray-900">Check-In Harian Diatur Saat 6pm</span>
-            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Klik untuk Check-In lebih awal</span>
+            <span className="block text-sm font-black leading-tight text-gray-900">Daily Check-In scheduled at 6 PM</span>
+            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Click to Check-In earlier</span>
           </span>
           <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0" />
         </Link>
@@ -69,7 +69,7 @@ export default function UserHomePage() {
           </div>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-black leading-tight text-gray-900">Relapse</span>
-            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Akui, evaluasi, dan reset progress kamu.</span>
+            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Acknowledge, evaluate, and reset your progress.</span>
           </span>
           <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0" />
         </Link>
@@ -80,7 +80,7 @@ export default function UserHomePage() {
           </div>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-black leading-tight text-gray-900">Emergency Button</span>
-            <span className="mt-1 block text-[11px] font-semibold leading-snug text-[#8b8b8b]">Dapatkan Bantuan instan ketika dalam waktu feeling tempted</span>
+            <span className="mt-1 block text-[11px] font-semibold leading-snug text-[#8b8b8b]">Get instant help when you feel tempted</span>
           </span>
           <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0 ml-1" />
         </button>
@@ -90,8 +90,8 @@ export default function UserHomePage() {
       <section className="mt-6">
         <h2 className="text-xl font-bold tracking-[-0.02em] text-gray-900">Today Insight</h2>
         <div className="mt-4 rounded-2xl bg-gray-50 border border-gray-200/50 px-5 py-5">
-          <p className="text-xs font-semibold leading-relaxed text-gray-700 italic">“Kamu sudah melakukan yang terbaik hari ini, hasil yang memuaskan datang dari hal kecil yang dilakukan secara konsisten.”</p>
-          <p className="mt-4 text-[9px] font-semibold text-[#8b8b8b] leading-tight">Insight ini disesuaikan dari journal harian yang kamu tulis dan aktivitas daily check-in kamu</p>
+          <p className="text-xs font-semibold leading-relaxed text-gray-700 italic">“You did your best today. Satisfying results come from small actions done consistently.”</p>
+          <p className="mt-4 text-[9px] font-semibold text-[#8b8b8b] leading-tight">This insight is customized based on your daily journal and daily check-in activity.</p>
         </div>
       </section>
 
