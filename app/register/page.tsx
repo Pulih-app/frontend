@@ -26,14 +26,9 @@ export default function RegisterPage() {
       </div>
 
       {/* Heading */}
-      <h1 className="text-4xl font-bold text-center text-gray-900 mb-3">
+      <h1 className="text-4xl font-bold text-center text-gray-900 mb-6">
         Register
       </h1>
-
-      {/* Subtitle */}
-      <p className="text-center text-gray-500 text-sm leading-relaxed mb-8 px-2 z-90">
-        Your data security matters. We only store whats truly needed, nothing more. See how its handled on this <Link href="/privacy" className="underline">privacy policy</Link>.
-      </p>
       {/* Email / Username input */}
       <TextField
         icon={User}
@@ -55,6 +50,36 @@ export default function RegisterPage() {
         placeholder="Password"
         containerClassName="mb-8"
       />
+
+      {/* Policy agreement checkbox */}
+      <div className="flex items-start gap-3 z-90 px-2 mt-1 mb-6">
+        <div className="relative flex items-center mt-0.3 shrink-0">
+          <input
+            type="checkbox"
+            id="privacy-policy"
+            className="peer h-4 w-4 cursor-pointer appearance-none rounded border-2 border-gray-300 checked:border-[#2e7d32] checked:bg-[#2e7d32] focus:outline-none transition-colors"
+          />
+          <svg
+            className="absolute left-0 top-0 h-4 w-4 pointer-events-none hidden peer-checked:block text-white p-0.5"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <label htmlFor="privacy-policy" className="text-gray-500 text-xs leading-normal select-none cursor-pointer">
+          I have read and agree to the{" "}
+          <Link href="/privacy" className="underline hover:text-gray-700 transition-colors">
+            privacy policy
+          </Link>
+          .
+        </label>
+      </div>
 
       {/* Submit button */}
       <button
