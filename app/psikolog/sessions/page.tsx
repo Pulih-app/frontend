@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Video, Calendar, X } from "lucide-react";
+import Button from "@/components/Button";
 
 interface Appointment {
     id: string;
@@ -40,22 +41,56 @@ export default function SessionsPage() {
     ]);
 
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [activeModalApp, setActiveModalApp] = useState<{ id: string; name: string } | null>(null);
+    const [meetLink, setMeetLink] = useState("");
+    const [selectedSchedule, setSelectedSchedule] = useState("");
+    const [profession, setProfession] = useState<"umum" | "klinis">("klinis");
 
-    const handleAccept = (id: string, name: string) => {
+    // Load profession from localStorage
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const saved = window.localStorage.getItem("psychologist-profession");
+            if (saved === "umum" || saved === "klinis") {
+                setProfession(saved);
+            }
+        }
+    }, []);
+
+    const handleAcceptClick = (id: string, name: string) => {
+        setActiveModalApp({ id, name });
+        setMeetLink("");
+        setSelectedSchedule("");
+    };
+
+    const handleConfirmAccept = () => {
+        if (!activeModalApp) return;
+        const { id, name } = activeModalApp;
+
         setAppointments((prev) =>
             prev.map((app) => (app.id === id ? { ...app, status: "accepted" } : app))
         );
-        setToastMessage(`Sesi untuk ${name} berhasil disetujui!`);
-        setTimeout(() => setToastMessage(null), 2000);
+
+        const detailInfo =
+            profession === "klinis"
+                ? `dengan link Google Meet: ${meetLink}`
+                : `pada jadwal: ${selectedSchedule}`;
+
+        setToastMessage(`Sesi untuk ${name} berhasil disetujui ${detailInfo}!`);
+        setActiveModalApp(null);
+        setTimeout(() => setToastMessage(null), 4000);
     };
 
     const handleReschedule = (id: string) => {
-        // Redirect to reschedule page
         router.push("/psikolog/practice-schedule");
     };
 
+    const isFormValid =
+        profession === "klinis"
+            ? meetLink.trim().startsWith("http") || meetLink.trim().length > 5
+            : selectedSchedule !== "";
+
     return (
-        <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border pb-8">
+        <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border pb-8 relative">
             {/* Back button */}
             <button
                 onClick={() => router.push("/psikolog/home")}
@@ -141,7 +176,7 @@ export default function SessionsPage() {
                                         Re Schedule
                                     </button>
                                     <button
-                                        onClick={() => handleAccept(app.id, app.patientName)}
+                                        onClick={() => handleAcceptClick(app.id, app.patientName)}
                                         className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white text-xs font-bold py-2.5 px-5 rounded-xl transition-colors cursor-pointer shadow-sm"
                                     >
                                         Accept
@@ -152,6 +187,94 @@ export default function SessionsPage() {
                     </div>
                 ))}
             </div>
+
+            {/* Accept Confirmation Modal Popup */}
+            {activeModalApp && (
+                <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+                    <div className="bg-white rounded-3xl p-6 w-full max-w-[320px] shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
+                        {/* Modal Header */}
+                        <div className="flex justify-between items-center">
+                            <h3 className="text-lg font-bold text-gray-900 leading-tight">
+                                Konfirmasi Sesi
+                            </h3>
+                            <button
+                                onClick={() => setActiveModalApp(null)}
+                                className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="h-px bg-gray-100 w-full" />
+
+                        {/* Modal Content depending on Profession */}
+                        {profession === "klinis" ? (
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block px-1">
+                                    Input Link Google Meet
+                                </label>
+                                <div className="relative flex items-center">
+                                    <Video size={16} className="absolute left-4 text-gray-400" />
+                                    <input
+                                        type="text"
+                                        placeholder="https://meet.google.com/..."
+                                        value={meetLink}
+                                        onChange={(e) => setMeetLink(e.target.value)}
+                                        className="w-full rounded-2xl border-2 border-transparent bg-gray-100 pl-10 pr-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors"
+                                    />
+                                </div>
+                                <p className="text-[10px] text-gray-400 px-1 mt-1 leading-relaxed">
+                                    Link Google Meet ini akan otomatis dikirimkan ke pasien untuk sesi video call online.
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block px-1">
+                                    Pilih Jadwal Pertemuan
+                                </label>
+                                <div className="relative flex items-center">
+                                    <Calendar size={16} className="absolute left-4 text-gray-400" />
+                                    <select
+                                        value={selectedSchedule}
+                                        onChange={(e) => setSelectedSchedule(e.target.value)}
+                                        className="w-full rounded-2xl border-2 border-transparent bg-gray-100 pl-10 pr-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors appearance-none cursor-pointer text-gray-800"
+                                    >
+                                        <option value="">Pilih jadwal...</option>
+                                        <option value="Jumat, 17 Juli 2026 (13.00 - 14.00 WIB)">
+                                            Jumat, 17 Juli (13.00 WIB)
+                                        </option>
+                                        <option value="Jumat, 17 Juli 2026 (14.30 - 15.30 WIB)">
+                                            Jumat, 17 Juli (14.30 WIB)
+                                        </option>
+                                        <option value="Sabtu, 18 Juli 2026 (10.00 - 11.00 WIB)">
+                                            Sabtu, 18 Juli (10.00 WIB)
+                                        </option>
+                                    </select>
+                                </div>
+                                <p className="text-[10px] text-gray-400 px-1 mt-1 leading-relaxed">
+                                    Pilih slot waktu praktik offline Anda untuk mengonfirmasi janji temu dengan pasien.
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Modal Action Buttons */}
+                        <div className="flex gap-3 pt-2">
+                            <button
+                                onClick={() => setActiveModalApp(null)}
+                                className="flex-1 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 active:bg-gray-100 font-bold text-sm py-3 rounded-2xl transition-colors cursor-pointer"
+                            >
+                                Batal
+                            </button>
+                            <button
+                                onClick={handleConfirmAccept}
+                                disabled={!isFormValid}
+                                className="flex-1 bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-sm py-3 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-[#2e7d32]/10"
+                            >
+                                Setujui
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </main>
     );
 }

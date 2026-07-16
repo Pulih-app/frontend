@@ -45,7 +45,7 @@ export default function Question9Page() {
       {/* Continue button */}
       <div className="mt-auto w-full pb-8 pt-6">
         {selected ? (
-          <Button href="/onboarding/question-9">Continue</Button>
+          <Button href="/onboarding/set-target">Continue</Button>
         ) : (
           <Button disabled className="!bg-gray-300 !hover:bg-gray-300 !active:bg-gray-300 cursor-not-allowed">Continue</Button>
         )}

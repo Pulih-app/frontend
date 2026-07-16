@@ -217,7 +217,12 @@ export default function PsychologistOnboardingPage() {
             <Button
               type="button"
               disabled={!isStep1Valid}
-              onClick={() => setStep(2)}
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.localStorage.setItem("psychologist-profession", profession);
+                }
+                setStep(2);
+              }}
             >
               Continue
             </Button>
