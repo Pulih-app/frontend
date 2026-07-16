@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { RefreshCw } from "lucide-react";
+import { ScheduleCalendar } from "@/components/ScheduleCalendar";
+import BottomNavbar from "@/components/BottomNavbar";
 
 // ─── Donut chart helpers ──────────────────────────────────────────────────────
 
@@ -35,6 +37,17 @@ function donutArcPath(
 }
 
 // ─── Static data ──────────────────────────────────────────────────────────────
+
+// Days marked as clean (no relapse) — adjust to real data as needed
+const CLEAN_DAYS = [
+  "2026-06-01", "2026-06-02", "2026-06-03", "2026-06-04", "2026-06-05",
+  "2026-06-06", "2026-06-07", "2026-06-08", "2026-06-09", "2026-06-10",
+  "2026-06-11", "2026-06-12", "2026-06-13", "2026-06-14", "2026-06-15",
+  "2026-06-16", "2026-06-17", "2026-06-18", "2026-06-19", "2026-06-20",
+  "2026-06-21", "2026-06-22", "2026-06-23",
+  "2026-07-01", "2026-07-02", "2026-07-03", "2026-07-04", "2026-07-05",
+  "2026-07-06", "2026-07-07", "2026-07-08", "2026-07-09", "2026-07-10",
+];
 
 const TRIGGER_DATA = [
   { label: "Boredom",  value: 6,   color: "#1a5c3a" },
@@ -75,14 +88,13 @@ export default function StatsPage() {
 
   return (
     <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-24 border">
-
       {/* ── Header banner ─────────────────────────────────────────────────── */}
       <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-2 pt-10 pb-8 min-h-[170px]">
         <div className="max-w-[58%]">
           <h1 className="text-white font-bold text-xl leading-snug">
-            Mari Kita lihat, Seberapa Jauh Progresmu
+            Let's see how far you've progressed
           </h1>
-          <p className="text-green-200 text-xs mt-2">Satu langkah kecil setiap harinya</p>
+          <p className="text-green-200 text-xs mt-2">One small step every day</p>
         </div>
 
         {/* Mascot placeholder */}
@@ -129,7 +141,7 @@ export default function StatsPage() {
                 <p className="text-[#1a5c3a] text-2xl font-bold">Longest Streak</p>
                 <div>
                   <p className="text-5xl font-bold text-[#1a5c3a] leading-none">23</p>
-                  <p className="text-3xl font-bold text-[#1a5c3a] leading-snug">Hari</p>
+                  <p className="text-3xl font-bold text-[#1a5c3a] leading-snug">Days</p>
                 </div>
               </div>
 
@@ -168,10 +180,21 @@ export default function StatsPage() {
                   </div>
                   <div>
                     <p className="text-xs text-[#1a5c3a] font-medium">Clean Days</p>
-                    <p className="text-2xl font-bold text-[#1a5c3a]">33 Hari</p>
+                    <p className="text-2xl font-bold text-[#1a5c3a]">33 Days</p>
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
+
+          {/* ── Streak Calendar ───────────────────────────────────────── */}
+          <section>
+            <h2 className="text-2xl font-bold text-gray-900">Streak Calendar</h2>
+            <p className="text-gray-400 text-sm mt-0.5">
+              Clean days you have achieved
+            </p>
+            <div className="mt-4">
+              <ScheduleCalendar selectedDays={CLEAN_DAYS} />
             </div>
           </section>
 
@@ -318,6 +341,8 @@ export default function StatsPage() {
           History coming soon
         </div>
       )}
+
+
     </div>
   );
 }
