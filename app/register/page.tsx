@@ -3,9 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { User, Lock, Eye, EyeOff } from "lucide-react";
+import { User, Mail, Lock, Eye, EyeOff } from "lucide-react";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -28,7 +28,7 @@ export default function LoginPage() {
 
       {/* Heading */}
       <h1 className="text-4xl font-bold text-center text-gray-900 mb-3">
-        Login
+        Register
       </h1>
 
       {/* Subtitle */}
@@ -42,7 +42,17 @@ export default function LoginPage() {
         </span>
         <input
           type="text"
-          placeholder="Email atau username"
+          placeholder="Username"
+          className="w-full bg-gray-100 rounded-2xl py-4 pl-12 pr-4 text-gray-700 placeholder-gray-400 text-sm outline-none border-2 border-transparent focus:border-[#4caf50] transition-colors"
+        />
+      </div>
+      <div className="relative mb-4 z-90">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+          <Mail size={20} strokeWidth={1.8} />
+        </span>
+        <input
+          type="email"
+          placeholder="Email"
           className="w-full bg-gray-100 rounded-2xl py-4 pl-12 pr-4 text-gray-700 placeholder-gray-400 text-sm outline-none border-2 border-transparent focus:border-[#4caf50] transition-colors"
         />
       </div>
@@ -76,17 +86,17 @@ export default function LoginPage() {
         type="button"
         className="w-full bg-[#2e7d32] z-90 hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm"
       >
-        Login
+        Register
       </button>
 
       {/* Register link */}
       <p className="text-center text-gray-500 text-sm mt-5 mb-4 z-90">
-        Don't have an account yet?{" "}
+        Already have an account?{" "}
         <Link
-          href="/register"
+          href="/"
           className="text-[#2e7d32] font-bold hover:underline"
         >
-          Register here.
+          Login Here.
         </Link>
       </p>
 
