@@ -105,7 +105,7 @@ export default function SessionsPage() {
                             {/* Mascot doctor illustration */}
                             <div className="w-24 h-24 relative shrink-0 bg-white/50 rounded-2xl p-1 border border-gray-200/20 overflow-hidden">
                                 <Image
-                                    src="/assets/psikolog/mascot-doctor.png"
+                                    src="/assets/psikolog/billy_lari.png"
                                     alt="Doctor Mascot"
                                     fill
                                     className="object-contain"
