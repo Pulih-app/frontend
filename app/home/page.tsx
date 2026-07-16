@@ -20,7 +20,7 @@ export default function UserHomePage() {
       </section>
 
       {/* Streak Card */}
-      <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-8 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)] border border-[#095f40]">
+      <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-8 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
         <div className="relative z-10 max-w-[220px]">
           <p className="text-[18px] font-black">Streak Kamu</p>
           <h2 className="mt-2 text-[44px] font-black leading-none tracking-[-0.03em]">23 Hari</h2>
@@ -52,8 +52,10 @@ export default function UserHomePage() {
       <section className="mt-6">
         <h2 className="text-xl font-bold tracking-[-0.02em] text-gray-900">Daily Routine</h2>
 
-        <Link href="/onboarding/daily-checkin" className="mt-4 flex items-center rounded-2xl bg-[#effbf4] px-5 py-4 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
-          <span className="mr-4 text-2xl shrink-0">⏱️</span>
+        <Link href="/onboarding/daily-checkin" className="mt-4 flex items-center rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 transition-transform">
+          <div className="mr-4 w-12 h-12 relative shrink-0">
+            <Image src="/assets/billy_checkin.png" alt="Billy Checkin" fill className="object-contain" />
+          </div>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-black leading-tight text-gray-900">Check-In Harian Diatur Saat 6pm</span>
             <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Klik untuk Check-In lebih awal</span>
@@ -61,21 +63,26 @@ export default function UserHomePage() {
           <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0" />
         </Link>
 
-        <Link href="/onboarding/set-target" className="mt-4 flex items-center rounded-2xl bg-[#ff8f94] px-5 py-4 active:scale-[0.99] text-white transition-transform">
-          <span className="mr-4 text-2xl shrink-0">💪</span>
+        <Link href="/onboarding/set-target" className="mt-4 flex items-center rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
+          <div className="mr-4 w-12 h-12 relative shrink-0">
+            <Image src="/assets/billy_relapse.png" alt="Billy Relapse" fill className="object-contain" />
+          </div>
           <span className="min-w-0 flex-1">
-            <span className="block text-sm font-black leading-tight">Relapse</span>
-            <span className="mt-1 block text-[11px] font-semibold text-white/90">Akui, evaluasi, dan reset progress kamu.</span>
+            <span className="block text-sm font-black leading-tight text-gray-900">Relapse</span>
+            <span className="mt-1 block text-[11px] font-semibold text-[#8b8b8b]">Akui, evaluasi, dan reset progress kamu.</span>
           </span>
-          <ChevronRight size={20} strokeWidth={2.5} className="text-white shrink-0" />
+          <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0" />
         </Link>
 
-        <button className="mt-4 flex w-full items-center rounded-2xl bg-gray-50 border border-gray-200/50 px-5 py-4 text-left active:scale-[0.99] transition-transform cursor-pointer">
-          <span className="mr-4 text-2xl shrink-0">🚨</span>
+        <button className="mt-4 flex w-full items-center rounded-2xl bg-[#effbf4] border border-[#d2f3df]/30 px-5 py-3.5 text-left active:scale-[0.99] transition-transform cursor-pointer">
+          <div className="mr-4 w-12 h-12 relative shrink-0">
+            <Image src="/assets/billy_panik.png" alt="Billy Panik" fill className="object-contain" />
+          </div>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-black leading-tight text-gray-900">Emergency Button</span>
-            <span className="mt-1 block text-[11px] font-semibold leading-snug text-gray-500">Dapatkan Bantuan instan ketika dalam waktu feeling tempted</span>
+            <span className="mt-1 block text-[11px] font-semibold leading-snug text-[#8b8b8b]">Dapatkan Bantuan instan ketika dalam waktu feeling tempted</span>
           </span>
+          <ChevronRight size={20} strokeWidth={2.5} className="text-gray-400 shrink-0 ml-1" />
         </button>
       </section>
 
