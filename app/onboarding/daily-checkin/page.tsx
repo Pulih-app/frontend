@@ -92,16 +92,18 @@ export default function DailyCheckinPage() {
                     Pilih yang paling menggambarkan perasaanmu saat ini
                 </p>
 
-                <div className="mt-4 rounded-[24px] bg-[#effbf4] border border-[#d2f3df]/30 px-3.5 py-5">
-                    <div className="flex justify-between items-center">
+                <div className="mt-4 rounded-[24px] bg-[#effbf4] border border-[#d2f3df]/30 px-2 py-3">
+                    <div className="flex justify-between items-center gap-1">
                         {moods.map((mood) => {
                             const isSelected = selectedMood === mood.value;
                             return (
                                 <button
                                     key={mood.value}
                                     onClick={() => setSelectedMood(mood.value)}
-                                    className={`flex flex-col items-center gap-1.5 flex-1 transition-all duration-200 cursor-pointer ${
-                                        isSelected ? "scale-110" : "opacity-80 hover:opacity-100"
+                                    className={`flex flex-col items-center gap-1.5 py-3 px-1 rounded-2xl flex-1 transition-all duration-200 cursor-pointer ${
+                                        isSelected 
+                                            ? "bg-[#0b744f] text-white shadow-md shadow-[#0b744f]/20 scale-105" 
+                                            : "bg-transparent text-gray-500 opacity-80 hover:opacity-100 hover:bg-black/5"
                                     }`}
                                 >
                                     <span className="text-3xl filter drop-shadow-sm select-none">
@@ -109,7 +111,7 @@ export default function DailyCheckinPage() {
                                     </span>
                                     <span
                                         className={`text-[9px] font-extrabold tracking-tight transition-colors text-center whitespace-nowrap ${
-                                            isSelected ? "text-[#2e7d32]" : "text-gray-400"
+                                            isSelected ? "text-white" : "text-gray-400"
                                         }`}
                                     >
                                         {mood.label}
