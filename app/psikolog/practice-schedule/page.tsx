@@ -57,62 +57,107 @@ export default function PracticeSchedulePage() {
     };
 
     return (
-        <main className="mx-auto flex min-h-screen w-full max-w-sm flex-col border bg-white pb-8 text-black">
-            <header className="border-b border-gray-200 px-5 py-7 text-center">
-                <h1 className="text-lg font-bold text-slate-900">Practice Schedule</h1>
-            </header>
-            <section className="px-5 pt-6">
-                <div className="mx-auto mb-8 flex w-40 items-center justify-center">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
-                    <span className="h-0.5 flex-1 bg-gray-200" />
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-500">2</span>
-                </div>
+        <main className="mx-auto flex min-h-screen w-full max-w-sm flex-col border bg-white pb-8 text-black px-6">
+            {/* Back button */}
+            <button
+                onClick={() => router.push("/psikolog/home")}
+                className="mt-6 inline-flex items-center gap-1 text-gray-500 hover:text-gray-700 active:text-gray-700 transition-colors w-fit cursor-pointer"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+            </button>
+
+            {/* Page Heading */}
+            <h1 className="mt-4 text-[2rem] font-extrabold text-gray-900 leading-tight">
+                Practice Schedule
+            </h1>
+
+            {/* Progress Step Dots */}
+            <div className="mx-auto mb-8 mt-6 flex w-40 items-center justify-center">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
+                <span className="h-0.5 flex-1 bg-gray-200" />
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gray-200 text-xs font-bold text-gray-500">2</span>
+            </div>
+
+            <section className="space-y-6">
                 <ScheduleCalendar
                     availableDays={selectedDays}
                     selectedDays={selectedDays}
                     onSelectDay={selectDay}
-                    className="border-4 border-[#2e7d32]"
+                    className="border border-gray-200/80 rounded-3xl shadow-sm overflow-hidden"
                 />
-                <h2 className="mt-4 text-xl font-bold">Select Date Range</h2>
-                <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3">
-                    <label className="text-sm font-semibold text-gray-400">
-                        Start Date
-                        <input
-                            type="date"
-                            value={startDate}
-                            onChange={(event) => {
-                                setStartDate(event.target.value);
-                                setEndDate(event.target.value);
-                            }}
-                            className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none"
-                        />
-                    </label>
-                    <span className="pb-4 text-xl">-</span>
-                    <label className="text-sm font-semibold text-gray-400">
-                        End Date
-                        <input
-                            type="date"
-                            value={endDate}
-                            onChange={(event) => setEndDate(event.target.value)}
-                            className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none"
-                        />
-                    </label>
+
+                {/* Date range inputs side-by-side */}
+                <div>
+                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2 px-1">
+                        Select Date Range
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        <label className="text-xs font-semibold text-gray-400">
+                            Start Date
+                            <input
+                                type="date"
+                                value={startDate}
+                                onChange={(event) => {
+                                    setStartDate(event.target.value);
+                                    setEndDate(event.target.value);
+                                }}
+                                className="mt-1.5 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3.5 text-sm font-medium text-gray-800 outline-none focus:border-[#2e7d32] focus:bg-white transition-colors"
+                            />
+                        </label>
+                        <label className="text-xs font-semibold text-gray-400">
+                            End Date
+                            <input
+                                type="date"
+                                value={endDate}
+                                onChange={(event) => setEndDate(event.target.value)}
+                                className="mt-1.5 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3.5 text-sm font-medium text-gray-800 outline-none focus:border-[#2e7d32] focus:bg-white transition-colors"
+                            />
+                        </label>
+                    </div>
                 </div>
-                <h2 className="mt-4 text-xl font-bold">Select Time Range</h2>
-                <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-3">
-                    <label className="text-sm font-semibold text-gray-400">
-                        Start Time
-                        <input type="time" className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none" />
-                    </label>
-                    <span className="pb-4 text-xl">-</span>
-                    <label className="text-sm font-semibold text-gray-400">
-                        End Time
-                        <input type="time" className="mt-2 w-full rounded-2xl border border-[#2e7d32] bg-[#F3F3F1] px-3 py-4 text-sm font-normal text-black outline-none" />
-                    </label>
+
+                {/* Time range inputs side-by-side */}
+                <div>
+                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2 px-1">
+                        Select Time Range
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                        <label className="text-xs font-semibold text-gray-400">
+                            Start Time
+                            <input
+                                type="time"
+                                className="mt-1.5 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3.5 text-sm font-medium text-gray-800 outline-none focus:border-[#2e7d32] focus:bg-white transition-colors"
+                            />
+                        </label>
+                        <label className="text-xs font-semibold text-gray-400">
+                            End Time
+                            <input
+                                type="time"
+                                className="mt-1.5 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3.5 text-sm font-medium text-gray-800 outline-none focus:border-[#2e7d32] focus:bg-white transition-colors"
+                            />
+                        </label>
+                    </div>
                 </div>
             </section>
-            <div className="mt-auto px-5 pt-10">
-                <Button type="button" onClick={continueToPricing} className="rounded-2xl bg-[#2e7d32] py-4 shadow-md shadow-[#2e7d32]/30 hover:bg-[#1b5e20] active:bg-[#1b5e20]">
+
+            <div className="mt-auto pt-8">
+                <Button
+                    type="button"
+                    onClick={continueToPricing}
+                    className="w-full bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm"
+                >
                     Continue
                 </Button>
             </div>

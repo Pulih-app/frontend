@@ -32,47 +32,71 @@ export default function SetUpPricingPage() {
     };
 
     return (
-        <main className="mx-auto flex min-h-screen w-full max-w-sm flex-col border bg-white pb-8 text-black">
-            <header className="border-b border-gray-200 px-5 py-7 text-center">
-                <h1 className="text-lg font-bold text-slate-900">Set Up Pricing</h1>
-            </header>
-            <section className="px-8 pt-6">
-                <div className="mx-auto mb-10 flex w-40 items-center justify-center">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
-                    <span className="h-0.5 flex-1 bg-[#2e7d32]" />
-                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">2</span>
-                </div>
+        <main className="mx-auto flex min-h-screen w-full max-w-sm flex-col border bg-white pb-8 text-black px-6">
+            {/* Back button */}
+            <button
+                onClick={() => router.push("/psikolog/practice-schedule")}
+                className="mt-6 inline-flex items-center gap-1 text-gray-500 hover:text-gray-700 active:text-gray-700 transition-colors w-fit cursor-pointer"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                >
+                    <path d="M15 18l-6-6 6-6" />
+                </svg>
+            </button>
+
+            {/* Page Heading */}
+            <h1 className="mt-4 text-[2rem] font-extrabold text-gray-900 leading-tight">
+                Set Up Pricing
+            </h1>
+
+            {/* Progress Step Dots */}
+            <div className="mx-auto mb-8 mt-6 flex w-40 items-center justify-center">
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">1</span>
+                <span className="h-0.5 flex-1 bg-[#2e7d32]" />
+                <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#2e7d32] text-xs font-bold text-white">2</span>
+            </div>
+
+            <section className="space-y-6">
                 <div className="space-y-4">
                     {variants.map((variant, index) => (
-                        <div key={variant.id} className="rounded-3xl bg-[#f0f0f0] px-4 py-6">
-                            <h2 className="text-xl font-bold">Session Rate {variants.length > 1 ? index + 1 : ""}</h2>
-                            <p className="text-sm text-gray-400">Set your consultation rate per session.</p>
+                        <div key={variant.id} className="rounded-3xl bg-gray-50 border border-gray-200/50 p-5 shadow-sm">
+                            <h2 className="text-lg font-bold text-gray-800">Session Rate {variants.length > 1 ? index + 1 : ""}</h2>
+                            <p className="text-xs text-gray-400 mt-0.5">Set your consultation rate per session.</p>
                             <input
                                 type="number"
                                 value={variant.price}
                                 onChange={(event) => updateVariant(variant.id, "price", event.target.value)}
                                 placeholder="Enter price (e.g., Rp 200.000)"
-                                className="mt-3 w-full rounded-2xl border border-[#2e7d32] bg-white px-4 py-3 text-sm outline-none"
+                                className="mt-3 w-full rounded-2xl border-2 border-transparent bg-white px-4 py-3.5 text-sm font-semibold outline-none focus:border-[#2e7d32] transition-colors shadow-inner"
                             />
                             <div className="mt-2 flex gap-2">
                                 {["300000", "200000"].map((value) => (
-                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "price", value)} className="rounded-full bg-[#2e7d32] px-3 py-1 text-[8px] font-bold text-white">
+                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "price", value)} className="rounded-full bg-[#2e7d32]/10 text-[#2e7d32] hover:bg-[#2e7d32]/25 active:bg-[#2e7d32]/25 px-3 py-1 text-[8px] font-bold">
                                         Rp {Number(value).toLocaleString("id-ID")}
                                     </button>
                                 ))}
 							</div>
-                            <h2 className="mt-3 text-xl font-bold">Session Duration</h2>
-                            <p className="text-sm text-gray-400">Set the time limit for each consultation session.</p>
+                            <h2 className="mt-5 text-lg font-bold text-gray-800">Session Duration</h2>
+                            <p className="text-xs text-gray-400 mt-0.5">Set the time limit for each consultation session.</p>
                             <input
                                 type="number"
                                 value={variant.duration}
                                 onChange={(event) => updateVariant(variant.id, "duration", event.target.value)}
                                 placeholder="Select or type duration (e.g., 60 mins)"
-                                className="mt-3 w-full rounded-2xl border border-[#2e7d32] bg-white px-4 py-3 text-sm outline-none"
+                                className="mt-3 w-full rounded-2xl border-2 border-transparent bg-white px-4 py-3.5 text-sm font-semibold outline-none focus:border-[#2e7d32] transition-colors shadow-inner"
                             />
                             <div className="mt-2 flex gap-2">
                                 {["30", "60"].map((value) => (
-                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "duration", value)} className="rounded-full bg-[#2e7d32] px-3 py-1 text-[8px] font-bold text-white">
+                                    <button key={value} type="button" onClick={() => updateVariant(variant.id, "duration", value)} className="rounded-full bg-[#2e7d32]/10 text-[#2e7d32] hover:bg-[#2e7d32]/25 active:bg-[#2e7d32]/25 px-3 py-1 text-[8px] font-bold">
                                         {value === "60" ? "1 Jam" : "30 Menit"}
                                     </button>
                                 ))}
@@ -80,18 +104,18 @@ export default function SetUpPricingPage() {
                         </div>
                     ))}
                 </div>
-                <div className="mt-14 text-center">
-                    <p className="mb-2 text-[10px]">Want to offer different rates or durations?</p>
-                    <button type="button" onClick={addVariant} className="rounded-full bg-[#2e7d32] px-3 py-1 text-[8px] font-bold text-white">
+                <div className="text-center pt-2">
+                    <p className="mb-2 text-[10px] font-semibold text-gray-400">Want to offer different rates or durations?</p>
+                    <button type="button" onClick={addVariant} className="rounded-full bg-[#2e7d32]/10 text-[#2e7d32] hover:bg-[#2e7d32]/20 px-4.5 py-1.5 text-[9px] font-extrabold transition-colors">
                         + Add Another Variant
                     </button>
                 </div>
             </section>
-            <div className="mt-auto grid grid-cols-2 gap-8 px-6 pt-10">
-                <Button type="button" onClick={() => router.back()} className="rounded-2xl bg-[#2e7d32] py-4 shadow-md shadow-green-900/30 hover:bg-[#1b5e20] active:bg-[#1b5e20]">
+            <div className="mt-auto grid grid-cols-2 gap-4 pt-8">
+                <Button type="button" onClick={() => router.back()} className="rounded-2xl border-2 border-[#2e7d32] bg-white text-[#2e7d32] hover:bg-gray-50 active:bg-gray-100 py-4 font-bold shadow-sm">
                     Back
                 </Button>
-                <Button type="button" onClick={savePackage} className="rounded-2xl bg-[#2e7d32] py-4 shadow-md shadow-green-900/30 hover:bg-[#1b5e20] active:bg-[#1b5e20]">
+                <Button type="button" onClick={savePackage} className="rounded-2xl bg-[#2e7d32] text-white hover:bg-[#1b5e20] active:bg-[#1b5e20] py-4 font-bold shadow-md shadow-[#2e7d32]/20">
                     Continue
                 </Button>
             </div>
