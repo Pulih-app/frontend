@@ -68,7 +68,7 @@ export default function UserHomePage() {
 
         </Link>
 
-        <Link href="/onboarding/set-target" className="mt-4 flex items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
+        <Link href="/relapse" className="mt-4 flex items-center relative overflow-hidden  rounded-2xl bg-[#effbf4] px-5 py-3.5 active:scale-[0.99] border border-[#d2f3df]/30 text-gray-900 transition-transform">
           <div className="w-8 h-8 shrink-0 mr-2">
             <Image src="/assets/billy_relapse.png" alt="Billy Relapse" width={500} height={500} className="object-contain absolute -left-36 -bottom-4 w-full h-full" />
           </div>

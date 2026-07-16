@@ -185,23 +185,6 @@ export default function RelapsePage() {
                 />
             </section>
 
-            {/* Daily Journal Section */}
-            <section className="mt-8 mb-6">
-                <h2 className="text-[18px] font-black tracking-tight text-gray-900">
-                    Jurnal Harian
-                </h2>
-                <p className="text-xs font-semibold text-gray-400 mt-1 leading-snug">
-                    Ceritakan apa yang kamu rasakan hari ini
-                </p>
-
-                <textarea
-                    value={journalText}
-                    onChange={(e) => setJournalText(e.target.value)}
-                    placeholder="Tuliskan perasaan, perjuangan, atau pencapaian hari ini..."
-                    className="w-full min-h-[120px] rounded-[24px] border-2 border-transparent bg-gray-100 p-5 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800 placeholder-gray-400 mt-4 resize-none leading-relaxed"
-                />
-            </section>
-
             {/* Success Toast Overlay */}
             {showSuccessToast && (
                 <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-6">
