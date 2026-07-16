@@ -6,38 +6,49 @@ import Button from "@/components/Button";
 import { ScheduleCalendar, dateValue, dayFromDate } from "../_components/ScheduleCalendar";
 
 function rangeDays(startDate: string, endDate: string) {
-    const start = dayFromDate(startDate);
-    const end = dayFromDate(endDate) || start;
-    const from = Math.min(start, end);
-    const to = Math.max(start, end);
+    if (!startDate || !endDate) return [];
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const from = start < end ? start : end;
+    const to = start < end ? end : start;
 
-    return Array.from({ length: to - from + 1 }, (_, index) => from + index);
+    const dates: string[] = [];
+    const current = new Date(from);
+    while (current <= to) {
+        dates.push(current.toISOString().split("T")[0]);
+        current.setDate(current.getDate() + 1);
+    }
+    return dates;
 }
 
 export default function PracticeSchedulePage() {
     const router = useRouter();
-    const [startDate, setStartDate] = useState(dateValue(16));
-    const [endDate, setEndDate] = useState(dateValue(16));
+    const [startDate, setStartDate] = useState(() => {
+        const today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    });
+    const [endDate, setEndDate] = useState(() => {
+        const today = new Date();
+        return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, "0")}-${String(today.getDate()).padStart(2, "0")}`;
+    });
     const selectedDays = rangeDays(startDate, endDate);
 
-    const selectDay = (day: number) => {
-        const value = dateValue(day);
-        const startDay = dayFromDate(startDate);
-        const endDay = dayFromDate(endDate);
-
-        if (startDay === endDay) {
-            if (day < startDay) {
-                setStartDate(value);
-                setEndDate(dateValue(startDay));
+    const selectDay = (dateStr: string) => {
+        if (startDate === endDate) {
+            const start = new Date(startDate);
+            const clicked = new Date(dateStr);
+            if (clicked < start) {
+                setStartDate(dateStr);
+                setEndDate(startDate);
                 return;
             }
 
-            setEndDate(value);
+            setEndDate(dateStr);
             return;
         }
 
-        setStartDate(value);
-        setEndDate(value);
+        setStartDate(dateStr);
+        setEndDate(dateStr);
     };
 
     const continueToPricing = () => {

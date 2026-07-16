@@ -6,10 +6,23 @@ import { useState } from "react";
 import { PsychologistShell } from "../_components/PsychologistShell";
 import { ScheduleCalendar } from "../_components/ScheduleCalendar";
 
-const fallbackDays = [16, 17, 20, 21, 22, 23, 24, 27, 28, 29, 30, 31];
+const fallbackDays = [
+    "2026-07-16",
+    "2026-07-17",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23",
+    "2026-07-24",
+    "2026-07-27",
+    "2026-07-28",
+    "2026-07-29",
+    "2026-07-30",
+    "2026-07-31",
+];
 
 export default function PsychologistHomePage() {
-    const [availableDays] = useState<number[]>(() => {
+    const [availableDays] = useState<string[]>(() => {
         if (typeof window === "undefined") return [];
 
         const saved = window.localStorage.getItem("psychologist-practice-days");
