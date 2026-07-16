@@ -28,14 +28,14 @@ export default function UserHomePage() {
         </div>
 
         {/* Mountain illustration */}
-        <div className="absolute bottom-[40px] right-[-24px] h-[175px] w-[225px] opacity-95">
+        <div className="absolute bottom-[35px] right-[-28px] h-[200px] w-[255px] opacity-95">
           <Image
             src="/assets/gunung.png"
             alt="Gunung streak"
             fill
             className="object-contain object-bottom"
             priority
-            sizes="225px"
+            sizes="255px"
           />
         </div>
 
