@@ -18,7 +18,7 @@ export default function CoachPage() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col h-screen bg-white max-w-sm mx-auto border overflow-hidden">
+    <div className="flex flex-col h-screen bg-white max-w-sm mx-auto overflow-hidden">
 
       {/* ── AppBar ──────────────────────────────────────────────────────── */}
       <div className="flex-shrink-0 bg-white border-b border-[#E2E8F0]">

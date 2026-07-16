@@ -25,7 +25,7 @@ export default function UserHomePage() {
       <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-6 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
         <div className="relative z-10 max-w-[220px]">
           <p className="text-[18px] font-black">Your Streak</p>
-          <h2 className="mt-2 text-[44px] font-black leading-none tracking-[-0.03em]">23 Days</h2>
+          <h2 className="mt-2 text-[44px] font-bold leading-none tracking-[-0.03em]">23 Days</h2>
           <p className="mt-4 text-xs leading-relaxed text-white/95">After completing the Daily Check-in, your streak will update at midnight</p>
         </div>
 

@@ -6,11 +6,11 @@ import { BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from 
 import BottomNavbar from "@/components/BottomNavbar";
 
 const navItems = [
-  { label: "Home", href: "/home", icon: Home },
-  { label: "Stats", href: "/stats", icon: TrendingUp },
-  { label: "Help", href: "/help", icon: UsersRound },
-  { label: "Learn", href: "/education", icon: BookOpen },
-  { label: "Profile", href: "/profile", icon: CircleDot },
+    { label: "Home", href: "/home", icon: Home },
+    { label: "Stats", href: "/stats", icon: TrendingUp },
+    { label: "Help", href: "/help", icon: UsersRound },
+    { label: "Learn", href: "/education", icon: BookOpen },
+    { label: "Profile", href: "/profile", icon: CircleDot },
 ];
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -105,28 +105,27 @@ export default function EducationPage() {
     return (
         <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-10">
 
-            {/* ── Header banner ─────────────────────────────────────────────────── */}
-            <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-2 pt-10 pb-8 min-h-[170px]">
-                <div className="max-w-[58%]">
+
+            <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-6 pt-10 pb-8 min-h-[170px]">
+                <div className="max-w-[70%]">
                     <h1 className="text-white font-bold text-xl leading-snug">
                         Education & Insights
                     </h1>
-                    <p className="text-green-200 text-xs mt-2">
-                        Expand your knowledge about recovery and healthy habits
-                    </p>
+                    <p className="text-green-200 text-xs mt-2">Get help from an AI coach, fellow companion on the journey, and experts.</p>
                 </div>
 
-                {/* Mascot */}
-                <div className="absolute -right-2 -bottom-0 h-40 w-40">
+                {/* Mascot placeholder */}
+                <div className="absolute -right-4 -bottom-2 h-38 w-38">
                     <Image
-                        src="/assets/analysis.png"
-                        alt="Edukasi"
+                        src="/assets/pemulihan.png"
+                        alt="Mascot"
                         width={160}
                         height={160}
                         className="object-contain object-bottom h-full w-full"
                     />
                 </div>
             </div>
+
             {/* ── Video Library ──────────────────────────────────────────────────── */}
             <div className="mt-6">
                 <h2 className="px-4 text-2xl font-bold text-gray-900">Video Libary</h2>
@@ -170,8 +169,8 @@ export default function EducationPage() {
                 </div>
             </div>
 
-                  <BottomNavbar items={navItems} />
-            
+            <BottomNavbar items={navItems} />
+
 
         </div>
     );

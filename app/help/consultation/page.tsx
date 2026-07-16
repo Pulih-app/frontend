@@ -150,7 +150,7 @@ export default function ConsultationPage() {
           <ArrowLeft size={24} strokeWidth={2} className="text-gray-900" />
         </Link>
         <h1 className="text-[17px] font-bold text-gray-900">Psikolog</h1>
-        <a href="/consultation/bookings" aria-label="Bookings" className="flex flex-col items-center bg-slate-50 p-1 rounded-md">
+        <a href="/help/consultation/bookings" aria-label="Bookings" className="flex flex-col items-center bg-slate-50 p-1 rounded-md">
           <CalendarCheck size={22} strokeWidth={1.8} className="text-gray-900" />
         </a>
       </div>
