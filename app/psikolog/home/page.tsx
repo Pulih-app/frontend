@@ -96,7 +96,7 @@ export default function PsychologistHomePage() {
                             className="mt-4 block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-full cursor-pointer shadow-sm hover:bg-[#eaeaea]"
                         >
                             <span className="relative z-10 flex flex-col items-start min-w-0">
-                                <span className="block text-[18px] font-black leading-none text-gray-900 border-b-[3px] border-[#0b744f] pb-1 w-fit">
+                                <span className="block text-[18px] font-black leading-none text-gray-900 w-fit">
                                     Alex Morgan
                                 </span>
                                 <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
