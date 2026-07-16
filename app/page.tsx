@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { User, Lock } from "lucide-react";
 import { TextField } from "@/components/TextField";
+import Button from "@/components/Button";
 import SplashScreen from "@/components/SplashScreen";
 
 
@@ -84,12 +85,9 @@ export default function LoginPage() {
       </div>
 
       {/* Submit button */}
-      <button
-        type="button"
-        className="w-full bg-[#2e7d32] z-90 hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm"
-      >
+      <Button type="button">
         Login
-      </button>
+      </Button>
 
       {/* Register link */}
       <p className="text-center text-gray-500 text-sm mt-5 mb-2 z-90">

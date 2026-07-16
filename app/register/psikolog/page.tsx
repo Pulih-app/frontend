@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { User, Mail, Lock, ShieldCheck } from "lucide-react";
 import { TextField } from "@/components/TextField";
+import Button from "@/components/Button";
 
 export default function PsychologistRegisterPage() {
   const router = useRouter();
@@ -85,13 +86,12 @@ export default function PsychologistRegisterPage() {
       </div>
 
       {/* Submit button */}
-      <button
+      <Button
         type="button"
         onClick={() => router.push("/register/psikolog/onboarding")}
-        className="w-full bg-[#2e7d32] z-90 hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm"
       >
         Register
-      </button>
+      </Button>
 
       {/* Redirect links */}
       <p className="text-center text-gray-500 text-sm mt-5 mb-2 z-90">
