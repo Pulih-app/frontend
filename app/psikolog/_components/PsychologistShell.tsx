@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { Hexagon, Home } from "lucide-react";
+import { User, Home } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
 
 const navItems = [
     { label: "Home", href: "/psikolog/home", icon: Home },
-    { label: "Profile", href: "/psikolog/profile", icon: Hexagon },
+    { label: "Profile", href: "/psikolog/profile", icon: User },
 ];
 
 export function PsychologistShell({ children }: { children: React.ReactNode }) {
