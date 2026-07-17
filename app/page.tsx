@@ -67,7 +67,7 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
+    <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full">
       <SplashScreen />
       {/* Logo badge */}
       <div className="flex justify-center mb-6">
