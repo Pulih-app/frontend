@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { PsychologistShell } from "../_components/PsychologistShell";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
+import { mockDb, Booking } from "../../lib/mockDb";
 
 const fallbackDays = [
     "2026-07-16",
@@ -24,10 +25,12 @@ const fallbackDays = [
 
 export default function PsychologistHomePage() {
     const [availableDays, setAvailableDays] = useState<string[]>([]);
+    const [appointments, setAppointments] = useState<Booking[]>([]);
     const [isMounted, setIsMounted] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
+        setAppointments(mockDb.getBookings());
         if (typeof window !== "undefined") {
             const saved = window.localStorage.getItem("psychologist-practice-days");
             if (saved) {
@@ -39,36 +42,9 @@ export default function PsychologistHomePage() {
     const hasSchedule = isMounted && availableDays.length > 0;
     const displayDays = hasSchedule ? availableDays : fallbackDays;
 
-    const todayPatients = [
-        {
-            id: "1",
-            name: "Alex Morgan",
-            duration: "1 Hour",
-            time: "13:00 - 14:00 WIB",
-            complaint: "Seeking relapse prevention & emotional guidance.",
-        },
-        {
-            id: "2",
-            name: "Budi Santoso",
-            duration: "1 Hour",
-            time: "14:30 - 15:30 WIB",
-            complaint: "Dealing with work-related stress and anxiety triggers.",
-        },
-        {
-            id: "3",
-            name: "Mr. Bu",
-            duration: "30 Mins",
-            time: "16:00 - 16:30 WIB",
-            complaint: "Needs someone to talk to because of extreme loneliness and anxiety recently.",
-        },
-        {
-            id: "4",
-            name: "Jane Smith",
-            duration: "1 Hour",
-            time: "17:00 - 18:00 WIB",
-            complaint: "First onboarding counseling and goal setting.",
-        },
-    ];
+    const completedCount = appointments.filter(app => app.status === "accepted").length;
+    const totalCount = appointments.length;
+    const progressPercent = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
 
     return (
         <PsychologistShell>
@@ -87,7 +63,7 @@ export default function PsychologistHomePage() {
                 <div className="relative z-10 max-w-[200px]">
                     <p className="text-[18px] font-black">Today&apos;s Overview</p>
                     <h2 className="mt-2 text-[40px] font-black leading-none tracking-[-0.03em]">
-                        4 Patients
+                        {totalCount} Patients
                     </h2>
                     <p className="mt-4 text-xs leading-relaxed text-white/95">
                         Provide consultation and clinical guidance to help patients heal.
@@ -108,9 +84,9 @@ export default function PsychologistHomePage() {
 
                 {/* White bottom progress bar container */}
                 <div className="absolute bottom-0 left-0 right-0 rounded-t-[24px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
-                    <p className="text-sm font-black text-gray-900">Queue Progress: 2 / 4 Completed</p>
+                    <p className="text-sm font-black text-gray-900">Queue Progress: {completedCount} / {totalCount} Approved</p>
                     <div className="mt-3.5 h-[16px] overflow-hidden rounded-full bg-[#e6e6e6]">
-                        <div className="h-full w-[50%] rounded-full bg-[#35b863]" />
+                        <div className="h-full rounded-full bg-[#35b863]" style={{ width: `${progressPercent}%` }} />
                     </div>
                 </div>
             </section>
@@ -129,24 +105,24 @@ export default function PsychologistHomePage() {
                         </div>
 
                         <div className="mt-4 flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory -mx-6 px-6">
-                            {todayPatients.map((patient) => (
+                            {appointments.map((patient) => (
                                 <Link 
                                     key={patient.id}
-                                    href={`/psikolog/session-detail?patient=${encodeURIComponent(patient.name)}&duration=${encodeURIComponent(patient.duration)}&timeSlot=${encodeURIComponent(patient.time)}&complaint=${encodeURIComponent(patient.complaint)}`}
+                                    href={`/psikolog/session-detail?patient=${encodeURIComponent(patient.patientName)}&duration=${encodeURIComponent(patient.duration)}&timeSlot=${encodeURIComponent(patient.time)}&complaint=${encodeURIComponent(patient.challenge)}`}
                                     className="block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-[285px] shrink-0 snap-start cursor-pointer shadow-sm hover:bg-[#eaeaea]"
                                 >
                                     <span className="relative z-10 flex flex-col items-start min-w-0">
                                         <span className="block text-[18px] font-black leading-none text-gray-900 w-fit">
-                                            {patient.name}
+                                            {patient.patientName}
                                         </span>
                                         <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
                                             {patient.duration}
                                         </span>
                                         <span className="mt-3 block text-sm font-black text-gray-800">
-                                            {patient.time}
+                                            {patient.time} {patient.date ? `(${patient.date})` : ""}
                                         </span>
                                         <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[210px] leading-relaxed line-clamp-2">
-                                            Complaint: {patient.complaint}
+                                            Complaint: {patient.challenge}
                                         </span>
                                     </span>
 

@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { RefreshCw } from "lucide-react";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 import { Bell, BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
+import { mockDb, UserStats } from "../lib/mockDb";
 
 const navItems = [
     { label: "Home", href: "/home", icon: Home },
@@ -95,6 +96,11 @@ const LABEL_6 = polarToCartesian(CX, CY, LABEL_R, 205); // near bottom-left
 export default function StatsPage() {
     const [tab, setTab] = useState<"analysis" | "history">("analysis");
     const [filter, setFilter] = useState<"top5" | "all">("top5");
+    const [stats, setStats] = useState<UserStats>({ currentStreak: 0, longestStreak: 0, cleanDays: [], successRate: 100 });
+
+    useEffect(() => {
+        setStats(mockDb.getUserStats());
+    }, []);
 
 
     return (
@@ -151,7 +157,7 @@ export default function StatsPage() {
                             <div className="flex-1 bg-[#e8f5ee] rounded-2xl pt-4 px-4 pb-2 flex flex-col justify-between">
                                 <p className="text-[#1a5c3a] text-2xl font-bold">Longest Streak</p>
                                 <div>
-                                    <p className="text-5xl font-bold text-[#1a5c3a] leading-none">23</p>
+                                    <p className="text-5xl font-bold text-[#1a5c3a] leading-none">{stats.longestStreak}</p>
                                     <p className="text-3xl font-bold text-[#1a5c3a] leading-snug">Days</p>
                                 </div>
                             </div>
@@ -171,7 +177,7 @@ export default function StatsPage() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-[#1a5c3a] font-medium">Success Rate</p>
-                                        <p className="text-2xl font-bold text-[#1a5c3a]">98%</p>
+                                        <p className="text-2xl font-bold text-[#1a5c3a]">{stats.successRate}%</p>
                                     </div>
                                 </div>
 
@@ -191,7 +197,7 @@ export default function StatsPage() {
                                     </div>
                                     <div>
                                         <p className="text-xs text-[#1a5c3a] font-medium">Clean Days</p>
-                                        <p className="text-2xl font-bold text-[#1a5c3a]">33 Days</p>
+                                        <p className="text-2xl font-bold text-[#1a5c3a]">{stats.cleanDays.length} Days</p>
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +211,7 @@ export default function StatsPage() {
                             Clean days you have achieved
                         </p>
                         <div className="mt-4">
-                            <ScheduleCalendar selectedDays={CLEAN_DAYS} />
+                            <ScheduleCalendar selectedDays={stats.cleanDays} />
                         </div>
                     </section>
 

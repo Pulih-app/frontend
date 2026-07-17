@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CalendarCheck, ArrowLeft, ChevronDown, Search, Star, LayoutGrid, ArrowUpDown } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { mockDb, Psychologist } from "../../lib/mockDb";
 
 type Category = "All" | "Psikolog Umum" | "Psikolog Klinis";
 type SortKey = "default" | "availability" | "price_asc";
@@ -14,64 +15,6 @@ const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "default", label: "Urutkan" },
   { value: "availability", label: "Tersedia Hari Ini" },
   { value: "price_asc", label: "Termurah" },
-];
-
-interface Psychologist {
-  id: number;
-  name: string;
-  category: Category;
-  price: number;
-  rating: number;
-  availableToday: boolean;
-  imageSrc: string;
-}
-
-const psychologists: Psychologist[] = [
-  {
-    id: 1,
-    name: "Dr. Ayu Rahmawati, M.Psi.",
-    category: "Psikolog Umum",
-    price: 150000,
-    rating: 4.5,
-    availableToday: true,
-    imageSrc: "/assets/onboarding/question-1",
-  },
-  {
-    id: 2,
-    name: "Dr. Budi Santoso, Psi.",
-    category: "Psikolog Klinis",
-    price: 200000,
-    rating: 4.8,
-    availableToday: false,
-    imageSrc: "/assets/onboarding/question-1",
-  },
-  {
-    id: 3,
-    name: "Dr. Citra Dewi, M.Psi.",
-    category: "Psikolog Umum",
-    price: 120000,
-    rating: 4.3,
-    availableToday: true,
-    imageSrc: "/assets/onboarding/question-1",
-  },
-  {
-    id: 4,
-    name: "Dr. Dimas Prakoso, Psi.",
-    category: "Psikolog Klinis",
-    price: 175000,
-    rating: 4.7,
-    availableToday: true,
-    imageSrc: "/assets/onboarding/question-1",
-  },
-  {
-    id: 5,
-    name: "Dr. Eka Putri, M.Psi.",
-    category: "Psikolog Klinis",
-    price: 250000,
-    rating: 4.9,
-    availableToday: false,
-    imageSrc: "/assets/onboarding/question-1",
-  },
 ];
 
 function formatPrice(price: number): string {
@@ -118,11 +61,16 @@ function PsychologistCard({ psikolog }: { psikolog: Psychologist }) {
 }
 
 export default function ConsultationPage() {
+  const [psychologists, setPsychologists] = useState<Psychologist[]>([]);
   const [query, setQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState<Category>("All");
   const [sortKey, setSortKey] = useState<SortKey>("default");
   const [sortOpen, setSortOpen] = useState(false);
   const [filterOpen, setFilterOpen] = useState(false);
+
+  useEffect(() => {
+    setPsychologists(mockDb.getPsychologists());
+  }, []);
 
   const filtered = psychologists
     .filter((p) => {

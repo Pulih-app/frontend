@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, Star } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeft, Star, Loader2 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useParams, useRouter } from "next/navigation";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 import Button from "@/components/Button";
+import { mockDb, Psychologist } from "../../../lib/mockDb";
 
 const AVAILABLE_DAYS = [
   "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21", "2026-07-22",
@@ -21,10 +23,64 @@ const BUNDLES = [
 ];
 
 export default function PsychologistProfilePage() {
+  const params = useParams();
+  const router = useRouter();
+  const id = params?.id ? Number(params.id) : null;
+
+  const [psychologist, setPsychologist] = useState<Psychologist | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [challenge, setChallenge] = useState("");
   const [selectedBundle, setSelectedBundle] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (id) {
+      const found = mockDb.getPsychologistById(id);
+      if (found) {
+        setPsychologist(found);
+      }
+    }
+  }, [id]);
+
+  const handleBookSession = () => {
+    if (!psychologist || !selectedDay || !selectedTime || !selectedBundle) return;
+
+    setIsSubmitting(true);
+
+    const bundle = BUNDLES.find((b) => b.id === selectedBundle);
+
+    setTimeout(() => {
+      // Format selected date
+      const formattedDate = new Date(selectedDay).toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      });
+
+      mockDb.saveBooking({
+        patientName: "Alex Morgan",
+        name: psychologist.name,
+        specialty: psychologist.category,
+        date: formattedDate,
+        time: `${selectedTime} WIB`,
+        duration: bundle?.duration || "1 Hour",
+        challenge: challenge || "Seeking general guidance.",
+        image: psychologist.imageSrc
+      });
+
+      setIsSubmitting(false);
+      router.push("/help/consultation/bookings");
+    }, 800);
+  };
+
+  if (!psychologist) {
+    return (
+      <main className="flex h-screen items-center justify-center bg-white text-black">
+        <Loader2 className="animate-spin text-[#1B5E4C]" size={28} />
+      </main>
+    );
+  }
 
   return (
     <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col bg-white">
@@ -44,22 +100,22 @@ export default function PsychologistProfilePage() {
           <div className="flex gap-4">
             <div className="w-24 h-24 rounded-2xl overflow-hidden bg-[#E2EDE7] shrink-0">
               <Image
-                src="/assets/onboarding/question-1"
-                alt="Psychologist"
+                src={psychologist.imageSrc}
+                alt={psychologist.name}
                 width={96}
                 height={96}
                 className="object-cover w-full h-full"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[16px] font-bold text-gray-900">Nama Psikolog</p>
+              <p className="text-[16px] font-bold text-gray-900">{psychologist.name}</p>
               <span className="inline-block mt-1.5 px-3 py-1 bg-[#1B5E4C] text-white text-[11px] font-semibold rounded-full">
-                Clinical Psychologist
+                {psychologist.category}
               </span>
-              <p className="text-[13px] text-gray-500 mt-2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque sit quis nemo omnis, aliquid magni qui iste sint iusto culpa!</p>
+              <p className="text-[13px] text-gray-500 mt-2">{psychologist.description}</p>
               <div className="flex items-center gap-1 mt-1">
                 <Star size={14} fill="#FACC15" stroke="none" />
-                <span className="text-[13px] text-gray-700 font-medium">4,5/5</span>
+                <span className="text-[13px] text-gray-700 font-medium">{psychologist.rating.toFixed(1)}/5</span>
               </div>
             </div>
           </div>
@@ -68,19 +124,19 @@ export default function PsychologistProfilePage() {
         {/* Patient Testimonials */}
         <section>
           <h2 className="text-[20px] font-bold text-gray-900">Patient Testimonials</h2>
-         <p className="text-[13px] text-gray-400 mb-3">
+          <p className="text-[13px] text-gray-400 mb-3">
             What other people says about their experience
           </p>
           <div className="bg-[#EFFBF4] rounded-2xl p-4">
             <div className="flex items-start justify-between">
-              <p className="text-[14px] font-bold text-gray-900">Ano**mp</p>
+              <p className="text-[14px] font-bold text-gray-900">{psychologist.testimonial.author}</p>
               <div className="flex items-center gap-1">
                 <Star size={14} fill="#FACC15" stroke="none" />
-                <span className="text-[13px] text-gray-700 font-medium">4/5</span>
+                <span className="text-[13px] text-gray-700 font-medium">{psychologist.testimonial.rating}/5</span>
               </div>
             </div>
             <p className="text-[12px] text-gray-500 mt-2 leading-relaxed">
-              Aku suka pmo dan setelah saya sesi konsultasi dengan psikolog ini saya jadi tambah semangat untuk berubah
+              {psychologist.testimonial.text}
             </p>
           </div>
         </section>
@@ -112,7 +168,7 @@ export default function PsychologistProfilePage() {
                 className={`px-7 py-3 rounded-2xl border text-[14px] font-medium transition-colors ${
                   selectedTime === time
                     ? "border-[#1B5E4C] bg-[#1B5E4C] text-white"
-                    : "border-gray-200 bg-gray-50 text-gray-800 hover:bg-gray-100"
+                    : "border-gray-200 bg-gray-50 text-gray-888 hover:bg-gray-100"
                 }`}
               >
                 {time}
@@ -165,7 +221,15 @@ export default function PsychologistProfilePage() {
 
       {/* Fixed bottom CTA */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm px-4 pb-6 pt-3 bg-white">
-        <Button type="button">Book Session</Button>
+        <Button 
+          type="button" 
+          disabled={isSubmitting || !selectedDay || !selectedTime || !selectedBundle}
+          onClick={handleBookSession}
+          className="flex items-center justify-center gap-2"
+        >
+          {isSubmitting && <Loader2 className="animate-spin" size={16} />}
+          <span>{isSubmitting ? "Booking Session..." : "Book Session"}</span>
+        </Button>
       </div>
     </main>
   );

@@ -3,88 +3,10 @@
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, MessageSquare, Heart, Plus, Flame } from "lucide-react";
-
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-interface Post {
-  id: number;
-  text: string;
-  author: string;
-  time: string;
-  streak: number;
-  comments: number;
-  likes: number;
-  category: "Advice" | "Support" | "Motivation";
-}
-
-// ─── Static data ─────────────────────────────────────────────────────────────
+import { useState, useEffect } from "react";
+import { mockDb, Post } from "../../lib/mockDb";
 
 const CATEGORIES = ["Advice", "Support", "Motivation"] as const;
-
-const POSTS: Post[] = [
-  {
-    id: 1,
-    text: "Avoid things that potentially trigger a relapse",
-    author: "djd*****",
-    time: "08:43",
-    streak: 0,
-    comments: 2,
-    likes: 1,
-    category: "Advice",
-  },
-  {
-    id: 2,
-    text: "I tried a no-social-media rule after 20:30. The result is a calmer mind and falling asleep faster.",
-    author: "Dav*****",
-    time: "23:59",
-    streak: 54,
-    comments: 2,
-    likes: 1,
-    category: "Advice",
-  },
-  {
-    id: 3,
-    text: "Simple checklist: enough sleep, 20 minutes exercise, no night scrolling, and emotional check-in. Small steps, big impact.",
-    author: "Eri*****",
-    time: "02:59",
-    streak: 40,
-    comments: 2,
-    likes: 1,
-    category: "Advice",
-  },
-  {
-    id: 4,
-    text: "I use a 3-step pattern: take a deep breath, identify the trigger, then redirect to physical activity. Going strong for 2 months.",
-    author: "Riz*****",
-    time: "07:15",
-    streak: 62,
-    comments: 5,
-    likes: 8,
-    category: "Advice",
-  },
-  {
-    id: 5,
-    text: "Anyone has tips for handling urges at night? It's really hard when you are alone.",
-    author: "Far*****",
-    time: "21:30",
-    streak: 7,
-    comments: 4,
-    likes: 2,
-    category: "Support",
-  },
-  {
-    id: 6,
-    text: "Every small day passed is a victory. Don't compare your journey with others 💚",
-    author: "And*****",
-    time: "06:00",
-    streak: 30,
-    comments: 1,
-    likes: 12,
-    category: "Motivation",
-  },
-];
-
-// ─── Streak badge ─────────────────────────────────────────────────────────────
 
 function StreakBadge({ count }: { count: number }) {
   return (
@@ -95,11 +17,9 @@ function StreakBadge({ count }: { count: number }) {
   );
 }
 
-// ─── Post card ────────────────────────────────────────────────────────────────
-
-function PostCard({ post }: { post: Post }) {
+function PostCard({ post, onLike }: { post: Post; onLike: (id: number) => void }) {
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+    <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 text-left text-black">
       {/* Text */}
       <p className="text-[15px] text-gray-900 leading-snug mb-3">{post.text}</p>
 
@@ -108,7 +28,7 @@ function PostCard({ post }: { post: Post }) {
         <span className="text-xs text-gray-400 font-medium">{post.author}</span>
         <span className="text-gray-300 text-xs">•</span>
         <span className="text-xs text-gray-400">{post.time}</span>
-        <StreakBadge count={post.streak} />
+        {post.streak > 0 && <StreakBadge count={post.streak} />}
       </div>
 
       {/* Actions */}
@@ -117,8 +37,13 @@ function PostCard({ post }: { post: Post }) {
           <MessageSquare size={16} strokeWidth={1.8} />
           <span className="text-sm">{post.comments}</span>
         </button>
-        <button className="flex items-center gap-1.5 text-gray-400 hover:text-rose-500 transition-colors">
-          <Heart size={16} strokeWidth={1.8} />
+        <button 
+          onClick={() => onLike(post.id)}
+          className={`flex items-center gap-1.5 transition-colors ${
+            post.likedByUser ? "text-rose-500" : "text-gray-400 hover:text-rose-500"
+          }`}
+        >
+          <Heart size={16} strokeWidth={1.8} fill={post.likedByUser ? "currentColor" : "none"} />
           <span className="text-sm">{post.likes}</span>
         </button>
       </div>
@@ -126,16 +51,24 @@ function PostCard({ post }: { post: Post }) {
   );
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
-
 export default function CommunityPage() {
   const router = useRouter();
-  const activeCategory = "Advice";
+  const [activeCategory, setActiveCategory] = useState<"Advice" | "Support" | "Motivation">("Advice");
+  const [posts, setPosts] = useState<Post[]>([]);
 
-  const filtered = POSTS.filter((p) => p.category === activeCategory);
+  useEffect(() => {
+    setPosts(mockDb.getCommunityPosts());
+  }, []);
+
+  const handleLike = (id: number) => {
+    mockDb.likeCommunityPost(id);
+    setPosts(mockDb.getCommunityPosts());
+  };
+
+  const filtered = posts.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto ">
+    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto border-x">
 
       {/* ── AppBar ──────────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
@@ -161,7 +94,8 @@ export default function CommunityPage() {
             return (
               <button
                 key={cat}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
+                onClick={() => setActiveCategory(cat)}
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors cursor-pointer ${
                   isActive
                     ? "bg-[#1a5c3a] text-white"
                     : "bg-gray-100 text-gray-500 hover:bg-gray-200"
@@ -179,9 +113,15 @@ export default function CommunityPage() {
 
       {/* ── Posts ───────────────────────────────────────────────────────── */}
       <div className="flex flex-col gap-3 px-4 py-4 pb-24">
-        {filtered.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+        {filtered.length > 0 ? (
+          filtered.map((post) => (
+            <PostCard key={post.id} post={post} onLike={handleLike} />
+          ))
+        ) : (
+          <div className="text-center py-10 text-sm text-gray-400">
+            Belum ada postingan di kategori ini.
+          </div>
+        )}
       </div>
 
       {/* ── FAB ─────────────────────────────────────────────────────────── */}

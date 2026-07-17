@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, CheckCircle2 } from "lucide-react";
 import Image from "next/image";
+import { mockDb } from "../lib/mockDb";
 
 interface MoodOption {
     label: string;
@@ -17,9 +18,12 @@ export default function DailyCheckinPage() {
     const [journalText, setJournalText] = useState("");
     const [dateString, setDateString] = useState("");
     const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [stats, setStats] = useState<any>(null);
 
     // Set today's date in English format
     useEffect(() => {
+        setStats(mockDb.getUserStats());
         const today = new Date();
         const formatted = today.toLocaleDateString("en-US", {
             weekday: "long",
@@ -39,11 +43,16 @@ export default function DailyCheckinPage() {
     ];
 
     const handleSubmit = () => {
-        setShowSuccessToast(true);
+        setIsSubmitting(true);
         setTimeout(() => {
-            setShowSuccessToast(false);
-            router.push("/home");
-        }, 1500);
+            mockDb.checkIn();
+            setIsSubmitting(false);
+            setShowSuccessToast(true);
+            setTimeout(() => {
+                setShowSuccessToast(false);
+                router.push("/home");
+            }, 1500);
+        }, 800);
     };
 
     return (
@@ -69,7 +78,7 @@ export default function DailyCheckinPage() {
                     Daily Check-In
                 </span>
                 <h2 className="mt-1 text-[72px] font-black leading-none tracking-tight">
-                    0
+                    {stats ? stats.currentStreak : 0}
                 </h2>
                 <span className="mt-1 text-sm font-extrabold tracking-wide">
                     Days Porn-Free
@@ -155,14 +164,23 @@ export default function DailyCheckinPage() {
                 </div>
             )}
 
-            {/* Fixed Footer Check-In Button */}
             <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-sm bg-white border-t border-gray-100 px-6 py-4 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
                 <button
                     onClick={handleSubmit}
-                    className="w-full bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.98] text-white font-extrabold text-sm py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#0b744f]/10 cursor-pointer"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.98] text-white font-extrabold text-sm py-4 rounded-2xl flex items-center justify-center gap-2 transition-all shadow-lg shadow-[#0b744f]/10 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
                 >
-                    <CheckCircle2 size={18} strokeWidth={2.5} />
-                    <span>Check In Now</span>
+                    {isSubmitting ? (
+                        <>
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1" />
+                            <span>Saving progress...</span>
+                        </>
+                    ) : (
+                        <>
+                            <CheckCircle2 size={18} strokeWidth={2.5} />
+                            <span>Check In Now</span>
+                        </>
+                    )}
                 </button>
             </footer>
         </main>

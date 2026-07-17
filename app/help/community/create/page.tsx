@@ -1,30 +1,52 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Flame, ArrowLeft } from "lucide-react";
+import { useState } from "react";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { mockDb } from "../../../lib/mockDb";
 
 const CATEGORIES = ["Advice", "Support", "Motivation"] as const;
 
 export default function TambahPostPage() {
   const router = useRouter();
+  const [selectedCategory, setSelectedCategory] = useState<"Advice" | "Support" | "Motivation">("Advice");
+  const [content, setContent] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSend = () => {
+    if (!content.trim()) return;
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      mockDb.saveCommunityPost(content, selectedCategory);
+      setIsSubmitting(false);
+      router.push("/help/community");
+    }, 600);
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto border">
+    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto border text-black text-left">
 
       {/* ── AppBar ──────────────────────────────────────────────────────── */}
       <div className="flex items-center px-3 pt-4 pb-3 border-b border-gray-100">
         <button
           onClick={() => router.back()}
-          className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors cursor-pointer"
           aria-label="Back"
+          disabled={isSubmitting}
         >
           <ArrowLeft size={20} className="text-[#1E293B]" />
         </button>
         <h1 className="flex-1 text-center text-[18px] font-bold text-[#0F172A]">
           Create Post
         </h1>
-        <button className="px-4 py-1.5 rounded-full bg-[#1a5c3a] text-white text-sm font-semibold active:opacity-80 transition-opacity">
-          Send
+        <button 
+          onClick={handleSend}
+          disabled={isSubmitting || !content.trim()}
+          className="px-4 py-1.5 rounded-full bg-[#1a5c3a] text-white text-sm font-semibold active:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1.5"
+        >
+          {isSubmitting && <Loader2 size={12} className="animate-spin" />}
+          <span>Send</span>
         </button>
       </div>
 
@@ -35,12 +57,15 @@ export default function TambahPostPage() {
         <div>
           <p className="text-sm font-semibold text-gray-700 mb-3">Category</p>
           <div className="flex gap-2 flex-wrap">
-            {CATEGORIES.map((cat, i) => {
-              const isActive = i === 0;
+            {CATEGORIES.map((cat) => {
+              const isActive = cat === selectedCategory;
               return (
                 <button
                   key={cat}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors border ${
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  disabled={isSubmitting}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors border cursor-pointer ${
                     isActive
                       ? "bg-[#1a5c3a] text-white border-[#1a5c3a]"
                       : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
@@ -60,9 +85,12 @@ export default function TambahPostPage() {
           <textarea
             placeholder="Share your experiences, tips, or questions with the community..."
             rows={7}
+            value={content}
+            onChange={(e) => setContent(e.target.value.slice(0, 500))}
+            disabled={isSubmitting}
             className="w-full bg-[#f5f5f0] rounded-2xl px-4 py-4 text-sm text-gray-800 placeholder-gray-400 outline-none resize-none leading-relaxed focus:ring-2 focus:ring-[#1a5c3a]/20 transition-all"
           />
-          <p className="text-xs text-gray-400 text-right mt-1.5">0 / 500</p>
+          <p className="text-xs text-gray-400 text-right mt-1.5">{content.length} / 500</p>
         </div>
 
         {/* Community Guidelines */}

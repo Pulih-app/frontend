@@ -5,14 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Video, Calendar, X, ChevronLeft } from "lucide-react";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
-
-interface Appointment {
-    id: string;
-    patientName: string;
-    duration: string;
-    timeSlot: string;
-    status: "pending" | "accepted" | "rescheduled";
-}
+import { mockDb, Booking } from "../../lib/mockDb";
 
 const addDurationToTime = (startTimeStr: string, durationStr: string): string => {
     if (!startTimeStr) return "";
@@ -32,44 +25,26 @@ const addDurationToTime = (startTimeStr: string, durationStr: string): string =>
 
 export default function SessionsPage() {
     const router = useRouter();
-    const [appointments, setAppointments] = useState<Appointment[]>([
-        {
-            id: "1",
-            patientName: "Alex Morgan",
-            duration: "1 Hour",
-            timeSlot: "13:00 - 14:00 WIB",
-            status: "pending",
-        },
-        {
-            id: "2",
-            patientName: "Budi Santoso",
-            duration: "1 Hour",
-            timeSlot: "14:30 - 15:30 WIB",
-            status: "pending",
-        },
-        {
-            id: "3",
-            patientName: "Siti Rahma",
-            duration: "30 Mins",
-            timeSlot: "16:00 - 16:30 WIB",
-            status: "pending",
-        },
-    ]);
-
+    const [appointments, setAppointments] = useState<Booking[]>([]);
     const [toastMessage, setToastMessage] = useState<string | null>(null);
 
     // Accept Modal States
-    const [activeModalApp, setActiveModalApp] = useState<{ id: string; name: string } | null>(null);
+    const [activeModalApp, setActiveModalApp] = useState<{ id: number; name: string } | null>(null);
     const [meetLink, setMeetLink] = useState("");
     const [selectedSchedule, setSelectedSchedule] = useState("");
     const [profession, setProfession] = useState<"umum" | "klinis">("klinis");
 
     // Reschedule Modal States
-    const [activeRescheduleApp, setActiveRescheduleApp] = useState<Appointment | null>(null);
+    const [activeRescheduleApp, setActiveRescheduleApp] = useState<Booking | null>(null);
     const [rescheduleDate, setRescheduleDate] = useState("");
     const [rescheduleStartTime, setRescheduleStartTime] = useState("13:00");
     const [rescheduleEndTime, setRescheduleEndTime] = useState("14:00");
     const [rescheduleReason, setRescheduleReason] = useState("");
+
+    // Load active appointments from mock database
+    useEffect(() => {
+        setAppointments(mockDb.getBookings());
+    }, []);
 
     // Load profession from localStorage
     useEffect(() => {
@@ -81,7 +56,7 @@ export default function SessionsPage() {
         }
     }, []);
 
-    const handleAcceptClick = (id: string, name: string) => {
+    const handleAcceptClick = (id: number, name: string) => {
         setActiveModalApp({ id, name });
         setMeetLink("");
         setSelectedSchedule("");
@@ -91,9 +66,8 @@ export default function SessionsPage() {
         if (!activeModalApp) return;
         const { id, name } = activeModalApp;
 
-        setAppointments((prev) =>
-            prev.map((app) => (app.id === id ? { ...app, status: "accepted" } : app))
-        );
+        mockDb.updateBookingStatus(id, "accepted", { meetLink });
+        setAppointments(mockDb.getBookings());
 
         const detailInfo =
             profession === "klinis"
@@ -105,12 +79,12 @@ export default function SessionsPage() {
         setTimeout(() => setToastMessage(null), 4000);
     };
 
-    const handleRescheduleClick = (app: Appointment) => {
+    const handleRescheduleClick = (app: Booking) => {
         setActiveRescheduleApp(app);
         setRescheduleDate("");
         setRescheduleReason("");
 
-        const times = app.timeSlot.replace(/\./g, ":").match(/(\d{2}:\d{2})/g);
+        const times = app.time.replace(/\./g, ":").match(/(\d{2}:\d{2})/g);
         let start = "13:00";
         if (times && times.length >= 1) {
             start = times[0];
@@ -139,15 +113,14 @@ export default function SessionsPage() {
             year: "numeric",
         });
 
-        const newTimeSlot = `${rescheduleStartTime} - ${rescheduleEndTime} WIB (${formattedDate})`;
+        const newTimeSlot = `${rescheduleStartTime} - ${rescheduleEndTime} WIB`;
 
-        setAppointments((prev) =>
-            prev.map((app) =>
-                app.id === id
-                    ? { ...app, status: "rescheduled", timeSlot: newTimeSlot }
-                    : app
-            )
-        );
+        mockDb.updateBookingStatus(id, "rescheduled", {
+            date: formattedDate,
+            time: newTimeSlot,
+            rescheduleReason
+        });
+        setAppointments(mockDb.getBookings());
 
         setToastMessage(`Reschedule for ${patientName} has been successfully submitted to ${formattedDate} at ${rescheduleStartTime} - ${rescheduleEndTime}!`);
         setActiveRescheduleApp(null);
@@ -218,7 +191,7 @@ export default function SessionsPage() {
                                     {app.duration}
                                 </span>
                                 <p className="text-xs font-semibold text-gray-500 mt-1">
-                                    {app.timeSlot}
+                                    {app.time} {app.date ? `(${app.date})` : ""}
                                 </p>
                             </div>
                         </div>

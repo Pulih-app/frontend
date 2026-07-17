@@ -1,9 +1,11 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
+import { mockDb, UserStats } from "../lib/mockDb";
 
 const navItems = [
   { label: "Home", href: "/home", icon: Home },
@@ -14,8 +16,23 @@ const navItems = [
 ];
 
 export default function UserHomePage() {
+  const [stats, setStats] = useState<UserStats>({ currentStreak: 0, longestStreak: 0, cleanDays: [], successRate: 100 });
+  const [targetDays, setTargetDays] = useState(30);
+
+  useEffect(() => {
+    setStats(mockDb.getUserStats());
+    if (typeof window !== "undefined") {
+      const savedTarget = window.localStorage.getItem("user-target-days");
+      if (savedTarget) {
+        setTargetDays(Number(savedTarget));
+      }
+    }
+  }, []);
+
+  const progressPercent = targetDays > 0 ? Math.min((stats.currentStreak / targetDays) * 100, 100) : 0;
+
   return (
-    <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col overflow-hidden bg-white px-6 pb-24">
+    <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col overflow-hidden bg-white px-6 pb-24 text-black text-left">
       <section className="mt-6">
         <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">Halo, Alex! <span className="text-xl">👋</span></h1>
         <p className="mt-2 text-[13px] font-semibold leading-tight text-[#7f8b92]">Proud of you for showing up today</p>
@@ -25,7 +42,7 @@ export default function UserHomePage() {
       <section className="relative mt-6 overflow-hidden rounded-[16px] bg-[#0b744f] px-6 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(0,0,0,0.16)]">
         <div className="relative z-10 max-w-[220px]">
           <p className="text-[18px] font-black">Your Streak</p>
-          <h2 className="mt-2 text-[44px] font-bold leading-none tracking-[-0.03em]">23 Days</h2>
+          <h2 className="mt-2 text-[44px] font-bold leading-none tracking-[-0.03em]">{stats.currentStreak} Days</h2>
           <p className="mt-4 text-xs leading-relaxed text-white/95">After completing the Daily Check-in, your streak will update at midnight</p>
         </div>
 
@@ -43,9 +60,9 @@ export default function UserHomePage() {
 
         {/* White bottom Progress bar container */}
         <div className="absolute bottom-0 left-0 right-0 rounded-t-[16px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
-          <p className="text-sm font-black">Progress: 11 / 32 Days</p>
+          <p className="text-sm font-black">Progress: {stats.currentStreak} / {targetDays} Days</p>
           <div className="mt-3.5 h-[16px] overflow-hidden rounded-full bg-[#e6e6e6]">
-            <div className="h-full w-[34%] rounded-full bg-[#35b863]" />
+            <div className="h-full rounded-full bg-[#35b863]" style={{ width: `${progressPercent}%` }} />
           </div>
         </div>
       </section>

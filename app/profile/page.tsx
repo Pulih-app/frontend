@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound, Clock, Target, LogOut } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
 
@@ -30,6 +31,11 @@ const manageItems = [
 ];
 
 export default function ProfilePage() {
+  const router = useRouter();
+  const handleLogout = () => {
+    router.push("/");
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-10">
       {/* ── Profile card ──────────────────────────────────────────────────── */}
@@ -100,7 +106,8 @@ export default function ProfilePage() {
           })}
         </div>
         <button
-          className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 rounded-2xl px-4 py-4 mt-4 active:scale-[0.98] transition-all duration-150 font-bold"
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 bg-red-50 text-red-600 rounded-2xl px-4 py-4 mt-4 active:scale-[0.98] transition-all duration-150 font-bold cursor-pointer"
         >
           <LogOut size={20} />
           Logout
