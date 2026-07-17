@@ -58,7 +58,7 @@ export default function PsychologistLoginPage() {
   }
 
   return (
-    <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
+    <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full ">
       {/* Logo badge */}
       <div className="flex justify-center mb-6">
         <div className="w-16 h-16  flex items-center justify-center ">
