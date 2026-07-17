@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Upload, Plus, Trash2, User, Calendar, MapPin, Camera } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Upload, User, Calendar, MapPin, Camera } from "lucide-react";
 import { TextField } from "@/components/TextField";
 import Button from "@/components/Button";
 
 export default function PsychologistOnboardingPage() {
+  const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [profession, setProfession] = useState<"umum" | "klinis" | "">("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: File | null }>({});
-  const [locations, setLocations] = useState<string[]>([""]);
-
   // Profile fields state
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
@@ -22,6 +22,16 @@ export default function PsychologistOnboardingPage() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (step !== 3) return;
+
+    const timeout = window.setTimeout(() => {
+      router.push("/psikolog/home");
+    }, 3000);
+
+    return () => window.clearTimeout(timeout);
+  }, [router, step]);
 
   async function handleOnboardingSubmit() {
     setError(null);
@@ -46,20 +56,22 @@ export default function PsychologistOnboardingPage() {
       const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
       const mappedType = profession === "umum" ? "general" : "clinical";
 
+      const profilePayload = {
+        type: mappedType,
+        fullName: name,
+        dateOfBirth: dob,
+        address: address,
+        bio: `Licensed ${mappedType} psychologist.`,
+        ...(finalPhotoUrl ? { photoUrl: finalPhotoUrl } : {}),
+      };
+
       const res = await fetch(`${base}/api/v1/psychologists/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({
-          type: mappedType,
-          fullName: name,
-          dateOfBirth: dob,
-          address: address,
-          photoUrl: finalPhotoUrl,
-          bio: `Licensed ${mappedType} psychologist.`,
-        }),
+        body: JSON.stringify(profilePayload),
       });
 
       const data = await res.json().catch(() => ({}));
@@ -97,27 +109,10 @@ export default function PsychologistOnboardingPage() {
       ? ["STRPK", "SIPPK", "IJAZAH", "STR", "SIPP"]
       : ["SIPP", "IJAZAH", "STR"];
 
-  const addLocation = () => {
-    if (locations.length < 3) {
-      setLocations([...locations, ""]);
-    }
-  };
-
-  const updateLocation = (index: number, val: string) => {
-    const next = [...locations];
-    next[index] = val;
-    setLocations(next);
-  };
-
-  const removeLocation = (index: number) => {
-    setLocations(locations.filter((_, i) => i !== index));
-  };
-
   const isStep1Valid =
     name.trim() !== "" &&
     dob.trim() !== "" &&
     address.trim() !== "" &&
-    photo !== null &&
     profession !== "";
 
   const isStep2Valid = () => {
@@ -198,7 +193,7 @@ export default function PsychologistOnboardingPage() {
               <TextField
                 icon={Camera}
                 type="text"
-                placeholder={photo ? `Photo: ${photo.name}` : "Upload Profile Photo"}
+                placeholder={photo ? `Photo: ${photo.name}` : "Upload Profile Photo (Optional)"}
                 readOnly
                 onClick={() => document.getElementById("photo-upload")?.click()}
                 className="cursor-pointer"
@@ -346,9 +341,10 @@ export default function PsychologistOnboardingPage() {
           <div className="flex gap-3 mt-auto pt-6">
             <Button
               type="button"
+              variant="custom"
               disabled={loading}
               onClick={() => setStep(1)}
-              className="flex-1 !bg-white border border-[#2e7d32] hover:!bg-gray-50 active:!bg-gray-100 !text-[#2e7d32] !font-bold flex items-center justify-center"
+              className="flex-1 rounded-2xl border border-[#2e7d32] bg-white py-4 text-center text-lg font-bold text-[#2e7d32] transition-colors hover:bg-gray-50 active:bg-gray-100 disabled:opacity-60"
             >
               Back
             </Button>

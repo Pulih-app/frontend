@@ -19,6 +19,21 @@ export default function PsychologistRegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  function getErrorMessage(data: unknown, fallback: string) {
+    if (!data || typeof data !== "object") return fallback;
+
+    const payload = data as { message?: unknown; errors?: unknown };
+    if (typeof payload.message === "string") return payload.message;
+
+    if (payload.errors && typeof payload.errors === "object") {
+      const firstError = Object.values(payload.errors as Record<string, unknown>)[0];
+      if (Array.isArray(firstError) && typeof firstError[0] === "string") return firstError[0];
+      if (typeof firstError === "string") return firstError;
+    }
+
+    return fallback;
+  }
+
   async function handleRegister() {
     setError(null);
 
@@ -54,11 +69,13 @@ export default function PsychologistRegisterPage() {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(data?.message ?? `Registration failed (${res.status})`);
+        throw new Error(getErrorMessage(data, `Registration failed (${res.status})`));
       }
 
-      const { session } = data.data;
-      localStorage.setItem("auth_token", session.access_token);
+      const session = data?.data?.session;
+      if (session?.access_token) {
+        localStorage.setItem("auth_token", session.access_token);
+      }
 
       router.push("/register/psikolog/onboarding");
     } catch (err) {
