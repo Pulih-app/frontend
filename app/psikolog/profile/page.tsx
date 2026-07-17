@@ -243,7 +243,7 @@ export default function PsychologistProfilePage() {
 
             {/* Edit Profile Modal */}
             {showEditModal && (
-                <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+                <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
                     <div className="bg-white rounded-3xl p-6 w-full max-w-[320px] shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
                         <div className="text-center">
                             <h3 className="text-base font-black text-gray-900 leading-tight">
@@ -314,7 +314,7 @@ export default function PsychologistProfilePage() {
 
             {/* Legal Documents Fullscreen Modal/Overlay */}
             {showDocsModal && (
-                <div className="fixed inset-0 z-40 bg-white flex flex-col p-6 overflow-y-auto max-w-sm mx-auto w-full border-x animate-in slide-in-from-bottom duration-250 text-black">
+                <div className="fixed inset-0 z-[60] bg-white flex flex-col p-6 overflow-y-auto max-w-sm mx-auto w-full border-x animate-in slide-in-from-bottom duration-250 text-black">
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4 shrink-0 -mx-6 px-6">
                         <h3 className="text-[17px] font-black text-gray-900 tracking-tight">
@@ -389,7 +389,7 @@ export default function PsychologistProfilePage() {
 
             {/* Document Preview Modal */}
             {previewDoc && (
-                <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 text-black">
+                <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6 text-black">
                     <div className="bg-white rounded-3xl p-6 w-full max-w-[320px] shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
                         {/* Header */}
                         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
