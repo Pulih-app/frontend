@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
+import { setOnboardingAnswer } from "@/lib/onboardingStore";
 
 const OPTIONS = [
   "More than once a day",
@@ -13,6 +15,12 @@ const OPTIONS = [
 
 export default function Question3Page() {
   const [selected, setSelected] = useState<string | null>(null);
+  const router = useRouter();
+
+  function handleContinue() {
+    setOnboardingAnswer("frequency", selected!);
+    router.push("/onboarding/question-4");
+  }
 
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border">
@@ -50,7 +58,7 @@ export default function Question3Page() {
       {/* Continue button */}
       <div className="mt-auto w-full pb-8 pt-6">
         {selected ? (
-          <Button href="/onboarding/question-4">Continue</Button>
+          <Button onClick={handleContinue}>Continue</Button>
         ) : (
           <Button disabled className="!bg-gray-300 !hover:bg-gray-300 !active:bg-gray-300 cursor-not-allowed">Continue</Button>
         )}

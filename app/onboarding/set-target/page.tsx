@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/Button";
+import { saveOnboardingField } from "@/lib/onboardingStore";
 
 const OPTIONS = ["7 hari", "14 hari", "30 hari", "69 hari"];
 
@@ -10,6 +12,15 @@ export default function SetTargetPage() {
     const [selected, setSelected] = useState<string>("14 hari");
     const [customDays, setCustomDays] = useState<string>("");
     const [isCustomActive, setIsCustomActive] = useState(false);
+    const router = useRouter();
+
+    function handleContinue() {
+        const days = isCustomActive
+            ? parseInt(customDays, 10)
+            : parseInt(selected.match(/\d+/)![0], 10);
+        saveOnboardingField({ porn_free_goal: days });
+        router.push("/onboarding/analysis");
+    }
 
     function handleCustomChange(value: string) {
         // Only allow digits
@@ -103,7 +114,7 @@ export default function SetTargetPage() {
             {/* Continue button */}
             <div className="mt-auto w-full pb-8 pt-6">
                 {hasValidSelection ? (
-                    <Button href="/onboarding/analysis">Continue</Button>
+                    <Button onClick={handleContinue}>Continue</Button>
                 ) : (
                     <Button
                         disabled

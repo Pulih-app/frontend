@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Button from "@/components/Button";
+import { setOnboardingAnswer } from "@/lib/onboardingStore";
 
 const OPTIONS = ["Yes", "No"];
 
 export default function Question7Page() {
   const [selected, setSelected] = useState<string | null>(null);
+  const router = useRouter();
+
+  function handleContinue() {
+    setOnboardingAnswer("escape_sadness", selected!);
+    router.push("/onboarding/question-7");
+  }
 
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border">
@@ -45,7 +53,7 @@ export default function Question7Page() {
       {/* Continue button */}
       <div className="mt-auto w-full pb-8 pt-6">
         {selected ? (
-          <Button href="/onboarding/question-7">Continue</Button>
+          <Button onClick={handleContinue}>Continue</Button>
         ) : (
           <Button disabled className="!bg-gray-300 !hover:bg-gray-300 !active:bg-gray-300 cursor-not-allowed">Continue</Button>
         )}

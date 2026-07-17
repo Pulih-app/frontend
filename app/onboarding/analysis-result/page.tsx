@@ -1,9 +1,50 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
+import { getOnboardingResult, OnboardingResult } from "@/lib/onboardingStore";
+
+type LevelStyle = {
+    badge: string;
+    icon: string;
+};
+
+function getLevelStyle(level: string): LevelStyle {
+    switch (level?.toLowerCase()) {
+        case "low":
+            return {
+                badge: "bg-green-100 text-green-600",
+                icon: "text-green-600",
+            };
+        case "moderate":
+            return {
+                badge: "bg-amber-100 text-amber-600",
+                icon: "text-amber-600",
+            };
+        case "severe":
+            return {
+                badge: "bg-red-200 text-red-700",
+                icon: "text-red-700",
+            };
+        case "high":
+        default:
+            return {
+                badge: "bg-red-100 text-red-500",
+                icon: "text-red-500",
+            };
+    }
+}
 
 export default function AnalysisResultPage() {
+    const [result] = useState<OnboardingResult | null>(() =>
+        typeof window !== "undefined" ? getOnboardingResult() : null
+    );
+
+    const analysis = result?.onboarding_analysis;
+    const level = analysis?.level ?? "High";
+    const style = getLevelStyle(level);
+
     return (
         <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto w-full border">
             {/* Scrollable content */}
@@ -23,12 +64,14 @@ export default function AnalysisResultPage() {
 
                 {/* Severity badge */}
                 <div className="flex justify-center mt-5">
-                    <span className="inline-flex items-center gap-2 bg-red-100 text-red-500 font-semibold text-base px-5 py-2 rounded-full">
+                    <span
+                        className={`inline-flex items-center gap-2 font-semibold text-base px-5 py-2 rounded-full ${style.badge}`}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 24 24"
                             fill="currentColor"
-                            className="w-4 h-4"
+                            className={`w-4 h-4 ${style.icon}`}
                         >
                             <path
                                 fillRule="evenodd"
@@ -36,18 +79,18 @@ export default function AnalysisResultPage() {
                                 clipRule="evenodd"
                             />
                         </svg>
-                        High
+                        {level}
                     </span>
                 </div>
 
                 {/* Heading */}
                 <h1 className="mt-5 text-center text-[1.75rem] font-extrabold text-gray-900 leading-tight">
-                    Perhatian Terhadap Pola Penggunaan
+                    {analysis?.title ?? "Your Recovery Profile"}
                 </h1>
 
                 {/* Description */}
                 <p className="mt-4 text-center text-gray-500 text-base leading-relaxed">
-                    Data menunjukkan pola penggunaan pornografi yang intensif dengan frekuensi harian tinggi serta adanya peningkatan intensitas konten dari waktu ke waktu.
+                    {analysis?.level_description ?? "We have analysed your answers and prepared a personalised recovery profile for you."}
                 </p>
 
                 {/* Disclaimer */}
@@ -57,25 +100,26 @@ export default function AnalysisResultPage() {
 
                 {/* Cards */}
                 <div className="mt-6 flex flex-col gap-4">
-                    {/* Analisis Pola card */}
+                    {/* Pattern analysis card */}
                     <div className="bg-[#f1f8f1] border-l-4 border-[#2e7d32] rounded-2xl px-5 py-4">
                         <p className="flex items-center gap-2 font-bold text-gray-900 text-base">
                             <span className="text-[#2e7d32] text-xl">&#x1F9E0;</span>
                             Analisis Pola
                         </p>
                         <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                            Adanya penggunaan sebagai mekanisme koping terhadap rasa sedih, peningkatan frekuensi, serta kecenderungan mencari konten yang lebih ekstrem menunjukkan bahwa kebiasaan ini telah menjadi ketergantungan yang cukup kuat.
+                            {analysis?.pattern_analysis ?? "Berdasarkan jawaban kamu, kami telah mengidentifikasi pola kebiasaan yang perlu diperhatikan."}
                         </p>
                     </div>
 
-                    {/* Semangat Untukmu card */}
+                    {/* Encouragement card */}
                     <div className="bg-[#f1f8f1] border-l-4 border-[#2e7d32] rounded-2xl px-5 py-4">
                         <p className="flex items-center gap-2 font-bold text-gray-900 text-base">
                             <span className="text-[#2e7d32] text-xl">&#x2665;</span>
-                            Semangat Untukmu , nanangggg
+                            Semangat Untukmu
+                            {result?.nickname ? `, ${result.nickname}` : ""}
                         </p>
                         <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                            Kamu sangat berani mengakui kondisi ini di usia 17 tahun. Ini adalah langkah pertama yang hebat untuk perubahan. Jangan terlalu keras pada diri sendiri, fokuslah untuk mulai mengurangi secara bertahap dan cari dukungan dari orang yang kamu percayai atau profesional jika merasa sulit menghadapinya sendiri.
+                            {analysis?.encouragement ?? "Kamu sudah mengambil langkah pertama yang luar biasa. Teruslah berjuang dan jangan menyerah."}
                         </p>
                     </div>
                 </div>

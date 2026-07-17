@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound } from "lucide-react";
+import { BookOpen, ChevronRight, User, Home, ChartColumn, Heart } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
 
 const navItems = [
   { label: "Home", href: "/home", icon: Home },
   { label: "Stats", href: "/stats", icon: ChartColumn },
-  { label: "Help", href: "/help", icon: UsersRound },
+  { label: "Support", href: "/help", icon: Heart },
   { label: "Learn", href: "/education", icon: BookOpen },
   { label: "Profile", href: "/profile", icon: User },
 ];
