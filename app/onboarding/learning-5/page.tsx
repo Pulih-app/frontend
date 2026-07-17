@@ -13,7 +13,7 @@ export default function OnboardingPage() {
                 <div className="relative w-56 h-56">
                     <Image
                         src="/assets/learning-5.png"
-                        alt="Maskot Pulih bertanya-tanya"
+                        alt="Pulih mascot wondering"
                         fill
                         className="object-contain"
                         priority

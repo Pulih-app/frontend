@@ -18,6 +18,7 @@ const navItems = [
 export default function UserHomePage() {
   const [stats, setStats] = useState<UserStats>({ currentStreak: 0, longestStreak: 0, cleanDays: [], successRate: 100 });
   const [targetDays, setTargetDays] = useState(30);
+  const [username, setUsername] = useState("Anangggg");
 
   useEffect(() => {
     setStats(mockDb.getUserStats());
@@ -25,6 +26,10 @@ export default function UserHomePage() {
       const savedTarget = window.localStorage.getItem("user-target-days");
       if (savedTarget) {
         setTargetDays(Number(savedTarget));
+      }
+      const savedName = window.localStorage.getItem("user-username");
+      if (savedName) {
+        setUsername(savedName);
       }
     }
   }, []);
@@ -34,7 +39,7 @@ export default function UserHomePage() {
   return (
     <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col overflow-hidden bg-white px-6 pb-24 text-black text-left">
       <section className="mt-6">
-        <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">Halo, Alex! <span className="text-xl">👋</span></h1>
+        <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">Halo, {username}! <span className="text-xl">👋</span></h1>
         <p className="mt-2 text-[13px] font-semibold leading-tight text-[#7f8b92]">Proud of you for showing up today</p>
       </section>
 

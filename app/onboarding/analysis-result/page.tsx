@@ -1,9 +1,25 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Button from "@/components/Button";
 
 export default function AnalysisResultPage() {
+    const [username, setUsername] = useState("Anangggg");
+    const [age, setAge] = useState("17");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const savedUsername = window.localStorage.getItem("user-username");
+            if (savedUsername) {
+                setUsername(savedUsername);
+            }
+            const savedAge = window.localStorage.getItem("user-age");
+            if (savedAge) {
+                setAge(savedAge);
+            }
+        }
+    }, []);
     return (
         <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto w-full border">
             {/* Scrollable content */}
@@ -42,17 +58,17 @@ export default function AnalysisResultPage() {
 
                 {/* Heading */}
                 <h1 className="mt-5 text-center text-[1.75rem] font-extrabold text-gray-900 leading-tight">
-                    Perhatian Terhadap Pola Penggunaan
+                    Attention to Usage Patterns
                 </h1>
 
                 {/* Description */}
                 <p className="mt-4 text-center text-gray-500 text-base leading-relaxed">
-                    Data menunjukkan pola penggunaan pornografi yang intensif dengan frekuensi harian tinggi serta adanya peningkatan intensitas konten dari waktu ke waktu.
+                    The data indicates an intensive pattern of pornography usage with high daily frequency, alongside an increase in content intensity over time.
                 </p>
 
                 {/* Disclaimer */}
                 <p className="mt-3 text-center text-gray-400 text-sm italic">
-                    ini Hanya indikasi*
+                    *this is only an indication
                 </p>
 
                 {/* Cards */}
@@ -61,10 +77,10 @@ export default function AnalysisResultPage() {
                     <div className="bg-[#f1f8f1] border-l-4 border-[#2e7d32] rounded-2xl px-5 py-4">
                         <p className="flex items-center gap-2 font-bold text-gray-900 text-base">
                             <span className="text-[#2e7d32] text-xl">&#x1F9E0;</span>
-                            Analisis Pola
+                            Pattern Analysis
                         </p>
                         <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                            Adanya penggunaan sebagai mekanisme koping terhadap rasa sedih, peningkatan frekuensi, serta kecenderungan mencari konten yang lebih ekstrem menunjukkan bahwa kebiasaan ini telah menjadi ketergantungan yang cukup kuat.
+                            Using it as a coping mechanism for sadness, the increasing frequency, and the tendency to seek more extreme content indicate that this habit has become a strong dependency.
                         </p>
                     </div>
 
@@ -72,10 +88,10 @@ export default function AnalysisResultPage() {
                     <div className="bg-[#f1f8f1] border-l-4 border-[#2e7d32] rounded-2xl px-5 py-4">
                         <p className="flex items-center gap-2 font-bold text-gray-900 text-base">
                             <span className="text-[#2e7d32] text-xl">&#x2665;</span>
-                            Semangat Untukmu , nanangggg
+                            Keep It Up, {username}
                         </p>
                         <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                            Kamu sangat berani mengakui kondisi ini di usia 17 tahun. Ini adalah langkah pertama yang hebat untuk perubahan. Jangan terlalu keras pada diri sendiri, fokuslah untuk mulai mengurangi secara bertahap dan cari dukungan dari orang yang kamu percayai atau profesional jika merasa sulit menghadapinya sendiri.
+                            You are very brave to acknowledge this condition at the age of {age}. This is a great first step toward change. Do not be too hard on yourself; focus on reducing it gradually and seek support from someone you trust or a professional if you find it difficult to handle alone.
                         </p>
                     </div>
                 </div>
@@ -83,7 +99,7 @@ export default function AnalysisResultPage() {
 
             {/* Sticky bottom button */}
             <div className="px-6 pb-8 pt-4 bg-white">
-                <Button href="/onboarding/home">Selanjutnya</Button>
+                <Button href="/onboarding/home">Next</Button>
             </div>
         </div>
     );

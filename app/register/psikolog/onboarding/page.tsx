@@ -1,14 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Upload, Plus, Trash2, User, Calendar, MapPin, Camera } from "lucide-react";
 import { TextField } from "@/components/TextField";
 import Button from "@/components/Button";
 
 export default function PsychologistOnboardingPage() {
+  const router = useRouter();
   const [step, setStep] = useState<1 | 2 | 3>(1);
+
+  useEffect(() => {
+    if (step === 1 && typeof window !== "undefined") {
+      window.localStorage.removeItem("psychologist-practice-days");
+      window.localStorage.removeItem("psychologist-profession");
+      window.localStorage.removeItem("psychologist-name");
+      window.localStorage.removeItem("psychologist-dob");
+      window.localStorage.removeItem("psychologist-address");
+      window.localStorage.removeItem("psychologist-avatar");
+      window.localStorage.removeItem("psychologist-description");
+      window.localStorage.removeItem("psychologist-package");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (step === 3) {
+      const timer = setTimeout(() => {
+        router.push("/psikolog/home");
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [step, router]);
   const [profession, setProfession] = useState<"umum" | "klinis" | "">("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<{ [key: string]: File | null }>({});
@@ -220,6 +244,7 @@ export default function PsychologistOnboardingPage() {
               onClick={() => {
                 if (typeof window !== "undefined") {
                   window.localStorage.setItem("psychologist-profession", profession);
+                  window.localStorage.setItem("psychologist-name", name);
                 }
                 setStep(2);
               }}

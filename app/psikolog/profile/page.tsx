@@ -40,6 +40,8 @@ export default function PsychologistProfilePage() {
     const [description, setDescription] = useState(
         "Specialized in anxiety treatment, relapse prevention, cognitive behavioral therapy (CBT), and emotional guidance."
     );
+    const [name, setName] = useState("Dr. Billy, M.Psi.");
+    const [email, setEmail] = useState("dr.billy@pulih.com");
 
     // Edit Modal States
     const [showEditModal, setShowEditModal] = useState(false);
@@ -74,6 +76,13 @@ export default function PsychologistProfilePage() {
                 setLegalDocs(JSON.parse(savedDocs));
             } else {
                 setLegalDocs(activeProf === "umum" ? defaultUmumDocs : defaultKlinisDocs);
+            }
+
+            const savedName = window.localStorage.getItem("psychologist-name");
+            if (savedName) {
+                setName(savedName);
+                const emailPrefix = savedName.toLowerCase().replace(/[^a-z0-9\s]/g, "").trim().replace(/\s+/g, ".");
+                setEmail(`${emailPrefix}@pulih.com`);
             }
         }
     }, []);
@@ -152,10 +161,10 @@ export default function PsychologistProfilePage() {
                                 {isMounted ? (profession === "umum" ? "General Psychologist" : "Clinical Psychologist") : "Psychologist"}
                             </p>
                             <h2 className="text-white text-xl font-black mt-1">
-                                Dr. Billy, M.Psi.
+                                {name}
                             </h2>
                             <p className="text-[#effbf4]/75 text-[11px] font-semibold mt-0.5">
-                                dr.billy@pulih.com
+                                {email}
                             </p>
                         </div>
                     </div>
@@ -449,7 +458,7 @@ export default function PsychologistProfilePage() {
                             <div className="h-px bg-gray-200/50 w-24 my-3" />
 
                             <p className="text-[10px] text-gray-500 font-bold">Awarded To:</p>
-                            <p className="text-xs font-black text-gray-800 mt-0.5">Dr. Billy, M.Psi.</p>
+                            <p className="text-xs font-black text-gray-800 mt-0.5">{name}</p>
 
                             <div className="mt-5 flex items-center gap-1.5 bg-[#effbf4] text-[#0b744f] border border-[#d2f3df] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
                                 <ShieldCheck size={12} strokeWidth={3} />

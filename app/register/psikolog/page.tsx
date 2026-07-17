@@ -88,7 +88,19 @@ export default function PsychologistRegisterPage() {
       {/* Submit button */}
       <Button
         type="button"
-        onClick={() => router.push("/register/psikolog/onboarding")}
+        onClick={() => {
+          if (typeof window !== "undefined") {
+            window.localStorage.removeItem("psychologist-practice-days");
+            window.localStorage.removeItem("psychologist-profession");
+            window.localStorage.removeItem("psychologist-name");
+            window.localStorage.removeItem("psychologist-dob");
+            window.localStorage.removeItem("psychologist-address");
+            window.localStorage.removeItem("psychologist-avatar");
+            window.localStorage.removeItem("psychologist-description");
+            window.localStorage.removeItem("psychologist-package");
+          }
+          router.push("/register/psikolog/onboarding");
+        }}
       >
         Register
       </Button>
@@ -115,7 +127,7 @@ export default function PsychologistRegisterPage() {
       </p>
 
       {/* Mascot image — flush to bottom */}
-      <div className="flex-1 flex items-end w-full">
+      <div className="flex-1 flex items-end w-full relative">
         <Image
           src="/assets/login.png"
           alt="Maskot Pulih"

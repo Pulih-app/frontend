@@ -11,7 +11,7 @@ export default function Onboarding4Page() {
                 <div className="relative w-64 h-64">
                     <Image
                         src="/assets/learning-4.png"
-                        alt="Maskot Pulih sedang sedih kehujanan"
+                        alt="Pulih mascot sad under the rain"
                         fill
                         className="object-contain"
                         priority

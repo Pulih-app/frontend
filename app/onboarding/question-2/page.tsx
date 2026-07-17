@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 
 export default function Question2Page() {
+    const router = useRouter();
     const [age, setAge] = useState<string>("");
 
     const isValid = age !== "" && Number(age) > 0;
@@ -42,7 +44,17 @@ export default function Question2Page() {
             {/* Continue button */}
             <div className="mt-auto w-full pb-8 pt-6">
                 {isValid ? (
-                    <Button href="/onboarding/question-3">Continue</Button>
+                    <Button
+                        type="button"
+                        onClick={() => {
+                            if (typeof window !== "undefined") {
+                                window.localStorage.setItem("user-age", age);
+                            }
+                            router.push("/onboarding/question-3");
+                        }}
+                    >
+                        Continue
+                    </Button>
                 ) : (
                     <Button disabled className="!bg-gray-300 !hover:bg-gray-300 !active:bg-gray-300 cursor-not-allowed">Continue</Button>
                 )}

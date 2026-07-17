@@ -27,14 +27,22 @@ export default function PsychologistHomePage() {
     const [availableDays, setAvailableDays] = useState<string[]>([]);
     const [appointments, setAppointments] = useState<Booking[]>([]);
     const [isMounted, setIsMounted] = useState(false);
+    const [psyName, setPsyName] = useState("Doctor");
 
     useEffect(() => {
         setIsMounted(true);
-        setAppointments(mockDb.getBookings());
         if (typeof window !== "undefined") {
-            const saved = window.localStorage.getItem("psychologist-practice-days");
-            if (saved) {
-                setAvailableDays(JSON.parse(saved));
+            const savedName = window.localStorage.getItem("psychologist-name") || "Dr. Billy, M.Psi.";
+            setPsyName(savedName);
+
+            // Filter appointments by psychologist name
+            const allBookings = mockDb.getBookings();
+            const filtered = allBookings.filter(booking => booking.name === savedName);
+            setAppointments(filtered);
+
+            const savedDays = window.localStorage.getItem("psychologist-practice-days");
+            if (savedDays) {
+                setAvailableDays(JSON.parse(savedDays));
             }
         }
     }, []);
@@ -51,7 +59,7 @@ export default function PsychologistHomePage() {
             {/* Welcome Greeting */}
             <section className="mt-2">
                 <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">
-                    Welcome, Doctor! <span className="text-xl">👋</span>
+                    Welcome, {psyName}! <span className="text-xl">👋</span>
                 </h1>
                 <p className="mt-2 text-[13px] font-semibold leading-tight text-[#7f8b92]">
                     Here is your practice schedule and patient queue today
@@ -104,38 +112,44 @@ export default function PsychologistHomePage() {
                             </Link>
                         </div>
 
-                        <div className="mt-4 flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory -mx-6 px-6">
-                            {appointments.map((patient) => (
-                                <Link 
-                                    key={patient.id}
-                                    href={`/psikolog/session-detail?patient=${encodeURIComponent(patient.patientName)}&duration=${encodeURIComponent(patient.duration)}&timeSlot=${encodeURIComponent(patient.time)}&complaint=${encodeURIComponent(patient.challenge)}`}
-                                    className="block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-[285px] shrink-0 snap-start cursor-pointer shadow-sm hover:bg-[#eaeaea]"
-                                >
-                                    <span className="relative z-10 flex flex-col items-start min-w-0">
-                                        <span className="block text-[18px] font-black leading-none text-gray-900 w-fit">
-                                            {patient.patientName}
+                        {appointments.length > 0 ? (
+                            <div className="mt-4 flex gap-4 overflow-x-auto pb-4 scrollbar-none snap-x snap-mandatory -mx-6 px-6">
+                                {appointments.map((patient) => (
+                                    <Link 
+                                        key={patient.id}
+                                        href={`/psikolog/session-detail?patient=${encodeURIComponent(patient.patientName)}&duration=${encodeURIComponent(patient.duration)}&timeSlot=${encodeURIComponent(patient.time)}&complaint=${encodeURIComponent(patient.challenge)}&type=${patient.type || "meet"}`}
+                                        className="block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-[285px] shrink-0 snap-start cursor-pointer shadow-sm hover:bg-[#eaeaea]"
+                                    >
+                                        <span className="relative z-10 flex flex-col items-start min-w-0">
+                                            <span className="block text-[18px] font-black leading-none text-gray-900 w-fit">
+                                                {patient.patientName}
+                                            </span>
+                                            <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
+                                                {patient.duration}
+                                            </span>
+                                            <span className="mt-3 block text-sm font-black text-gray-800">
+                                                {patient.time} {patient.date ? `(${patient.date})` : ""}
+                                            </span>
+                                            <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[210px] leading-relaxed line-clamp-2">
+                                                Complaint: {patient.challenge}
+                                            </span>
                                         </span>
-                                        <span className="mt-3 inline-flex items-center rounded-full bg-[#0b744f] px-3.5 py-1 text-[10px] font-black tracking-wider uppercase text-white">
-                                            {patient.duration}
-                                        </span>
-                                        <span className="mt-3 block text-sm font-black text-gray-800">
-                                            {patient.time} {patient.date ? `(${patient.date})` : ""}
-                                        </span>
-                                        <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[210px] leading-relaxed line-clamp-2">
-                                            Complaint: {patient.challenge}
-                                        </span>
-                                    </span>
 
-                                    {/* Green decorative quarter circle segment with gradient */}
-                                    <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tr from-[#35b863] to-[#2e7d32] rounded-tl-full pointer-events-none z-0" />
-                                    
-                                    {/* Chevron inside the green corner */}
-                                    <div className="absolute bottom-4 right-4 text-white z-10 pointer-events-none">
-                                        <ChevronRight size={20} strokeWidth={3} />
-                                    </div>
-                                </Link>
-                            ))}
-                        </div>
+                                        {/* Green decorative quarter circle segment with gradient */}
+                                        <div className="absolute bottom-0 right-0 w-24 h-24 bg-gradient-to-tr from-[#35b863] to-[#2e7d32] rounded-tl-full pointer-events-none z-0" />
+                                        
+                                        {/* Chevron inside the green corner */}
+                                        <div className="absolute bottom-4 right-4 text-white z-10 pointer-events-none">
+                                            <ChevronRight size={20} strokeWidth={3} />
+                                        </div>
+                                    </Link>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="mt-4 rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 text-center text-gray-400 text-sm font-bold">
+                                No patients scheduled for today.
+                            </div>
+                        )}
                     </section>
 
                     {/* Practice Calendar Section */}

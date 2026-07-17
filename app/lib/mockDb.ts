@@ -36,6 +36,7 @@ export interface Booking {
   status: "pending" | "accepted" | "rescheduled";
   meetLink?: string;
   rescheduleReason?: string;
+  type?: "chat" | "meet";
 }
 
 export interface Post {
@@ -243,6 +244,7 @@ export const mockDb = {
   getBookings: (): Booking[] => {
     if (!isClient()) return [];
     const data = localStorage.getItem("pulih-bookings");
+    let bookings: Booking[] = [];
     if (!data) {
       // Seed default data
       const defaults: Booking[] = [
@@ -256,13 +258,71 @@ export const mockDb = {
           duration: "1 Hour",
           challenge: "Mengalami kecemasan berlebih saat hendak presentasi.",
           image: generateAvatar("ayu", "#EFFBF4", "#0b744f", true),
-          status: "pending"
+          status: "pending",
+          type: "chat"
         }
       ];
       localStorage.setItem("pulih-bookings", JSON.stringify(defaults));
-      return defaults;
+      bookings = defaults;
+    } else {
+      bookings = JSON.parse(data);
     }
-    return JSON.parse(data);
+
+    // Dynamic seeding for custom psychologist if they don't have bookings yet
+    const savedName = localStorage.getItem("psychologist-name");
+    const savedProfession = localStorage.getItem("psychologist-profession");
+    if (savedName) {
+      const hasBookingsForCustom = bookings.some(b => b.name === savedName);
+      if (!hasBookingsForCustom) {
+        const specialty = savedProfession === "umum" ? "Psikolog Umum" : "Psikolog Klinis";
+        const customDefaults: Booking[] = [
+          {
+            id: Date.now() + 1,
+            patientName: "Aditya Pratama",
+            name: savedName,
+            specialty,
+            date: "17 July 2026",
+            time: "14:00 - 15:00 WIB",
+            duration: "1 Hour",
+            challenge: "Mengalami stres berat karena tekanan pekerjaan dan kesulitan membagi waktu.",
+            image: generateAvatar("aditya", "#EBF5FF", "#1E40AF", false),
+            status: "accepted",
+            type: "chat"
+          },
+          {
+            id: Date.now() + 2,
+            patientName: "Rian Hidayat",
+            name: savedName,
+            specialty,
+            date: "17 July 2026",
+            time: "16:00 - 17:00 WIB",
+            duration: "1 Hour",
+            challenge: "Sering mengalami panic attack tiba-tiba di tempat kerja.",
+            image: generateAvatar("rian", "#F3E8FF", "#6D28D9", false),
+            status: "accepted",
+            meetLink: "https://meet.google.com/abc-defg-hij",
+            type: "meet"
+          },
+          {
+            id: Date.now() + 3,
+            patientName: "Siti Aminah",
+            name: savedName,
+            specialty,
+            date: "18 July 2026",
+            time: "10:00 - 11:00 WIB",
+            duration: "1 Hour",
+            challenge: "Kecemasan akademik menjelang ujian akhir kelulusan.",
+            image: generateAvatar("siti", "#FCE7F3", "#DB2777", true),
+            status: "pending",
+            type: "meet"
+          }
+        ];
+        bookings = [...customDefaults, ...bookings];
+        localStorage.setItem("pulih-bookings", JSON.stringify(bookings));
+      }
+    }
+
+    return bookings;
   },
 
   saveBooking: (booking: Omit<Booking, "id" | "status">): Booking => {
@@ -413,10 +473,14 @@ export const mockDb = {
     
     localStorage.setItem("pulih-streak", "0");
     
+    const todayStr = new Date().toISOString().split("T")[0];
+    const updatedCleanDays = stats.cleanDays.filter(d => d !== todayStr);
+    localStorage.setItem("pulih-clean-days", JSON.stringify(updatedCleanDays));
+    
     return {
       currentStreak: 0,
       longestStreak: stats.longestStreak,
-      cleanDays: stats.cleanDays,
+      cleanDays: updatedCleanDays,
       successRate: mockDb.getUserStats().successRate
     };
   }

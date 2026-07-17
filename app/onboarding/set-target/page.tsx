@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 
-const OPTIONS = ["7 hari", "14 hari", "30 hari", "69 hari"];
+const OPTIONS = ["7 days", "14 days", "30 days", "69 days"];
 
 export default function SetTargetPage() {
-    const [selected, setSelected] = useState<string>("14 hari");
+    const router = useRouter();
+    const [selected, setSelected] = useState<string>("14 days");
     const [customDays, setCustomDays] = useState<string>("");
     const [isCustomActive, setIsCustomActive] = useState(false);
 
@@ -31,6 +33,19 @@ export default function SetTargetPage() {
 
     const hasValidSelection = selected || (isCustomActive && customDays !== "");
 
+    const handleContinue = () => {
+        let daysNum = 14;
+        if (isCustomActive && customDays) {
+            daysNum = Number(customDays);
+        } else if (selected) {
+            daysNum = Number(selected.split(" ")[0]);
+        }
+        if (typeof window !== "undefined") {
+            window.localStorage.setItem("user-target-days", daysNum.toString());
+        }
+        router.push("/onboarding/analysis");
+    };
+
     return (
         <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border">
             {/* Mascot illustration */}
@@ -38,7 +53,7 @@ export default function SetTargetPage() {
                 <div className="relative w-52 h-52">
                     <Image
                         src="/assets/set-target.png"
-                        alt="Maskot Pulih memanah"
+                        alt="Pulih mascot shooting arrow"
                         fill
                         className="object-contain"
                         priority
@@ -48,7 +63,7 @@ export default function SetTargetPage() {
 
             {/* Heading */}
             <h1 className="mt-10 text-[2rem] font-extrabold text-gray-900 leading-tight text-center">
-                Mari mulai dengan target kecil untuk membangun momentum.
+                Let's start with a small target to build momentum.
             </h1>
 
             {/* Target options */}
@@ -81,7 +96,7 @@ export default function SetTargetPage() {
                     <input
                         type="text"
                         inputMode="numeric"
-                        placeholder="Tulis targetmu sendiri"
+                        placeholder="Write your own target"
                         value={customDays}
                         onChange={(e) => handleCustomChange(e.target.value)}
                         className={`flex-1 bg-transparent outline-none text-base ${
@@ -94,7 +109,7 @@ export default function SetTargetPage() {
                         <span className={`text-base font-bold ${
                             isCustomActive ? "text-[#2e7d32]" : "text-gray-400"
                         }`}>
-                            hari
+                            days
                         </span>
                     )}
                 </div>
@@ -103,7 +118,7 @@ export default function SetTargetPage() {
             {/* Continue button */}
             <div className="mt-auto w-full pb-8 pt-6">
                 {hasValidSelection ? (
-                    <Button href="/onboarding/analysis">Continue</Button>
+                    <Button type="button" onClick={handleContinue}>Continue</Button>
                 ) : (
                     <Button
                         disabled

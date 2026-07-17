@@ -25,8 +25,10 @@ function SessionDetailContent() {
         }
     }, []);
 
+    const sessionType = searchParams.get("type") || (profession === "umum" || patientName === "Mr. Bu" ? "chat" : "meet");
+
     const handleStartCounseling = () => {
-        if (profession === "umum" || patientName === "Mr. Bu") {
+        if (sessionType === "chat") {
             router.push(`/psikolog/chat?patient=${encodeURIComponent(patientName)}&age=${encodeURIComponent("24 Years")}&duration=${encodeURIComponent(duration)}`);
         } else {
             alert("Opening Google Meet for Video Call Session...");
@@ -91,7 +93,7 @@ function SessionDetailContent() {
                     <div className="bg-[#f5f5f5] rounded-[20px] p-4 border border-gray-200/30 text-left">
                         <span className="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider block">Method</span>
                         <span className="text-sm font-black text-gray-800 mt-1 block">
-                            {profession === "umum" || patientName === "Mr. Bu" ? "Chat (Online)" : "Video Call (Online)"}
+                            {sessionType === "chat" ? "Chat (Online)" : "Video Call (Online)"}
                         </span>
                     </div>
                     <div className="bg-[#f5f5f5] rounded-[20px] p-4 border border-gray-200/30 text-left">

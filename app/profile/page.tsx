@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound, Clock, Target, LogOut } from "lucide-react";
@@ -32,6 +33,19 @@ const manageItems = [
 
 export default function ProfilePage() {
   const router = useRouter();
+  const [username, setUsername] = useState("Anangggg");
+  const [email, setEmail] = useState("anangggg@gmail.com");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedUsername = window.localStorage.getItem("user-username");
+      if (savedUsername) {
+        setUsername(savedUsername);
+        setEmail(`${savedUsername.toLowerCase().replace(/[^a-z0-9]/g, "")}@gmail.com`);
+      }
+    }
+  }, []);
+
   const handleLogout = () => {
     router.push("/");
   };
@@ -56,8 +70,8 @@ export default function ProfilePage() {
 
             <div>
               <p className="text-green-300 text-[12px] text-center font-semibold mt-4">Your Profile</p>
-              <h2 className="text-white text-[22px] text-center  font-bold leading-tight">nanangggg</h2>
-              <p className="text-green-300 text-[12px] text-center mt-1">nanangggg@gmail.com</p>
+              <h2 className="text-white text-[22px] text-center  font-bold leading-tight">{username}</h2>
+              <p className="text-green-300 text-[12px] text-center mt-1">{email}</p>
             </div>
 
           </div>

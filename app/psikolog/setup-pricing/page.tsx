@@ -116,7 +116,12 @@ export default function SetUpPricingPage() {
                 </div>
             </section>
             <div className="mt-auto grid grid-cols-2 gap-4 pt-8">
-                <Button type="button" onClick={() => router.back()} className="rounded-2xl border-2 border-[#2e7d32] bg-white text-[#2e7d32] hover:bg-gray-50 active:bg-gray-100 py-4 font-bold shadow-sm">
+                <Button
+                    type="button"
+                    variant="custom"
+                    onClick={() => router.back()}
+                    className="rounded-2xl border-2 border-[#2e7d32] text-[#2e7d32] bg-white hover:bg-gray-50 active:bg-gray-100 py-4 font-bold shadow-sm text-center block w-full"
+                >
                     Back
                 </Button>
                 <Button type="button" onClick={savePackage} className="rounded-2xl bg-[#2e7d32] text-white hover:bg-[#1b5e20] active:bg-[#1b5e20] py-4 font-bold shadow-md shadow-[#2e7d32]/20">

@@ -2,11 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { User, Mail, Lock } from "lucide-react";
 import { TextField } from "@/components/TextField";
 import Button from "@/components/Button";
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const [username, setUsername] = useState("");
 
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
@@ -40,6 +44,8 @@ export default function RegisterPage() {
         icon={User}
         type="text"
         placeholder="Username"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         containerClassName="mb-4"
       />
       <TextField
@@ -88,7 +94,20 @@ export default function RegisterPage() {
       </div>
 
       {/* Submit button */}
-      <Button type="button">
+      <Button
+        type="button"
+        onClick={() => {
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem("user-username", username || "Anangggg");
+            window.localStorage.removeItem("pulih-streak");
+            window.localStorage.removeItem("pulih-longest-streak");
+            window.localStorage.removeItem("pulih-clean-days");
+            window.localStorage.removeItem("pulih-relapses");
+            window.localStorage.removeItem("user-target-days");
+          }
+          router.push("/onboarding");
+        }}
+      >
         Register
       </Button>
 
@@ -114,7 +133,7 @@ export default function RegisterPage() {
       </p>
 
       {/* Mascot image — flush to bottom */}
-      <div className="flex-1 flex items-end w-full">
+      <div className="flex-1 flex items-end w-full relative">
         <Image
           src="/assets/login.png"
           alt="Maskot Pulih"

@@ -5,10 +5,10 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 const FACTS = [
-    "Pornografi membajak sistem reward di otak kamu, menjebakmu dalam siklus yang tak berujung",
-    "Otak manusia dapat pulih dan membentuk kebiasaan baru dalam 90 hari",
-    "Lebih dari 200 juta orang di dunia berjuang melawan kecanduan pornografi",
-    "Aktivitas fisik rutin dapat membantu memulihkan sirkuit dopamin di otak",
+    "Pornography hijacks your brain's reward system, trapping you in an endless cycle",
+    "The human brain can recover and form new habits within 90 days",
+    "Over 200 million people worldwide struggle with pornography addiction",
+    "Regular physical activity can help restore dopamine circuits in the brain",
 ];
 
 export default function AnalysisPage() {
@@ -51,7 +51,7 @@ export default function AnalysisPage() {
                 <div className="relative w-64 h-64">
                     <Image
                         src="/assets/analysis.png"
-                        alt="Maskot Pulih menganalisis"
+                        alt="Pulih mascot analyzing"
                         fill
                         className="object-contain"
                         priority
@@ -61,7 +61,7 @@ export default function AnalysisPage() {
 
             {/* Did you know label */}
             <p className="mt-8 text-center text-[#2e7d32] font-bold text-xl">
-                Tahukah kamu?
+                Did you know?
             </p>
 
             {/* Rotating fact */}
@@ -83,7 +83,7 @@ export default function AnalysisPage() {
                     />
                 </div>
                 <p className="mt-3 text-center text-gray-500 text-sm">
-                    Mempersiapkan hasilmu...{progress}%
+                    Preparing your results...{progress}%
                 </p>
             </div>
         </main>

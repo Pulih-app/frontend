@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { User, Lock } from "lucide-react";
 import { TextField } from "@/components/TextField";
 import Button from "@/components/Button";
 
 export default function PsychologistLoginPage() {
+  const router = useRouter();
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
       {/* Logo badge */}
@@ -80,7 +82,10 @@ export default function PsychologistLoginPage() {
       </div>
 
       {/* Submit button */}
-      <Button type="button">
+      <Button
+        type="button"
+        onClick={() => router.push("/psikolog/home")}
+      >
         Login
       </Button>
 
@@ -106,7 +111,7 @@ export default function PsychologistLoginPage() {
       </p>
 
       {/* Mascot image — flush to bottom */}
-      <div className="flex-1 flex items-end w-full">
+      <div className="flex-1 flex items-end w-full relative">
         <Image
           src="/assets/login.png"
           alt="Maskot Pulih"
