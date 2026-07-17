@@ -106,7 +106,7 @@ export default function PsychologistOnboardingPage() {
             <TextField
               icon={User}
               type="text"
-              placeholder="Nama Lengkap"
+              placeholder="Full Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
@@ -114,7 +114,7 @@ export default function PsychologistOnboardingPage() {
             <TextField
               icon={Calendar}
               type="date"
-              placeholder="Tanggal Lahir"
+              placeholder="Date of Birth"
               value={dob}
               onChange={(e) => setDob(e.target.value)}
               className="text-gray-700 placeholder-gray-400"
@@ -123,7 +123,7 @@ export default function PsychologistOnboardingPage() {
             <TextField
               icon={MapPin}
               type="text"
-              placeholder="Alamat Lengkap"
+              placeholder="Full Address"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -132,7 +132,7 @@ export default function PsychologistOnboardingPage() {
               <TextField
                 icon={Camera}
                 type="text"
-                placeholder={photo ? `Foto: ${photo.name}` : "Upload Foto Profil"}
+                placeholder={photo ? `Photo: ${photo.name}` : "Upload Profile Photo"}
                 readOnly
                 onClick={() => document.getElementById("photo-upload")?.click()}
                 className="cursor-pointer"

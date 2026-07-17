@@ -95,7 +95,7 @@ export default function AnalysisResultPage() {
 
                 {/* Disclaimer */}
                 <p className="mt-3 text-center text-gray-400 text-sm italic">
-                    ini Hanya indikasi*
+                    This is only an indication*
                 </p>
 
                 {/* Cards */}
@@ -104,10 +104,10 @@ export default function AnalysisResultPage() {
                     <div className="bg-[#f1f8f1] border-l-4 border-[#2e7d32] rounded-2xl px-5 py-4">
                         <p className="flex items-center gap-2 font-bold text-gray-900 text-base">
                             <span className="text-[#2e7d32] text-xl">&#x1F9E0;</span>
-                            Analisis Pola
+                            Pattern Analysis
                         </p>
                         <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                            {analysis?.pattern_analysis ?? "Berdasarkan jawaban kamu, kami telah mengidentifikasi pola kebiasaan yang perlu diperhatikan."}
+                            {analysis?.pattern_analysis ?? "Based on your answers, we have identified habit patterns that need attention."}
                         </p>
                     </div>
 
@@ -115,11 +115,11 @@ export default function AnalysisResultPage() {
                     <div className="bg-[#f1f8f1] border-l-4 border-[#2e7d32] rounded-2xl px-5 py-4">
                         <p className="flex items-center gap-2 font-bold text-gray-900 text-base">
                             <span className="text-[#2e7d32] text-xl">&#x2665;</span>
-                            Semangat Untukmu
+                            Encouragement For You
                             {result?.nickname ? `, ${result.nickname}` : ""}
                         </p>
                         <p className="mt-2 text-gray-600 text-sm leading-relaxed">
-                            {analysis?.encouragement ?? "Kamu sudah mengambil langkah pertama yang luar biasa. Teruslah berjuang dan jangan menyerah."}
+                            {analysis?.encouragement ?? "You have taken an amazing first step. Keep fighting and never give up."}
                         </p>
                     </div>
                 </div>
@@ -127,7 +127,7 @@ export default function AnalysisResultPage() {
 
             {/* Sticky bottom button */}
             <div className="px-6 pb-8 pt-4 bg-white">
-                <Button href="/onboarding/home">Selanjutnya</Button>
+                <Button href="/onboarding/home">Continue</Button>
             </div>
         </div>
     );

@@ -37,7 +37,7 @@ export default function PsychologistLoginPage() {
       <TextField
         icon={User}
         type="text"
-        placeholder="Email atau username"
+        placeholder="Email or username"
         containerClassName="mb-4"
       />
 

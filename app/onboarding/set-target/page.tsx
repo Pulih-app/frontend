@@ -6,10 +6,10 @@ import Image from "next/image";
 import Button from "@/components/Button";
 import { saveOnboardingField } from "@/lib/onboardingStore";
 
-const OPTIONS = ["7 hari", "14 hari", "30 hari", "69 hari"];
+const OPTIONS = ["7 days", "14 days", "30 days", "69 days"];
 
 export default function SetTargetPage() {
-    const [selected, setSelected] = useState<string>("14 hari");
+    const [selected, setSelected] = useState<string>("14 days");
     const [customDays, setCustomDays] = useState<string>("");
     const [isCustomActive, setIsCustomActive] = useState(false);
     const router = useRouter();
@@ -59,7 +59,7 @@ export default function SetTargetPage() {
 
             {/* Heading */}
             <h1 className="mt-10 text-[2rem] font-extrabold text-gray-900 leading-tight text-center">
-                Mari mulai dengan target kecil untuk membangun momentum.
+                Let's start with a small goal to build momentum.
             </h1>
 
             {/* Target options */}
@@ -92,7 +92,7 @@ export default function SetTargetPage() {
                     <input
                         type="text"
                         inputMode="numeric"
-                        placeholder="Tulis targetmu sendiri"
+                        placeholder="Set your own goal"
                         value={customDays}
                         onChange={(e) => handleCustomChange(e.target.value)}
                         className={`flex-1 bg-transparent outline-none text-base ${
@@ -105,7 +105,7 @@ export default function SetTargetPage() {
                         <span className={`text-base font-bold ${
                             isCustomActive ? "text-[#2e7d32]" : "text-gray-400"
                         }`}>
-                            hari
+                            days
                         </span>
                     )}
                 </div>

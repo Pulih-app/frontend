@@ -88,7 +88,7 @@ export default function LoginPage() {
       <TextField
         icon={User}
         type="text"
-        placeholder="Email atau username"
+        placeholder="Email or username"
         containerClassName="mb-4"
         value={identifier}
         onChange={(e) => setIdentifier(e.target.value)}

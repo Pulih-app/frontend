@@ -6,14 +6,14 @@ import { useState, useEffect } from "react";
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
-type CategoryFilter = "All" | "Psikolog Umum" | "Psikolog Klinis";
+type CategoryFilter = "All" | "General Psychologist" | "Clinical Psychologist";
 type SortKey = "default" | "rating_desc";
 
-const FILTERS: CategoryFilter[] = ["All", "Psikolog Umum", "Psikolog Klinis"];
+const FILTERS: CategoryFilter[] = ["All", "General Psychologist", "Clinical Psychologist"];
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "default", label: "Urutkan" },
-  { value: "rating_desc", label: "Rating Tertinggi" },
+  { value: "default", label: "Sort" },
+  { value: "rating_desc", label: "Highest Rating" },
 ];
 
 interface RatingSummary {
@@ -40,7 +40,7 @@ interface ApiResponse {
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
 function typeToCategory(type: string): CategoryFilter {
-  return type === "clinical" ? "Psikolog Klinis" : "Psikolog Umum";
+  return type === "clinical" ? "Clinical Psychologist" : "General Psychologist";
 }
 
 // ─── Components ────────────────────────────────────────────────────────────────
@@ -73,7 +73,7 @@ function PsychologistCard({ psikolog }: { psikolog: Psychologist }) {
             {psikolog.ratingSummary.averageRating.toFixed(1)}/5
           </span>
           <span className="text-[12px] text-gray-400 ml-0.5">
-            ({psikolog.ratingSummary.reviewCount} ulasan)
+            ({psikolog.ratingSummary.reviewCount} reviews)
           </span>
         </div>
       </div>
@@ -106,11 +106,11 @@ export default function ConsultationPage() {
         return res.json() as Promise<ApiResponse>;
       })
       .then((json) => {
-        if (!json.success) throw new Error(json.message ?? "Gagal memuat data psikolog");
+        if (!json.success) throw new Error(json.message ?? "Failed to load psychologists data");
         setPsychologists(json.data ?? []);
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+        setError(err instanceof Error ? err.message : "An error occurred");
       })
       .finally(() => setLoading(false));
   };
@@ -132,7 +132,7 @@ export default function ConsultationPage() {
       return 0;
     });
 
-  const activeSortLabel = SORT_OPTIONS.find((o) => o.value === sortKey)?.label ?? "Urutkan";
+  const activeSortLabel = SORT_OPTIONS.find((o) => o.value === sortKey)?.label ?? "Sort";
 
   return (
     <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col bg-white px-4 pb-10">
@@ -141,7 +141,7 @@ export default function ConsultationPage() {
         <Link href="/help" aria-label="Kembali">
           <ArrowLeft size={24} strokeWidth={2} className="text-gray-900" />
         </Link>
-        <h1 className="text-[17px] font-bold text-gray-900">Psikolog</h1>
+        <h1 className="text-[17px] font-bold text-gray-900">Psychologists</h1>
         <a href="/help/consultation/bookings" aria-label="Bookings" className="flex flex-col items-center bg-slate-50 p-1 rounded-md">
           <CalendarCheck size={22} strokeWidth={1.8} className="text-gray-900" />
         </a>
@@ -155,7 +155,7 @@ export default function ConsultationPage() {
         <Search size={18} strokeWidth={2} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
         <input
           type="text"
-          placeholder="Cari Teman Ceritamu"
+          placeholder="Find Your Listener"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="w-full rounded-2xl border-2 border-[#1B5E4C] py-3.5 pl-11 pr-4 text-sm text-gray-700 placeholder-gray-400 outline-none transition-colors"
@@ -175,7 +175,7 @@ export default function ConsultationPage() {
             }`}
           >
             <LayoutGrid size={14} strokeWidth={2} />
-            <span>{activeFilter === "All" ? "Kategori" : activeFilter}</span>
+            <span>{activeFilter === "All" ? "Category" : activeFilter}</span>
             <ChevronDown size={14} strokeWidth={2} className={`transition-transform ${filterOpen ? "rotate-180" : ""}`} />
           </button>
 
@@ -209,7 +209,7 @@ export default function ConsultationPage() {
             }`}
           >
             <ArrowUpDown size={14} strokeWidth={2} />
-            <span>{sortKey === "default" ? "Urutkan" : activeSortLabel}</span>
+            <span>{sortKey === "default" ? "Sort" : activeSortLabel}</span>
             <ChevronDown size={14} strokeWidth={2} className={`transition-transform ${sortOpen ? "rotate-180" : ""}`} />
           </button>
 
@@ -248,7 +248,7 @@ export default function ConsultationPage() {
             onClick={() => { setError(null); setLoading(true); doFetch(); }}
             className="mt-4 px-5 py-2 bg-[#1B5E4C] text-white rounded-full text-sm font-medium"
           >
-            Coba Lagi
+            Try Again
           </button>
         </div>
       )}
@@ -260,7 +260,7 @@ export default function ConsultationPage() {
             filtered.map((p) => <PsychologistCard key={p.id} psikolog={p} />)
           ) : (
             <p className="text-center text-sm text-gray-400 mt-10">
-              Psikolog tidak ditemukan.
+              No psychologists found.
             </p>
           )}
         </div>

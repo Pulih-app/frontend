@@ -7,8 +7,8 @@ import { ArrowLeft } from "lucide-react";
 const BOOKINGS = [
   {
     id: 1,
-    name: "Nama Psikolog",
-    specialty: "Psikolog Klinis",
+    name: "Psychologist Name",
+    specialty: "Clinical Psychologist",
     date: "14 July 2026",
     time: "08:00",
     image: "/assets/onboarding/question-1",
@@ -20,7 +20,7 @@ export default function BookingListPage() {
     <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col bg-white">
       {/* Header */}
       <div className="relative flex items-center justify-center px-4 pt-6 pb-4">
-        <Link href="/help/consultation" aria-label="Kembali" className="absolute left-4">
+        <Link href="/help/consultation" aria-label="Back" className="absolute left-4">
           <ArrowLeft size={24} strokeWidth={2} className="text-gray-900" />
         </Link>
         <h1 className="text-[17px] font-bold text-gray-900">Booking List</h1>

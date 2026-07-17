@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 
@@ -9,8 +9,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Pulih - Bantuan",
-  description: "Dapatkan bantuan dari AI Companion, komunitas, atau ahli profesional.",
+  title: "Pulih - Help",
+  description: "Get help from AI Companion, community, or professional experts.",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
@@ -25,7 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="id"
+      lang="en"
       className={`${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

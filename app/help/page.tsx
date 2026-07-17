@@ -64,7 +64,7 @@ export default function HelpPage() {
       <div className="relative bg-[#1a5c3a] rounded-2xl overflow-hidden px-6 mx-4 mt-6 pt-10 pb-8 min-h-[170px]">
         <div className="max-w-[58%]">
           <h1 className="text-white font-bold text-xl leading-snug">
-            Your'e not alone
+            You're not alone
           </h1>
           <p className="text-green-200 text-xs mt-2">Get help from an AI coach, fellow companion on the journey, and experts.</p>
         </div>
@@ -85,22 +85,22 @@ export default function HelpPage() {
       <div className="px-4 mt-6 space-y-3">
         <HelpCard
           href="/help/coach"
-          title="Chat Dengan Billy"
-          description="Billy Merupakan AI companion yang akan menjawab semua keresahan kamu"
+          title="Chat With Billy"
+          description="Billy is an AI companion that will answer all your concerns"
           imageSrc="/assets/coach.png"
         />
 
         <HelpCard
           href="/help/community"
-          title="Temukan Komunitas"
-          description="temukan teman seperjuangan di komunitas"
+          title="Find Community"
+          description="Find companions in the community"
           imageSrc="/assets/comunity.png"
         />
 
         <HelpCard
           href="/help/consultation"
-          title="Konsultasi Dengan Ahli"
-          description="konsultasi secara gratis maupun berbayar dengan ahli"
+          title="Consult with an Expert"
+          description="Free or paid consultation with experts"
           imageSrc="/assets/consult.png"
         />
       </div>

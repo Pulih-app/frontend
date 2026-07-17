@@ -112,11 +112,11 @@ export default function PsychologistProfilePage() {
         return res.json() as Promise<ApiResponse>;
       })
       .then((json) => {
-        if (!json.success) throw new Error(json.message ?? "Gagal memuat profil psikolog");
+        if (!json.success) throw new Error(json.message ?? "Failed to load psychologist profile");
         setPsychologist(json.data);
       })
       .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+        setError(err instanceof Error ? err.message : "An error occurred");
       })
       .finally(() => setLoading(false));
   };
@@ -130,7 +130,7 @@ export default function PsychologistProfilePage() {
     <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col bg-white">
       {/* Header */}
       <div className="relative flex items-center justify-center px-4 pt-6 pb-4">
-        <Link href="/help/consultation" aria-label="Kembali" className="absolute left-4">
+        <Link href="/help/consultation" aria-label="Back" className="absolute left-4">
           <ArrowLeft size={24} strokeWidth={2} className="text-gray-900" />
         </Link>
         <h1 className="text-[17px] font-bold text-gray-900">Psychologist Profile</h1>
@@ -151,7 +151,7 @@ export default function PsychologistProfilePage() {
             onClick={() => { setError(null); setLoading(true); doFetch(); }}
             className="mt-4 px-5 py-2 bg-[#1B5E4C] text-white rounded-full text-sm font-medium"
           >
-            Coba Lagi
+            Try Again
           </button>
         </div>
       )}
@@ -188,7 +188,7 @@ export default function PsychologistProfilePage() {
                       {psychologist.ratingSummary.averageRating.toFixed(1)}/5
                     </span>
                     <span className="text-[12px] text-gray-400 ml-0.5">
-                      ({psychologist.ratingSummary.reviewCount} ulasan)
+                      ({psychologist.ratingSummary.reviewCount} reviews)
                     </span>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ export default function PsychologistProfilePage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-[13px] text-gray-400">Belum ada testimoni.</p>
+                <p className="text-[13px] text-gray-400">No testimonials yet.</p>
               )}
             </section>
 
@@ -245,7 +245,7 @@ export default function PsychologistProfilePage() {
             {/* Time Slots */}
             <section>
               <p className="text-[15px] font-semibold text-gray-900 mb-3">
-                Pilih jam <span className="text-red-500">*</span>
+                Select time <span className="text-red-500">*</span>
               </p>
               <div className="flex flex-wrap gap-3">
                 {TIME_SLOTS.map((time) => (

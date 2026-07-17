@@ -17,7 +17,7 @@ export default function UserHomePage() {
   return (
     <main className="relative mx-auto flex min-h-screen w-full max-w-sm flex-col overflow-hidden bg-white px-6 pb-24">
       <section className="mt-6">
-        <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">Halo, Alex! <span className="text-xl">👋</span></h1>
+        <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">Hello, Alex! <span className="text-xl">👋</span></h1>
         <p className="mt-2 text-[13px] font-semibold leading-tight text-[#7f8b92]">Proud of you for showing up today</p>
       </section>
 
@@ -33,7 +33,7 @@ export default function UserHomePage() {
         <div className="absolute bottom-[60px] right-[-28px] h-[200px] w-[255px] opacity-95">
           <Image
             src="/assets/gunung.png"
-            alt="Gunung streak"
+            alt="Streak mountain"
             fill
             className="object-contain object-bottom"
             priority
