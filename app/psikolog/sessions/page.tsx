@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { CheckCircle2, Video, Calendar, X } from "lucide-react";
+import { CheckCircle2, Video, Calendar, X, ChevronLeft } from "lucide-react";
 import Button from "@/components/Button";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 
@@ -14,6 +14,22 @@ interface Appointment {
     timeSlot: string;
     status: "pending" | "accepted" | "rescheduled";
 }
+
+const addDurationToTime = (startTimeStr: string, durationStr: string): string => {
+    if (!startTimeStr) return "";
+    const [hours, minutes] = startTimeStr.split(":").map(Number);
+    let durationMinutes = 60; // default to 60 minutes
+    if (durationStr.includes("30")) {
+        durationMinutes = 30;
+    }
+    const date = new Date();
+    date.setHours(hours);
+    date.setMinutes(minutes + durationMinutes);
+    
+    const targetHours = String(date.getHours()).padStart(2, "0");
+    const targetMinutes = String(date.getMinutes()).padStart(2, "0");
+    return `${targetHours}:${targetMinutes}`;
+};
 
 export default function SessionsPage() {
     const router = useRouter();
@@ -50,10 +66,11 @@ export default function SessionsPage() {
     const [profession, setProfession] = useState<"umum" | "klinis">("klinis");
 
     // Reschedule Modal States
-    const [activeRescheduleApp, setActiveRescheduleApp] = useState<{ id: string; name: string } | null>(null);
+    const [activeRescheduleApp, setActiveRescheduleApp] = useState<Appointment | null>(null);
     const [rescheduleDate, setRescheduleDate] = useState("");
     const [rescheduleStartTime, setRescheduleStartTime] = useState("13:00");
     const [rescheduleEndTime, setRescheduleEndTime] = useState("14:00");
+    const [rescheduleReason, setRescheduleReason] = useState("");
 
     // Load profession from localStorage
     useEffect(() => {
@@ -89,24 +106,33 @@ export default function SessionsPage() {
         setTimeout(() => setToastMessage(null), 4000);
     };
 
-    const handleRescheduleClick = (id: string, name: string, currentTimeSlot: string) => {
-        setActiveRescheduleApp({ id, name });
+    const handleRescheduleClick = (app: Appointment) => {
+        setActiveRescheduleApp(app);
         setRescheduleDate("");
+        setRescheduleReason("");
 
-        // Parse default times from timeslot if possible (e.g. "13.00 - 14.00 WIB" -> start "13:00", end "14:00")
-        const times = currentTimeSlot.replace(/\./g, ":").match(/(\d{2}:\d{2})/g);
-        if (times && times.length >= 2) {
-            setRescheduleStartTime(times[0]);
-            setRescheduleEndTime(times[1]);
-        } else {
-            setRescheduleStartTime("13:00");
-            setRescheduleEndTime("14:00");
+        // Parse default start time from timeslot if possible (e.g. "13.00 - 14.00 WIB" -> start "13:00")
+        const times = app.timeSlot.replace(/\./g, ":").match(/(\d{2}:\d{2})/g);
+        let start = "13:00";
+        if (times && times.length >= 1) {
+            start = times[0];
+        }
+        setRescheduleStartTime(start);
+        const calculatedEndTime = addDurationToTime(start, app.duration);
+        setRescheduleEndTime(calculatedEndTime);
+    };
+
+    const handleStartTimeChange = (newStartTime: string) => {
+        setRescheduleStartTime(newStartTime);
+        if (activeRescheduleApp) {
+            const calculatedEndTime = addDurationToTime(newStartTime, activeRescheduleApp.duration);
+            setRescheduleEndTime(calculatedEndTime);
         }
     };
 
     const handleConfirmReschedule = () => {
         if (!activeRescheduleApp) return;
-        const { id, name } = activeRescheduleApp;
+        const { id, patientName } = activeRescheduleApp;
 
         const formattedDate = new Date(rescheduleDate).toLocaleDateString("id-ID", {
             weekday: "long",
@@ -125,7 +151,7 @@ export default function SessionsPage() {
             )
         );
 
-        setToastMessage(`Reschedule untuk ${name} berhasil diajukan ke tanggal ${formattedDate} jam ${rescheduleStartTime} - ${rescheduleEndTime}!`);
+        setToastMessage(`Reschedule untuk ${patientName} berhasil diajukan ke tanggal ${formattedDate} jam ${rescheduleStartTime} - ${rescheduleEndTime}!`);
         setActiveRescheduleApp(null);
         setTimeout(() => setToastMessage(null), 4000);
     };
@@ -135,29 +161,23 @@ export default function SessionsPage() {
             ? meetLink.trim().startsWith("http") || meetLink.trim().length > 5
             : selectedSchedule !== "";
 
-    const isRescheduleFormValid = rescheduleDate !== "" && rescheduleStartTime !== "" && rescheduleEndTime !== "";
+    const isRescheduleFormValid = rescheduleDate !== "" && rescheduleStartTime !== "" && rescheduleEndTime !== "" && rescheduleReason.trim() !== "";
 
     return (
         <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border pb-8 relative">
-            {/* Back button */}
-            <button
-                onClick={() => router.push("/psikolog/home")}
-                className="mt-6 inline-flex items-center gap-1 text-gray-500 hover:text-gray-700 active:text-gray-700 transition-colors w-fit cursor-pointer"
-            >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
+            {/* Top Navbar */}
+            <header className="relative flex items-center justify-center py-4 border-b border-gray-100 -mx-6 px-6">
+                <button
+                    onClick={() => router.push("/psikolog/home")}
+                    className="absolute left-6 text-gray-800 hover:text-gray-900 transition-colors cursor-pointer"
+                    aria-label="Kembali"
                 >
-                    <path d="M15 18l-6-6 6-6" />
-                </svg>
-            </button>
+                    <ChevronLeft size={24} strokeWidth={2.5} />
+                </button>
+                <h1 className="text-[17px] font-black text-gray-900 tracking-tight">
+                    Practice Schedule
+                </h1>
+            </header>
 
             {/* Success Toast */}
             {toastMessage && (
@@ -167,69 +187,65 @@ export default function SessionsPage() {
                 </div>
             )}
 
-            {/* Dash Border Header: "Practice Schedule" */}
-            <div className="mt-6 w-full border-2 border-dashed border-[#2e7d32] bg-[#2e7d32]/5 rounded-3xl py-6 px-4 text-center">
-                <h1 className="text-xl font-extrabold text-[#2e7d32] tracking-wide">
-                    Practice Schedule
-                </h1>
-            </div>
-
             {/* Appointment Request Cards list */}
             <div className="mt-8 flex flex-col gap-5">
                 {appointments.map((app) => (
                     <div
                         key={app.id}
-                        className={`bg-gray-100 rounded-3xl p-4 border border-gray-200/50 flex flex-col gap-3 transition-all duration-300 ${
+                        className={`bg-[#f5f5f5] rounded-[28px] p-6 border border-gray-200/40 flex flex-col gap-4 shadow-sm text-left relative overflow-hidden transition-all duration-300 ${
                             app.status === "accepted" ? "opacity-60 grayscale scale-95" : ""
                         }`}
                     >
+                        {/* Top-Right curved gradient shape */}
+                        <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-tr from-[#35b863]/10 to-[#2e7d32]/10 rounded-bl-full pointer-events-none z-0" />
+
                         {/* Upper row: Mascot + Text details */}
-                        <div className="flex gap-4 items-center">
+                        <div className="relative z-10 flex gap-4 items-center">
                             {/* Mascot doctor illustration */}
-                            <div className="w-24 h-24 relative shrink-0 bg-white/50 rounded-2xl p-1 border border-gray-200/20 overflow-hidden">
+                            <div className="w-20 h-20 relative shrink-0 bg-white rounded-[22px] p-1.5 border border-gray-200/30 shadow-[0_4px_12px_rgba(0,0,0,0.03)] overflow-hidden flex items-center justify-center">
                                 <Image
                                     src="/assets/psikolog/billy_lari.png"
                                     alt="Doctor Mascot"
                                     fill
-                                    className="object-contain"
+                                    className="object-contain p-1"
                                 />
                             </div>
 
                             {/* Session details */}
-                            <div className="flex flex-col gap-1.5 flex-1">
-                                <h3 className="font-bold text-gray-900 text-base leading-tight">
+                            <div className="flex flex-col gap-1 flex-1">
+                                <h3 className="font-black text-gray-900 text-base leading-tight border-b-2 border-[#0b744f]/20 pb-0.5 w-fit">
                                     {app.patientName}
                                 </h3>
-                                <span className="w-fit px-3 py-0.5 bg-[#2e7d32] text-white text-[9px] font-extrabold rounded-full">
+                                <span className="w-fit px-3 py-0.5 bg-[#0b744f] text-white text-[9px] font-extrabold rounded-full mt-1.5">
                                     {app.duration}
                                 </span>
-                                <p className="text-xs font-semibold text-gray-500 mt-0.5">
+                                <p className="text-xs font-semibold text-gray-500 mt-1">
                                     {app.timeSlot}
                                 </p>
                             </div>
                         </div>
 
                         {/* Lower row: Reschedule & Accept buttons */}
-                        <div className="flex gap-2.5 items-center justify-end border-t border-gray-200/50 pt-3">
+                        <div className="relative z-10 grid grid-cols-2 gap-3 border-t border-gray-200/40 pt-4">
                             {app.status === "accepted" ? (
-                                <span className="text-xs font-bold text-[#2e7d32] bg-[#2e7d32]/10 py-1.5 px-4 rounded-xl">
+                                <div className="col-span-2 text-center text-xs font-extrabold text-[#2e7d32] bg-[#effbf4] border border-[#d2f3df]/30 py-2.5 rounded-xl">
                                     Sesi Disetujui
-                                </span>
+                                </div>
                             ) : app.status === "rescheduled" ? (
-                                <span className="text-xs font-bold text-[#054b37] bg-[#054b37]/10 py-1.5 px-4 rounded-xl">
+                                <div className="col-span-2 text-center text-xs font-extrabold text-[#054b37] bg-[#effbf4] border border-[#d2f3df]/30 py-2.5 rounded-xl">
                                     Jadwal Diubah
-                                </span>
+                                </div>
                             ) : (
                                 <>
                                     <button
-                                        onClick={() => handleRescheduleClick(app.id, app.patientName, app.timeSlot)}
-                                        className="bg-[#054b37] hover:bg-[#033023] text-white text-xs font-bold py-2.5 px-4 rounded-xl transition-colors cursor-pointer shadow-sm"
+                                        onClick={() => handleRescheduleClick(app)}
+                                        className="w-full bg-white border border-[#0b744f] text-[#0b744f] hover:bg-gray-50 text-xs font-extrabold py-3.5 rounded-2xl transition-all active:scale-[0.97] cursor-pointer text-center"
                                     >
                                         Re Schedule
                                     </button>
                                     <button
                                         onClick={() => handleAcceptClick(app.id, app.patientName)}
-                                        className="bg-[#2e7d32] hover:bg-[#1b5e20] text-white text-xs font-bold py-2.5 px-5 rounded-xl transition-colors cursor-pointer shadow-sm"
+                                        className="w-full bg-[#0b744f] hover:bg-[#095f40] text-white text-xs font-extrabold py-3.5 rounded-2xl transition-all active:scale-[0.97] cursor-pointer text-center shadow-md shadow-[#0b744f]/10"
                                     >
                                         Accept
                                     </button>
@@ -339,7 +355,7 @@ export default function SessionsPage() {
                                     Reschedule Sesi
                                 </h3>
                                 <p className="text-[11px] font-semibold text-gray-400 mt-0.5">
-                                    Pasien: {activeRescheduleApp.name}
+                                    Pasien: {activeRescheduleApp.patientName}
                                 </p>
                             </div>
                             <button
@@ -382,7 +398,7 @@ export default function SessionsPage() {
                                         <input
                                             type="time"
                                             value={rescheduleStartTime}
-                                            onChange={(e) => setRescheduleStartTime(e.target.value)}
+                                            onChange={(e) => handleStartTimeChange(e.target.value)}
                                             className="mt-1 w-full rounded-2xl border-2 border-transparent bg-gray-100 px-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors text-gray-800"
                                         />
                                     </label>
@@ -396,6 +412,19 @@ export default function SessionsPage() {
                                         />
                                     </label>
                                 </div>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
+                                    Alasan Reschedule
+                                </label>
+                                <textarea
+                                    value={rescheduleReason}
+                                    onChange={(e) => setRescheduleReason(e.target.value)}
+                                    placeholder="Tuliskan alasan perubahan jadwal..."
+                                    rows={2}
+                                    className="w-full rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold outline-none focus:border-[#0b744f] focus:bg-white transition-colors text-gray-800 resize-none"
+                                />
                             </div>
                         </div>
 
