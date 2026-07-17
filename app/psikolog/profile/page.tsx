@@ -177,56 +177,80 @@ export default function PsychologistProfilePage() {
                     {/* Edit Profil */}
                     <button
                         onClick={handleEditProfileClick}
-                        className="w-full flex items-center gap-4 bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35"
+                        className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
-                        <div className="p-3 bg-white rounded-2xl text-[#0b744f] shadow-sm shrink-0">
-                            <Edit3 size={18} strokeWidth={2.5} />
-                        </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 relative z-10 pr-14">
                             <p className="text-sm font-black text-gray-900 leading-tight">Edit Profil</p>
                             <p className="text-[10px] font-semibold text-gray-400 mt-1">Ubah foto profil dan deskripsi spesialisasi Anda</p>
+                        </div>
+                        <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
+                            <Image
+                                src="/assets/billy_editprofile.png"
+                                alt="Billy Edit Profil"
+                                width={72}
+                                height={72}
+                                className="object-contain object-bottom w-full h-full"
+                            />
                         </div>
                     </button>
 
                     {/* Dokumen Legalitas */}
                     <button
                         onClick={handleDocsClick}
-                        className="w-full flex items-center gap-4 bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35"
+                        className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
-                        <div className="p-3 bg-white rounded-2xl text-[#0b744f] shadow-sm shrink-0">
-                            <ShieldCheck size={18} strokeWidth={2.5} />
-                        </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 relative z-10 pr-14">
                             <p className="text-sm font-black text-gray-900 leading-tight">Dokumen Legalitas</p>
                             <p className="text-[10px] font-semibold text-gray-400 mt-1">Lihat berkas legalitas STRPK, SIPPK, SIPP, STR, Ijazah Anda</p>
+                        </div>
+                        <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
+                            <Image
+                                src="/assets/billy_dokumen.png"
+                                alt="Billy Dokumen"
+                                width={72}
+                                height={72}
+                                className="object-contain object-bottom w-full h-full"
+                            />
                         </div>
                     </button>
 
                     {/* Atur Jadwal Praktik */}
                     <button
                         onClick={() => router.push("/psikolog/practice-schedule")}
-                        className="w-full flex items-center gap-4 bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35"
+                        className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
-                        <div className="p-3 bg-white rounded-2xl text-[#0b744f] shadow-sm shrink-0">
-                            <Calendar size={18} strokeWidth={2.5} />
-                        </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 relative z-10 pr-14">
                             <p className="text-sm font-black text-gray-900 leading-tight">Atur Jadwal Praktik</p>
                             <p className="text-[10px] font-semibold text-gray-400 mt-1">Kelola hari & jam ketersediaan konseling Anda</p>
+                        </div>
+                        <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
+                            <Image
+                                src="/assets/billy_jadwal.png"
+                                alt="Billy Jadwal"
+                                width={72}
+                                height={72}
+                                className="object-contain object-bottom w-full h-full"
+                            />
                         </div>
                     </button>
 
                     {/* Atur Tarif Konseling */}
                     <button
                         onClick={() => router.push("/psikolog/setup-pricing")}
-                        className="w-full flex items-center gap-4 bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35"
+                        className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
-                        <div className="p-3 bg-white rounded-2xl text-[#0b744f] shadow-sm shrink-0">
-                            <DollarSign size={18} strokeWidth={2.5} />
-                        </div>
-                        <div className="flex-1 min-w-0">
+                        <div className="flex-1 min-w-0 relative z-10 pr-14">
                             <p className="text-sm font-black text-gray-900 leading-tight">Atur Tarif Konseling</p>
                             <p className="text-[10px] font-semibold text-gray-400 mt-1">Sesuaikan harga layanan sesi konsultasi online</p>
+                        </div>
+                        <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
+                            <Image
+                                src="/assets/billy_bundling.png"
+                                alt="Billy Bundling"
+                                width={72}
+                                height={72}
+                                className="object-contain object-bottom w-full h-full"
+                            />
                         </div>
                     </button>
                 </div>
