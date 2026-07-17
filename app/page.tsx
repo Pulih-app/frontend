@@ -58,7 +58,7 @@ export default function LoginPage() {
 
       const currentUser = userData.data;
 
-      router.push(currentUser.onboarding_completed ? "/home" : "/onboarding");
+      router.push(currentUser.onboarding_completed ? "/home" : "/home");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
