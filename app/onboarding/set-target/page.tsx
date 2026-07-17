@@ -43,7 +43,7 @@ export default function SetTargetPage() {
     const hasValidSelection = selected || (isCustomActive && customDays !== "");
 
     return (
-        <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border">
+        <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full ">
             {/* Mascot illustration */}
             <div className="flex items-center justify-center mt-16">
                 <div className="relative w-52 h-52">

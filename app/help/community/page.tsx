@@ -1,88 +1,33 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, MessageSquare, Heart, Plus, Flame } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
+interface PostAuthor {
+  nickname: string;
+  currentStreak: number;
+}
+
 interface Post {
-  id: number;
-  text: string;
-  author: string;
-  time: string;
-  streak: number;
-  comments: number;
-  likes: number;
-  category: "Advice" | "Support" | "Motivation";
+  id: string;
+  userId: string;
+  title: string;
+  category: string;
+  content: string;
+  likeCount: number;
+  commentCount: number;
+  createdAt: string;
+  updatedAt: string;
+  author: PostAuthor;
 }
 
 // ─── Static data ─────────────────────────────────────────────────────────────
 
-const CATEGORIES = ["Advice", "Support", "Motivation"] as const;
-
-const POSTS: Post[] = [
-  {
-    id: 1,
-    text: "Avoid things that potentially trigger a relapse",
-    author: "djd*****",
-    time: "08:43",
-    streak: 0,
-    comments: 2,
-    likes: 1,
-    category: "Advice",
-  },
-  {
-    id: 2,
-    text: "I tried a no-social-media rule after 20:30. The result is a calmer mind and falling asleep faster.",
-    author: "Dav*****",
-    time: "23:59",
-    streak: 54,
-    comments: 2,
-    likes: 1,
-    category: "Advice",
-  },
-  {
-    id: 3,
-    text: "Simple checklist: enough sleep, 20 minutes exercise, no night scrolling, and emotional check-in. Small steps, big impact.",
-    author: "Eri*****",
-    time: "02:59",
-    streak: 40,
-    comments: 2,
-    likes: 1,
-    category: "Advice",
-  },
-  {
-    id: 4,
-    text: "I use a 3-step pattern: take a deep breath, identify the trigger, then redirect to physical activity. Going strong for 2 months.",
-    author: "Riz*****",
-    time: "07:15",
-    streak: 62,
-    comments: 5,
-    likes: 8,
-    category: "Advice",
-  },
-  {
-    id: 5,
-    text: "Anyone has tips for handling urges at night? It's really hard when you are alone.",
-    author: "Far*****",
-    time: "21:30",
-    streak: 7,
-    comments: 4,
-    likes: 2,
-    category: "Support",
-  },
-  {
-    id: 6,
-    text: "Every small day passed is a victory. Don't compare your journey with others 💚",
-    author: "And*****",
-    time: "06:00",
-    streak: 30,
-    comments: 1,
-    likes: 12,
-    category: "Motivation",
-  },
-];
+const CATEGORIES = ["Story", "Advice", "Support"] as const;
 
 // ─── Streak badge ─────────────────────────────────────────────────────────────
 
@@ -98,31 +43,77 @@ function StreakBadge({ count }: { count: number }) {
 // ─── Post card ────────────────────────────────────────────────────────────────
 
 function PostCard({ post }: { post: Post }) {
+  // Currently, we don't get 'hasLiked' from the API response example, so we'll just mock it initially or allow toggle.
+  const [localLikeCount, setLocalLikeCount] = useState(post.likeCount);
+  const [localLiked, setLocalLiked] = useState(false);
+
+  const handleLike = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation(); // prevent navigating to detail page
+
+    const wasLiked = localLiked;
+    const currentCount = localLikeCount;
+
+    setLocalLiked(!wasLiked);
+    setLocalLikeCount(wasLiked ? currentCount - 1 : currentCount + 1);
+
+    try {
+      const token =
+        localStorage.getItem("auth_token") ??
+        process.env.NEXT_PUBLIC_API_TOKEN ??
+        "";
+      const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+      const res = await fetch(`${base}/api/v1/community/${post.id}/like`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        setLocalLiked(wasLiked);
+        setLocalLikeCount(currentCount);
+      }
+    } catch (err) {
+      setLocalLiked(wasLiked);
+      setLocalLikeCount(currentCount);
+      console.error("Failed to like post", err);
+    }
+  };
+
+  const formattedTime = new Date(post.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
   return (
-    <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-      {/* Text */}
-      <p className="text-[15px] text-gray-900 leading-snug mb-3">{post.text}</p>
+    <Link href={`/help/community/${post.id}`}>
+      <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors">
+        {/* Title */}
+        <h3 className="font-bold text-gray-900 mb-1">{post.title}</h3>
+        {/* Text */}
+        <p className="text-[15px] text-gray-900 leading-snug mb-3 line-clamp-3">{post.content}</p>
 
-      {/* Meta */}
-      <div className="flex items-center gap-2 mb-3">
-        <span className="text-xs text-gray-400 font-medium">{post.author}</span>
-        <span className="text-gray-300 text-xs">•</span>
-        <span className="text-xs text-gray-400">{post.time}</span>
-        <StreakBadge count={post.streak} />
-      </div>
+        {/* Meta */}
+        <div className="flex items-center gap-2 mb-3">
+          <span className="text-xs text-gray-400 font-medium">{post.author.nickname}</span>
+          <span className="text-gray-300 text-xs">•</span>
+          <span className="text-xs text-gray-400">{formattedTime}</span>
+          <StreakBadge count={post.author.currentStreak} />
+        </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-4">
-        <button className="flex items-center gap-1.5 text-gray-400 hover:text-gray-600 transition-colors">
-          <MessageSquare size={16} strokeWidth={1.8} />
-          <span className="text-sm">{post.comments}</span>
-        </button>
-        <button className="flex items-center gap-1.5 text-gray-400 hover:text-rose-500 transition-colors">
-          <Heart size={16} strokeWidth={1.8} />
-          <span className="text-sm">{post.likes}</span>
-        </button>
+        {/* Actions */}
+        <div className="flex items-center gap-4">
+          <button className="flex items-center gap-1.5 text-gray-400 hover:text-gray-600 transition-colors">
+            <MessageSquare size={16} strokeWidth={1.8} />
+            <span className="text-sm">{post.commentCount}</span>
+          </button>
+          <button
+            onClick={handleLike}
+            className={`flex items-center gap-1.5 transition-colors ${localLiked ? 'text-rose-500' : 'text-gray-400 hover:text-rose-500'}`}
+          >
+            <Heart size={16} strokeWidth={1.8} fill={localLiked ? "currentColor" : "none"} />
+            <span className="text-sm">{localLikeCount}</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -130,12 +121,43 @@ function PostCard({ post }: { post: Post }) {
 
 export default function CommunityPage() {
   const router = useRouter();
-  const activeCategory = "Advice";
+  const [activeCategory, setActiveCategory] = useState("Story");
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = POSTS.filter((p) => p.category === activeCategory);
+  useEffect(() => {
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const token =
+          localStorage.getItem("auth_token") ??
+          process.env.NEXT_PUBLIC_API_TOKEN ??
+          "";
+        const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+        const res = await fetch(`${base}/api/v1/community`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch posts");
+        const json = await res.json();
+
+        if (json.success && json.data) {
+          setPosts(json.data);
+        }
+      } catch (err) {
+        console.error("Failed to load community posts", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, []);
+
+  const filtered = posts.filter((p) => p.category.toLowerCase() === activeCategory.toLowerCase());
 
   return (
-    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto ">
+    <div className="flex flex-col min-h-screen bg-white max-w-sm min-w-sm mx-auto ">
 
       {/* ── AppBar ──────────────────────────────────────────────────────── */}
       <div className="sticky top-0 z-10 bg-white border-b border-gray-100">
@@ -161,6 +183,7 @@ export default function CommunityPage() {
             return (
               <button
                 key={cat}
+                onClick={() => setActiveCategory(cat)}
                 className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
                   isActive
                     ? "bg-[#1a5c3a] text-white"
@@ -179,9 +202,15 @@ export default function CommunityPage() {
 
       {/* ── Posts ───────────────────────────────────────────────────────── */}
       <div className="flex flex-col gap-3 px-4 py-4 pb-24">
-        {filtered.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
+        {loading ? (
+          <p className="text-center text-sm text-gray-400 mt-4">Loading posts...</p>
+        ) : filtered.length > 0 ? (
+          filtered.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))
+        ) : (
+          <p className="text-center text-sm text-gray-400 mt-4">No posts found in this category.</p>
+        )}
       </div>
 
       {/* ── FAB ─────────────────────────────────────────────────────────── */}

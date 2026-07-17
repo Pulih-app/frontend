@@ -2,13 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, CheckCircle2, AlertCircle } from "lucide-react";
 import Image from "next/image";
 
 interface MoodOption {
     label: string;
     emoji: string;
     value: number;
+    /** Indonesian mood string sent to the API */
+    apiValue: string;
 }
 
 export default function RelapsePage() {
@@ -16,28 +18,34 @@ export default function RelapsePage() {
     const [selectedMood, setSelectedMood] = useState<number | null>(null);
     const [selectedTriggers, setSelectedTriggers] = useState<string[]>([]);
     const [commitmentMessage, setCommitmentMessage] = useState("");
-    const [journalText, setJournalText] = useState("");
     const [dateString, setDateString] = useState("");
     const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     // Set today's date in English format
     useEffect(() => {
-        const today = new Date();
-        const formatted = today.toLocaleDateString("en-US", {
-            weekday: "long",
-            month: "long",
-            day: "numeric",
-            year: "numeric",
+        // State updates must happen in a callback, not synchronously in the
+        // effect body (Next.js 16 rule). Use Promise.resolve to defer.
+        Promise.resolve().then(() => {
+            const today = new Date();
+            setDateString(
+                today.toLocaleDateString("en-US", {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                })
+            );
         });
-        setDateString(formatted);
     }, []);
 
     const moods: MoodOption[] = [
-        { label: "Very Bad", emoji: "😢", value: 1 },
-        { label: "Bad", emoji: "😟", value: 2 },
-        { label: "Neutral", emoji: "😐", value: 3 },
-        { label: "Good", emoji: "😊", value: 4 },
-        { label: "Very Good", emoji: "🤩", value: 5 },
+        { label: "Very Bad",  emoji: "😢", value: 1, apiValue: "sangat buruk" },
+        { label: "Bad",       emoji: "😟", value: 2, apiValue: "cemas"        },
+        { label: "Neutral",   emoji: "😐", value: 3, apiValue: "netral"       },
+        { label: "Good",      emoji: "😊", value: 4, apiValue: "baik"         },
+        { label: "Very Good", emoji: "🤩", value: 5, apiValue: "tenang"       },
     ];
 
     const handleTriggerToggle = (trigger: string) => {
@@ -48,12 +56,64 @@ export default function RelapsePage() {
         );
     };
 
-    const handleSubmit = () => {
-        setShowSuccessToast(true);
-        setTimeout(() => {
-            setShowSuccessToast(false);
-            router.push("/home");
-        }, 1500);
+    const handleSubmit = async () => {
+        if (selectedMood === null) {
+            setError("Please select your mood before submitting.");
+            return;
+        }
+
+        setError(null);
+        setIsSubmitting(true);
+
+        const token =
+            localStorage.getItem("auth_token") ??
+            process.env.NEXT_PUBLIC_API_TOKEN ??
+            "";
+        const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+        const moodApiValue =
+            moods.find((m) => m.value === selectedMood)?.apiValue ?? "netral";
+
+        const now = new Date();
+        const localDate = [
+            now.getFullYear(),
+            String(now.getMonth() + 1).padStart(2, "0"),
+            String(now.getDate()).padStart(2, "0"),
+        ].join("-");
+
+        try {
+            const res = await fetch(`${base}/api/v1/routine/relapses`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify({
+                    mood: moodApiValue,
+                    relapse_trigger: selectedTriggers,
+                    commitment: commitmentMessage.trim(),
+                    localDate,
+                }),
+            });
+
+            const json = await res.json();
+
+            if (!res.ok || !json.success) {
+                throw new Error(json.message ?? `Server error ${res.status}`);
+            }
+
+            setShowSuccessToast(true);
+            setTimeout(() => {
+                setShowSuccessToast(false);
+                router.push("/home");
+            }, 1500);
+        } catch (err) {
+            setError(
+                err instanceof Error ? err.message : "Something went wrong. Try again."
+            );
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -186,6 +246,16 @@ export default function RelapsePage() {
             </section>
 
             {/* Success Toast Overlay */}
+            {/* Error Banner */}
+            {error && (
+                <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-full max-w-sm px-6">
+                    <div className="flex items-center gap-2.5 rounded-2xl bg-red-50 border border-red-200 px-4 py-3 shadow-sm">
+                        <AlertCircle size={16} className="text-red-500 shrink-0" />
+                        <p className="text-xs font-semibold text-red-600 leading-snug">{error}</p>
+                    </div>
+                </div>
+            )}
+
             {showSuccessToast && (
                 <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-6">
                     <div className="bg-white rounded-3xl p-6 w-full max-w-[280px] shadow-2xl border border-gray-100 flex flex-col items-center gap-3 animate-in fade-in zoom-in duration-200">
@@ -204,9 +274,10 @@ export default function RelapsePage() {
             <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 z-40 w-full max-w-sm bg-white border-t border-gray-100 px-6 py-4 shadow-[0_-4px_16px_rgba(0,0,0,0.04)]">
                 <button
                     onClick={handleSubmit}
-                    className="w-full bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.98] text-white font-extrabold text-sm py-4 rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-[#0b744f]/10 cursor-pointer"
+                    disabled={isSubmitting}
+                    className="w-full bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.98] text-white font-extrabold text-sm py-4 rounded-2xl flex items-center justify-center transition-all shadow-lg shadow-[#0b744f]/10 cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                    <span>Relapse</span>
+                    <span>{isSubmitting ? "Submitting..." : "Relapse"}</span>
                 </button>
             </footer>
         </main>

@@ -62,9 +62,21 @@ interface Statistics {
     };
 }
 
+interface Relapse {
+    id: string;
+    user_id: string;
+    relapse_date: string;
+    relapse_day_name: string;
+    mood: string | null;
+    commitment: string | null;
+    relapse_trigger: string[];
+    check_in_id: string | null;
+    created_at: string;
+}
+
 interface StatsApiData {
     statistics: Statistics;
-    relapses: unknown[];
+    relapses: Relapse[];
     hourly_relapse_distribution: HourlyRelapse[];
     relapse_triggers_distribution: TriggerDistribution[];
     peak_relapse_hours_utc: number[];
@@ -137,11 +149,11 @@ const TRIGGER_COLORS = [
 
 // ─── Chart layout constants ───────────────────────────────────────────────────
 
-const BAR_W   = 34;
-const BAR_GAP = 12;
-const CHART_H = 140;
-const YPAD    = 8;
-const XPAD    = 22;
+const CHART_H = 120;
+const YPAD    = 20;
+const XPAD    = 36;
+const CHART_W = 320;
+const TOTAL_H = 180;
 
 const CX = 120, CY = 122, OUTER_R = 82, INNER_R = 50;
 
@@ -176,17 +188,15 @@ export default function StatsPage() {
 
         Promise.all([
             fetch(`${base}/api/v1/routine/relapses/statistics`, { headers }),
-            // fetch(`${base}/api/v1/ai/relapse-prevention-plan`,  { headers }),
+            fetch(`${base}/api/v1/ai/relapse-prevention-plan`,  { headers }),
         ])
             .then(([statsRes,]) => {
                 if (!statsRes.ok) throw new Error(`Statistics API returned ${statsRes.status}`);
-                // if (!planRes.ok)  throw new Error(`Prevention plan API returned ${planRes.status}`);
                 return Promise.all([statsRes.json()]);
             })
-            // .then(([statsJson, planJson]) => {
-            //     if (statsJson.success) setStatsData(statsJson.data as StatsApiData);
-            //     if (planJson.success)  setPlanData(planJson.data as PreventionPlanData);
-            // })
+            .then(([statsJson]) => {
+                if (statsJson.success) setStatsData(statsJson.data as StatsApiData);
+            })
             .catch((err: unknown) => {
                 setError(err instanceof Error ? err.message : "Failed to load data");
             })
@@ -228,8 +238,6 @@ export default function StatsPage() {
 
     const maxVal  = useMemo(() => Math.max(...triggerData.map((t) => t.value), 1), [triggerData]);
     const yScale  = CHART_H / maxVal;
-    const chartW  = XPAD + Math.max(triggerData.length, 1) * (BAR_W + BAR_GAP) - BAR_GAP + 8;
-    const totalH  = YPAD + CHART_H + 26;
 
     // ─── Donut chart segments (grouped by time-of-day) ────────────────────────
 
@@ -403,16 +411,6 @@ export default function StatsPage() {
                                 </div>
                             </section>
 
-                            {/* ── Streak Calendar ───────────────────────────────────────── */}
-                            <section>
-                                <h2 className="text-2xl font-bold text-gray-900">Streak Calendar</h2>
-                                <p className="text-gray-400 text-sm mt-0.5">
-                                    Clean days you have achieved
-                                </p>
-                                <div className="mt-4">
-                                    <ScheduleCalendar selectedDays={cleanDays} />
-                                </div>
-                            </section>
 
                             {/* ── Trigger & Urges ───────────────────────────────────────── */}
                             <section>
@@ -447,7 +445,7 @@ export default function StatsPage() {
                                     ) : (
                                         <svg
                                             width="100%"
-                                            viewBox={`0 0 ${chartW} ${totalH}`}
+                                            viewBox={`0 0 ${CHART_W} ${TOTAL_H}`}
                                             preserveAspectRatio="xMidYMid meet"
                                         >
                                             {/* Grid lines */}
@@ -461,12 +459,12 @@ export default function StatsPage() {
                                                     <g key={v}>
                                                         <line
                                                             x1={XPAD - 4} y1={yPos}
-                                                            x2={chartW - 4} y2={yPos}
+                                                            x2={CHART_W - 16} y2={yPos}
                                                             stroke="#e5e7eb" strokeWidth="1"
                                                         />
                                                         <text
                                                             x={XPAD - 8} y={yPos + 4}
-                                                            fontSize="9" fill="#9ca3af" textAnchor="end"
+                                                            fontSize="10" fill="#9ca3af" textAnchor="end"
                                                         >
                                                             {v}
                                                         </text>
@@ -477,18 +475,34 @@ export default function StatsPage() {
                                             {/* Bars */}
                                             {triggerData.map((item, i) => {
                                                 const barH = item.value * yScale;
-                                                const x    = XPAD + i * (BAR_W + BAR_GAP);
-                                                const y    = YPAD + CHART_H - barH;
+                                                const n = triggerData.length;
+                                                const totalAvailableW = CHART_W - XPAD - 16;
+                                                let actualBarW = 24;
+                                                let actualGap = 24;
+                                                let contentW = n * actualBarW + (n - 1) * actualGap;
+                                                
+                                                if (contentW > totalAvailableW) {
+                                                    const scale = totalAvailableW / contentW;
+                                                    actualBarW = Math.max(actualBarW * scale, 8);
+                                                    actualGap = Math.max(actualGap * scale, 4);
+                                                    contentW = n * actualBarW + (n - 1) * actualGap;
+                                                }
+                                                
+                                                const startX = XPAD + (totalAvailableW - contentW) / 2;
+                                                const x = startX + i * (actualBarW + actualGap);
+                                                const y = YPAD + CHART_H - barH;
+                                                
                                                 const label = item.label.length > 7
                                                     ? item.label.slice(0, 6) + "…"
                                                     : item.label;
+                                                    
                                                 return (
                                                     <g key={item.label}>
-                                                        <rect x={x} y={y} width={BAR_W} height={barH} rx="6" fill={item.color} />
+                                                        <rect x={x} y={y} width={actualBarW} height={barH} rx="6" fill={item.color} />
                                                         <text
-                                                            x={x + BAR_W / 2}
-                                                            y={YPAD + CHART_H + 16}
-                                                            fontSize="8.5" fill="#6b7280" textAnchor="middle"
+                                                            x={x + actualBarW / 2}
+                                                            y={YPAD + CHART_H + 20}
+                                                            fontSize={actualBarW < 14 ? "8" : "11"} fill="#6b7280" textAnchor="middle"
                                                         >
                                                             {label}
                                                         </text>
@@ -570,7 +584,7 @@ export default function StatsPage() {
                             </section>
 
                             {/* ── Relapse Prevention Plan ───────────────────────────────── */}
-                            {/* <section id="prevention-plan">
+                            <section id="prevention-plan">
                                 <h2 className="text-2xl font-bold text-gray-900">Prevention Plan</h2>
                                 <p className="text-gray-400 text-sm mt-0.5">
                                     Your personal 3D strategy — Delay, Distract, Decide
@@ -617,16 +631,105 @@ export default function StatsPage() {
                                 {statsData?.ai_summary && (
                                     <InfoNote text={statsData.ai_summary} />
                                 )}
-                            </section> */}
+                            </section>
                         </>
                     )}
                 </div>
             )}
 
-            {/* ── History tab placeholder ────────────────────────────────────── */}
+            {/* ── History tab ───────────────────────────────────────────────── */}
             {tab === "history" && (
-                <div className="flex-1 flex items-center justify-center text-gray-400 text-sm mt-12">
-                    History coming soon
+                <div className="px-4 mt-6 space-y-4">
+
+                    {/* Loading */}
+                    {loading && (
+                        <div className="flex flex-col items-center justify-center py-20 gap-3 text-gray-400">
+                            <RefreshCw size={24} className="animate-spin" />
+                            <p className="text-sm">Loading history…</p>
+                        </div>
+                    )}
+
+                    {/* Error */}
+                    {!loading && error && (
+                        <div className="flex flex-col items-center justify-center py-20 gap-3">
+                            <p className="text-sm text-red-500 text-center">{error}</p>
+                            <button
+                                onClick={() => runFetch(true)}
+                                className="px-5 py-2 bg-[#1a5c3a] text-white rounded-full text-sm font-medium"
+                            >
+                                Retry
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Content */}
+                    {!loading && !error && (
+                        <>
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900">Relapse History</h2>
+                                <p className="text-gray-400 text-sm mt-0.5">
+                                    {statsData?.relapses?.length
+                                        ? `${statsData.relapses.length} relapse${statsData.relapses.length > 1 ? "s" : ""} recorded`
+                                        : "No relapses recorded yet"}
+                                </p>
+                            </div>
+
+                            {(!statsData?.relapses || statsData.relapses.length === 0) ? (
+                                <div className="flex flex-col items-center justify-center py-16 gap-3 text-gray-400">
+                                    <p className="text-sm text-center">You&apos;re doing great — no relapses logged!</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-3 pb-4">
+                                    {statsData.relapses.map((relapse) => (
+                                        <div
+                                            key={relapse.id}
+                                            className="bg-[#f5f5f0] rounded-2xl p-4 space-y-3"
+                                        >
+                                            {/* Date row */}
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="w-2.5 h-2.5 rounded-full bg-red-400 shrink-0" />
+                                                    <span className="text-sm font-semibold text-gray-800">
+                                                        {relapse.relapse_day_name}, {relapse.relapse_date}
+                                                    </span>
+                                                </div>
+                                                {relapse.mood && (
+                                                    <span className="text-xs bg-white border border-gray-200 text-gray-500 px-2.5 py-0.5 rounded-full capitalize">
+                                                        {relapse.mood}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {/* Triggers */}
+                                            {relapse.relapse_trigger.length > 0 && (
+                                                <div>
+                                                    <p className="text-xs text-gray-400 mb-1.5">Triggers</p>
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {relapse.relapse_trigger.map((trigger) => (
+                                                            <span
+                                                                key={trigger}
+                                                                className="text-xs bg-[#1a5c3a]/10 text-[#1a5c3a] px-2.5 py-0.5 rounded-full"
+                                                            >
+                                                                {trigger}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Commitment */}
+                                            {relapse.commitment && (
+                                                <div>
+                                                    <p className="text-xs text-gray-400 mb-0.5">Commitment</p>
+                                                    <p className="text-sm text-gray-700">{relapse.commitment}</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </>
+                    )}
                 </div>
             )}
 

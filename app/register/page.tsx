@@ -51,7 +51,7 @@ export default function RegisterPage() {
         throw new Error(data?.message ?? `Registration failed (${res.status})`);
       }
 
-      router.push("/");
+      router.push("/onboarding");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {

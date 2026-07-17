@@ -41,26 +41,11 @@ export default function OnboardingPage() {
         </p>
       </div>
 
-      {/* Nickname input */}
-      <input
-        type="text"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleContinue()}
-        placeholder="What should we call you?"
-        className="w-full px-5 py-4 rounded-2xl bg-gray-100 text-gray-900 text-base outline-none focus:ring-2 focus:ring-[#2e7d32] transition-shadow"
-      />
-
       {/* Bottom Action */}
       <div className="mt-auto w-full pb-6 pt-4">
         <button
-          onClick={handleContinue}
-          disabled={!nickname.trim()}
-          className={`w-full font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm ${
-            nickname.trim()
-              ? "bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
-          }`}
+          onClick={() => router.push("/onboarding/learning-2")}
+          className={`w-full font-bold text-lg rounded-2xl py-4 transition-colors shadow-sm bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white`}
         >
           Continue
         </button>

@@ -22,6 +22,29 @@ interface RatingSummary {
   reviewCount: number;
 }
 
+interface SessionSlot {
+  id: string;
+  startsAt: string;
+  endsAt: string;
+  status: string;
+  packageName: string;
+  packageDurationMinutes: number;
+  priceAmount: number;
+}
+
+interface Availability {
+  date: string;
+  totalSlots: number;
+  availableSlots: number;
+  heldSlots: number;
+  bookedSlots: number;
+  completedSlots: number;
+  cancelledSlots: number;
+  expiredSlots: number;
+  rescheduledSlots: number;
+  slots: SessionSlot[];
+}
+
 interface Psychologist {
   id: string;
   type: string;
@@ -31,29 +54,11 @@ interface Psychologist {
   bio: string;
   ratingSummary: RatingSummary;
   latestReviews: Review[];
+  availability: Availability[];
 }
 
-interface ApiResponse {
-  success: boolean;
-  message: string;
-  data: Psychologist;
-  meta: null;
-}
 
-// ─── Constants ─────────────────────────────────────────────────────────────────
 
-const AVAILABLE_DAYS = [
-  "2026-07-16", "2026-07-17", "2026-07-20", "2026-07-21", "2026-07-22",
-  "2026-07-23", "2026-07-24", "2026-07-27", "2026-07-28", "2026-07-29",
-  "2026-07-30", "2026-07-31",
-];
-
-const TIME_SLOTS = ["20:00", "20:15"];
-
-const BUNDLES = [
-  { id: 1, label: "Bundle 1", price: "Rp30.000", duration: "30 Minutes" },
-  { id: 2, label: "Bundle 2", price: "Rp55.000", duration: "1 Hour" },
-];
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -98,28 +103,58 @@ export default function PsychologistProfilePage() {
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [challenge, setChallenge] = useState("");
-  const [selectedBundle, setSelectedBundle] = useState<number | null>(null);
+  const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
 
-  const doFetch = () => {
+  const doFetch = async () => {
     const token = localStorage.getItem("auth_token") ?? "";
     const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
-    fetch(`${base}/api/v1/psychologists/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`Server error: ${res.status}`);
-        return res.json() as Promise<ApiResponse>;
-      })
-      .then((json) => {
-        if (!json.success) throw new Error(json.message ?? "Failed to load psychologist profile");
-        setPsychologist(json.data);
-      })
-      .catch((err: unknown) => {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      })
-      .finally(() => setLoading(false));
+    try {
+      const res = await fetch(`${base}/api/v1/psychologists/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+
+      const json = await res.json();
+
+      if (!json.success) throw new Error(json.message ?? "Failed to load psychologist profile");
+
+      setPsychologist(json.data);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // Derived state for dates, times, and bundles
+  const availableDays = (psychologist?.availability || []).map((a) => a.date).sort();
+
+  const timeSlots = (psychologist?.availability || [])
+    .find((a) => a.date === selectedDay)
+    ?.slots.map((s) => {
+      const dateObj = new Date(s.startsAt);
+      return dateObj.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+    })
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .sort() || [];
+
+  const allSlots = (psychologist?.availability || []).flatMap((a) => a.slots);
+  
+  const uniqueBundles = Array.from(
+    new Map(
+      allSlots.map((s) => [
+        s.packageName,
+        {
+          id: s.packageName,
+          label: s.packageName,
+          price: `Rp${s.priceAmount.toLocaleString("id-ID")}`,
+          duration: `${s.packageDurationMinutes} Minutes`,
+        },
+      ])
+    ).values()
+  );
 
   useEffect(() => {
     if (id) doFetch();
@@ -236,9 +271,12 @@ export default function PsychologistProfilePage() {
                 Select a date to view available time slots
               </p>
               <ScheduleCalendar
-                availableDays={AVAILABLE_DAYS}
+                availableDays={availableDays}
                 selectedDays={selectedDay ? [selectedDay] : []}
-                onSelectDay={(d) => setSelectedDay((prev) => (prev === d ? null : d))}
+                onSelectDay={(d) => {
+                  setSelectedDay((prev) => (prev === d ? null : d));
+                  setSelectedTime(null); // Reset time when date changes
+                }}
               />
             </section>
 
@@ -248,7 +286,7 @@ export default function PsychologistProfilePage() {
                 Select time <span className="text-red-500">*</span>
               </p>
               <div className="flex flex-wrap gap-3">
-                {TIME_SLOTS.map((time) => (
+                {timeSlots.map((time) => (
                   <button
                     key={time}
                     type="button"
@@ -286,7 +324,7 @@ export default function PsychologistProfilePage() {
                 Pick the length that feels right for you today
               </p>
               <div className="flex flex-col gap-3">
-                {BUNDLES.map((bundle) => (
+                {uniqueBundles.map((bundle) => (
                   <button
                     key={bundle.id}
                     type="button"

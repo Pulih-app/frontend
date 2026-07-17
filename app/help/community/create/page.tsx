@@ -1,15 +1,57 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Flame, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
-const CATEGORIES = ["Advice", "Support", "Motivation"] as const;
+const CATEGORIES = ["Story", "Advice", "Support"] as const;
 
 export default function TambahPostPage() {
   const router = useRouter();
+  
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState<string>(CATEGORIES[0]);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async () => {
+    if (!title.trim() || !content.trim()) return;
+    
+    setLoading(true);
+    try {
+      const token =
+        localStorage.getItem("auth_token") ??
+        process.env.NEXT_PUBLIC_API_TOKEN ??
+        "";
+      const base = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+      const res = await fetch(`${base}/api/v1/community`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          title,
+          category: category.toLowerCase(),
+          content,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to create post");
+
+      router.push("/help/community");
+      router.refresh();
+    } catch (err) {
+      console.error(err);
+      alert("Failed to submit post. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto border">
+    <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto">
 
       {/* ── AppBar ──────────────────────────────────────────────────────── */}
       <div className="flex items-center px-3 pt-4 pb-3 border-b border-gray-100">
@@ -23,8 +65,12 @@ export default function TambahPostPage() {
         <h1 className="flex-1 text-center text-[18px] font-bold text-[#0F172A]">
           Create Post
         </h1>
-        <button className="px-4 py-1.5 rounded-full bg-[#1a5c3a] text-white text-sm font-semibold active:opacity-80 transition-opacity">
-          Send
+        <button 
+          onClick={handleSubmit}
+          disabled={loading || !title.trim() || !content.trim()}
+          className="px-4 py-1.5 rounded-full bg-[#1a5c3a] text-white text-sm font-semibold active:opacity-80 transition-opacity disabled:opacity-50 disabled:bg-gray-400"
+        >
+          {loading ? "Sending..." : "Send"}
         </button>
       </div>
 
@@ -35,11 +81,12 @@ export default function TambahPostPage() {
         <div>
           <p className="text-sm font-semibold text-gray-700 mb-3">Category</p>
           <div className="flex gap-2 flex-wrap">
-            {CATEGORIES.map((cat, i) => {
-              const isActive = i === 0;
+            {CATEGORIES.map((cat) => {
+              const isActive = cat === category;
               return (
                 <button
                   key={cat}
+                  onClick={() => setCategory(cat)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-semibold transition-colors border ${
                     isActive
                       ? "bg-[#1a5c3a] text-white border-[#1a5c3a]"
@@ -54,15 +101,29 @@ export default function TambahPostPage() {
           </div>
         </div>
 
-        {/* Post text */}
+        {/* Post Title */}
+        <div>
+          <p className="text-sm font-semibold text-gray-700 mb-3">Title</p>
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Give your post a title..."
+            className="w-full bg-[#f5f5f0] rounded-2xl px-4 py-3 text-sm text-gray-800 placeholder-gray-400 outline-none focus:ring-2 focus:ring-[#1a5c3a]/20 transition-all"
+          />
+        </div>
+
+        {/* Post content */}
         <div>
           <p className="text-sm font-semibold text-gray-700 mb-3">Post Content</p>
           <textarea
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
             placeholder="Share your experiences, tips, or questions with the community..."
             rows={7}
             className="w-full bg-[#f5f5f0] rounded-2xl px-4 py-4 text-sm text-gray-800 placeholder-gray-400 outline-none resize-none leading-relaxed focus:ring-2 focus:ring-[#1a5c3a]/20 transition-all"
           />
-          <p className="text-xs text-gray-400 text-right mt-1.5">0 / 500</p>
+          <p className="text-xs text-gray-400 text-right mt-1.5">{content.length} / 500</p>
         </div>
 
         {/* Community Guidelines */}
