@@ -20,6 +20,78 @@ export default function PsychologistOnboardingPage() {
   const [address, setAddress] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleOnboardingSubmit() {
+    setError(null);
+    setLoading(true);
+
+    try {
+      const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+      if (!token) {
+        throw new Error("Authentication token not found. Please register or login first.");
+      }
+
+      let finalPhotoUrl = "";
+      if (photo) {
+        finalPhotoUrl = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(photo);
+        });
+      }
+
+      const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+      const mappedType = profession === "umum" ? "general" : "clinical";
+
+      const res = await fetch(`${base}/api/v1/psychologists/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          type: mappedType,
+          fullName: name,
+          dateOfBirth: dob,
+          address: address,
+          photoUrl: finalPhotoUrl,
+          bio: `Licensed ${mappedType} psychologist.`,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data?.message ?? `Submission failed (${res.status})`);
+      }
+
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("psychologist-profession", profession);
+
+        const docsList = Object.entries(uploadedFiles)
+          .filter(([_, file]) => !!file)
+          .map(([docName, file]) => ({
+            name: docName,
+            fileName: file?.name ?? `${docName}.pdf`,
+          }));
+        window.localStorage.setItem(`psychologist-docs-${profession}`, JSON.stringify(docsList));
+
+        if (finalPhotoUrl) {
+          window.localStorage.setItem("psychologist-avatar", finalPhotoUrl);
+        }
+      }
+
+      setStep(3);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const reqDocs =
     profession === "klinis"
       ? ["STRPK", "SIPPK", "IJAZAH", "STR", "SIPP"]
@@ -49,13 +121,7 @@ export default function PsychologistOnboardingPage() {
     profession !== "";
 
   const isStep2Valid = () => {
-    const allDocsUploaded = reqDocs.every((doc) => !!uploadedFiles[doc]);
-    if (!allDocsUploaded) return false;
-
-    if (profession === "klinis") {
-      return locations.length > 0 && locations.every((loc) => loc.trim() !== "");
-    }
-    return true;
+    return reqDocs.every((doc) => !!uploadedFiles[doc]);
   };
 
   return (
@@ -280,6 +346,7 @@ export default function PsychologistOnboardingPage() {
           <div className="flex gap-3 mt-auto pt-6">
             <Button
               type="button"
+              disabled={loading}
               onClick={() => setStep(1)}
               className="flex-1 !bg-white border border-[#2e7d32] hover:!bg-gray-50 active:!bg-gray-100 !text-[#2e7d32] !font-bold flex items-center justify-center"
             >
@@ -287,13 +354,17 @@ export default function PsychologistOnboardingPage() {
             </Button>
             <Button
               type="button"
-              disabled={!isStep2Valid()}
-              onClick={() => setStep(3)}
+              disabled={!isStep2Valid() || loading}
+              onClick={handleOnboardingSubmit}
               className="flex-1"
             >
-              Continue
+              {loading ? "Submitting..." : "Continue"}
             </Button>
           </div>
+
+          {error && (
+            <p className="text-red-500 text-sm text-center mt-4 px-2">{error}</p>
+          )}
         </div>
       )}
 

@@ -73,12 +73,14 @@ export default function SessionsPage() {
 
     // Load profession from localStorage
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            const saved = window.localStorage.getItem("psychologist-profession");
-            if (saved === "umum" || saved === "klinis") {
-                setProfession(saved);
+        setTimeout(() => {
+            if (typeof window !== "undefined") {
+                const saved = window.localStorage.getItem("psychologist-profession");
+                if (saved === "umum" || saved === "klinis") {
+                    setProfession(saved);
+                }
             }
-        }
+        }, 0);
     }, []);
 
     const handleAcceptClick = (id: string, name: string) => {
@@ -199,11 +201,11 @@ export default function SessionsPage() {
 
                         {/* Upper row: Mascot + Text details */}
                         <div className="relative z-10 flex gap-4 items-center">
-                            {/* Mascot doctor illustration */}
+                            {/* Mascot psychologist illustration */}
                             <div className="w-20 h-20 relative shrink-0 bg-white rounded-[22px] p-1.5 border border-gray-200/30 shadow-[0_4px_12px_rgba(0,0,0,0.03)] overflow-hidden flex items-center justify-center">
                                 <Image
                                     src="/assets/psikolog/billy_lari.png"
-                                    alt="Doctor Mascot"
+                                    alt="Psychologist Mascot"
                                     fill
                                     className="object-contain p-1"
                                 />

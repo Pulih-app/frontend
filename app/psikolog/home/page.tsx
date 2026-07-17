@@ -25,15 +25,45 @@ const fallbackDays = [
 export default function PsychologistHomePage() {
     const [availableDays, setAvailableDays] = useState<string[]>([]);
     const [isMounted, setIsMounted] = useState(false);
+    const [name, setName] = useState("Psychologist");
+    const [profession, setProfession] = useState<"umum" | "klinis">("klinis");
 
     useEffect(() => {
-        setIsMounted(true);
-        if (typeof window !== "undefined") {
-            const saved = window.localStorage.getItem("psychologist-practice-days");
-            if (saved) {
-                setAvailableDays(JSON.parse(saved));
+        setTimeout(() => {
+            setIsMounted(true);
+            if (typeof window !== "undefined") {
+                const saved = window.localStorage.getItem("psychologist-practice-days");
+                if (saved) {
+                    setAvailableDays(JSON.parse(saved));
+                }
+
+                const token = window.localStorage.getItem("auth_token");
+                if (token) {
+                    const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+                    fetch(`${base}/api/v1/psychologists/me`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    })
+                        .then((res) => res.json())
+                        .then((json) => {
+                            if (json?.data) {
+                                if (json.data.fullName) {
+                                    setName(json.data.fullName);
+                                }
+                                if (json.data.type) {
+                                    const mappedType = json.data.type === "general" ? "umum" : "klinis";
+                                    setProfession(mappedType);
+                                    window.localStorage.setItem("psychologist-profession", mappedType);
+                                }
+                            }
+                        })
+                        .catch((err) => {
+                            console.error("Failed to fetch psychologist profile:", err);
+                        });
+                }
             }
-        }
+        }, 0);
     }, []);
 
     const hasSchedule = isMounted && availableDays.length > 0;
@@ -75,48 +105,50 @@ export default function PsychologistHomePage() {
             {/* Welcome Greeting */}
             <section className="mt-2">
                 <h1 className="text-2xl font-black leading-none tracking-[-0.03em] text-gray-900">
-                    Welcome, Doctor! <span className="text-xl">👋</span>
+                    Welcome, {name}! <span className="text-xl">👋</span>
                 </h1>
                 <p className="mt-2 text-[13px] font-semibold leading-tight text-[#7f8b92]">
                     Here is your practice schedule and patient queue today
                 </p>
             </section>
 
-            {/* Overview Progress Card */}
-            <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-6 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(11,116,79,0.15)]">
-                <div className="relative z-10 max-w-[200px]">
-                    <p className="text-[18px] font-black">Today&apos;s Overview</p>
-                    <h2 className="mt-2 text-[40px] font-black leading-none tracking-[-0.03em]">
-                        4 Patients
-                    </h2>
-                    <p className="mt-4 text-xs leading-relaxed text-white/95">
-                        Provide consultation and clinical guidance to help patients heal.
-                    </p>
-                </div>
-
-                {/* Billy Mascot Illustration */}
-                <div className="absolute bottom-[60px] right-[-10px] h-[170px] w-[140px] opacity-95">
-                    <Image
-                        src="/assets/psikolog/billy_lari.png"
-                        alt="Billy Doctor Mascot"
-                        fill
-                        className="object-contain object-bottom"
-                        priority
-                        sizes="140px"
-                    />
-                </div>
-
-                {/* White bottom progress bar container */}
-                <div className="absolute bottom-0 left-0 right-0 rounded-t-[24px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
-                    <p className="text-sm font-black text-gray-900">Queue Progress: 2 / 4 Completed</p>
-                    <div className="mt-3.5 h-[16px] overflow-hidden rounded-full bg-[#e6e6e6]">
-                        <div className="h-full w-[50%] rounded-full bg-[#35b863]" />
-                    </div>
-                </div>
-            </section>
-
             {hasSchedule ? (
                 <>
+                    {/* Overview Progress Card */}
+                    <section className="relative mt-6 overflow-hidden rounded-[30px] bg-[#0b744f] px-6 pb-[104px] pt-7 text-white shadow-[0_12px_24px_rgba(11,116,79,0.15)]">
+                        <div className="relative z-10 max-w-[200px]">
+                            <p className="text-[18px] font-black">Today&apos;s Overview</p>
+                            <h2 className="mt-2 text-[40px] font-black leading-none tracking-[-0.03em]">
+                                4 Patients
+                            </h2>
+                            <p className="mt-4 text-xs leading-relaxed text-white/95">
+                                {profession === "klinis"
+                                    ? "Provide consultation and clinical guidance to help patients heal."
+                                    : "Provide consultation and behavioral guidance to help patients heal."}
+                            </p>
+                        </div>
+
+                        {/* Billy Mascot Illustration */}
+                        <div className="absolute bottom-[60px] right-[-10px] h-[170px] w-[140px] opacity-95">
+                            <Image
+                                src="/assets/psikolog/billy_lari.png"
+                                alt="Billy Psychologist Mascot"
+                                fill
+                                className="object-contain object-bottom"
+                                priority
+                                sizes="140px"
+                            />
+                        </div>
+
+                        {/* White bottom progress bar container */}
+                        <div className="absolute bottom-0 left-0 right-0 rounded-t-[24px] bg-white px-8 pb-6 pt-5 text-[#818b92] shadow-[0_-2px_10px_rgba(0,0,0,0.03)]">
+                            <p className="text-sm font-black text-gray-900">Queue Progress: 2 / 4 Completed</p>
+                            <div className="mt-3.5 h-[16px] overflow-hidden rounded-full bg-[#e6e6e6]">
+                                <div className="h-full w-[50%] rounded-full bg-[#35b863]" />
+                            </div>
+                        </div>
+                    </section>
+
                     {/* Today's Queue Section */}
                     <section className="mt-8">
                         <div className="flex items-center justify-between">
