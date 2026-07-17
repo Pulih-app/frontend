@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronRight } from "lucide-react";
 import { PsychologistShell } from "../_components/PsychologistShell";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
@@ -23,14 +23,20 @@ const fallbackDays = [
 ];
 
 export default function PsychologistHomePage() {
-    const [availableDays] = useState<string[]>(() => {
-        if (typeof window === "undefined") return [];
+    const [availableDays, setAvailableDays] = useState<string[]>([]);
+    const [isMounted, setIsMounted] = useState(false);
 
-        const saved = window.localStorage.getItem("psychologist-practice-days");
-        return saved ? JSON.parse(saved) : [];
-    });
+    useEffect(() => {
+        setIsMounted(true);
+        if (typeof window !== "undefined") {
+            const saved = window.localStorage.getItem("psychologist-practice-days");
+            if (saved) {
+                setAvailableDays(JSON.parse(saved));
+            }
+        }
+    }, []);
 
-    const hasSchedule = availableDays.length > 0;
+    const hasSchedule = isMounted && availableDays.length > 0;
     const displayDays = hasSchedule ? availableDays : fallbackDays;
 
     const todayPatients = [
