@@ -4,15 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import { RefreshCw } from "lucide-react";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
-import { Bell, BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound } from "lucide-react";
+import { Bell, BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
 
 const navItems = [
     { label: "Home", href: "/home", icon: Home },
-    { label: "Stats", href: "/stats", icon: TrendingUp },
+    { label: "Stats", href: "/stats", icon: ChartColumn },
     { label: "Help", href: "/help", icon: UsersRound },
     { label: "Learn", href: "/education", icon: BookOpen },
-    { label: "Profile", href: "/profile", icon: CircleDot },
+    { label: "Profile", href: "/profile", icon: User },
 ];
 
 // ─── Donut chart helpers ──────────────────────────────────────────────────────
@@ -225,8 +225,8 @@ export default function StatsPage() {
                                         key={f}
                                         onClick={() => setFilter(f)}
                                         className={`px-4 py-1 rounded-full text-sm font-medium transition-all ${filter === f
-                                                ? "bg-[#1a5c3a] text-white"
-                                                : "bg-white text-gray-600 border border-gray-200"
+                                            ? "bg-[#1a5c3a] text-white"
+                                            : "bg-white text-gray-600 border border-gray-200"
                                             }`}
                                     >
                                         {f === "top5" ? "Top 5" : "All"}

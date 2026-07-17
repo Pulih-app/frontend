@@ -1,15 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { BookOpen, ChevronRight, CircleDot, Home, TrendingUp, UsersRound, Clock, Target, LogOut } from "lucide-react";
+import { BookOpen, ChevronRight, User, Home, ChartColumn, UsersRound, Clock, Target, LogOut } from "lucide-react";
 import BottomNavbar from "@/components/BottomNavbar";
 
 const navItems = [
   { label: "Home", href: "/home", icon: Home },
-  { label: "Stats", href: "/stats", icon: TrendingUp },
+  { label: "Stats", href: "/stats", icon: ChartColumn },
   { label: "Help", href: "/help", icon: UsersRound },
   { label: "Learn", href: "/education", icon: BookOpen },
-  { label: "Profile", href: "/profile", icon: CircleDot },
+  { label: "Profile", href: "/profile", icon: User },
 ];
 
 const manageItems = [
@@ -38,7 +38,7 @@ export default function ProfilePage() {
           {/* Green top */}
           <div className="bg-[#1a5c3a] px-5 pt-5 pb-6 flex flex-col items-center justify-center">
 
-              <div className="w-32 h-32 rounded-full bg-white overflow-hidden flex items-center justify-center shadow-md">
+            <div className="w-32 h-32 rounded-full bg-white overflow-hidden flex items-center justify-center shadow-md">
               <Image
                 src="/assets/profile.png"
                 alt="Avatar"
