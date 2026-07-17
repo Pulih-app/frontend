@@ -96,19 +96,10 @@ export default function BookingListPage() {
             minute: "2-digit",
           });
 
+
           return (
             <div key={booking.id} className="bg-[#F3F3F3] rounded-3xl p-4">
               <div className="flex gap-4">
-                {/* Avatar */}
-                <div className="w-24 h-28 rounded-2xl overflow-hidden bg-[#E2EDE7] shrink-0">
-                  <Image
-                    src={DEFAULT_IMAGE}
-                    alt={booking.psychologistFullName}
-                    width={96}
-                    height={112}
-                    className="object-cover w-full h-full"
-                  />
-                </div>
 
                 {/* Info */}
                 <div className="flex-1 min-w-0 flex flex-col justify-between">

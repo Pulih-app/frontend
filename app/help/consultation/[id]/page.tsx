@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, Star, MessageCircle, Video } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 import Button from "@/components/Button";
 
@@ -95,6 +95,7 @@ function channelIcon(channel: string) {
 export default function PsychologistProfilePage() {
   const params = useParams();
   const id = params?.id as string;
+  const router = useRouter();
 
   const [psychologist, setPsychologist] = useState<Psychologist | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,6 +105,7 @@ export default function PsychologistProfilePage() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [challenge, setChallenge] = useState("");
   const [selectedBundle, setSelectedBundle] = useState<string | null>(null);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   const doFetch = async () => {
     const token = localStorage.getItem("auth_token") ?? "";
@@ -125,6 +127,66 @@ export default function PsychologistProfilePage() {
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getSelectedSlotId = () => {
+    if (!selectedDay || !selectedTime || !selectedBundle || !psychologist) return null;
+    
+    const dayAvailability = psychologist.availability.find(a => a.date === selectedDay);
+    if (!dayAvailability) return null;
+
+    const slot = dayAvailability.slots.find(s => {
+      const dateObj = new Date(s.startsAt);
+      const timeStr = dateObj.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+      return timeStr === selectedTime && s.packageName === selectedBundle;
+    });
+
+    return slot?.id || null;
+  };
+
+  const handleBookSession = async () => {
+    const sessionSlotId = getSelectedSlotId();
+    if (!sessionSlotId) {
+      alert("Please select a date, time, and session bundle.");
+      return;
+    }
+    if (!challenge.trim()) {
+      alert("Please tell us your challenge.");
+      return;
+    }
+
+    setBookingLoading(true);
+    try {
+      const token = localStorage.getItem("auth_token") ?? "";
+      const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+      const res = await fetch(`${base}/api/v1/bookings`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          sessionSlotId,
+          complaint: challenge,
+        }),
+      });
+
+      const json = await res.json();
+      if (!res.ok || !json.success) {
+        throw new Error(json.message || "Failed to book session");
+      }
+
+      if (json.data?.paymentUrl) {
+        router.push(json.data.paymentUrl);
+      } else {
+        alert("Booking successful, but no payment URL returned.");
+      }
+    } catch (err: any) {
+      alert(err.message || "An error occurred while booking.");
+    } finally {
+      setBookingLoading(false);
     }
   };
 
@@ -347,7 +409,9 @@ export default function PsychologistProfilePage() {
 
           {/* Fixed bottom CTA */}
           <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-sm px-4 pb-6 pt-3 bg-white">
-            <Button type="button">Book Session</Button>
+            <Button type="button" onClick={handleBookSession} disabled={bookingLoading}>
+              {bookingLoading ? "Booking..." : "Book Session"}
+            </Button>
           </div>
         </>
       )}
