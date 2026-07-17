@@ -114,13 +114,14 @@ export default function BookingListPage() {
                     </p>
                   </div>
 
-                  {/* Join/Chat button */}
-                  <button
+                  {/* Join button */}
+                  <a
                     type="button"
+                    href="https://meet.google.com/dxy-xyyr-bqn"
                     className="mt-3 w-full py-2.5 rounded-2xl bg-[#1B5E4C] text-white text-[14px] font-semibold hover:bg-[#174f3e] transition-colors"
                   >
                     Join
-                  </button>
+                  </a>
                 </div>
               </div>
             </div>

@@ -41,10 +41,24 @@ export default function LoginPage() {
         throw new Error(data?.message ?? `Login failed (${res.status})`);
       }
 
-      const { session, user } = data.data;
+      const { session } = data.data;
       localStorage.setItem("auth_token", session.access_token);
 
-      router.push(user.onboarding_completed ? "/home" : "/onboarding");
+      const userRes = await fetch(`${base}/api/v1/users/me`, {
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+      });
+
+      const userData = await userRes.json().catch(() => ({}));
+
+      if (!userRes.ok) {
+        throw new Error(userData?.message ?? `Failed to fetch user profile (${userRes.status})`);
+      }
+
+      const currentUser = userData.data;
+
+      router.push(currentUser.onboarding_completed ? "/home" : "/onboarding");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
