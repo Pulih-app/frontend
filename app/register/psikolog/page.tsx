@@ -1,14 +1,73 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { User, Mail, Lock, ShieldCheck } from "lucide-react";
+import { User, Mail, Lock } from "lucide-react";
 import { TextField } from "@/components/TextField";
 import Button from "@/components/Button";
 
 export default function PsychologistRegisterPage() {
   const router = useRouter();
+
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [agreedToPolicy, setAgreedToPolicy] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleRegister() {
+    setError(null);
+
+    if (!agreedToPolicy) {
+      setError("You must agree to the privacy policy.");
+      return;
+    }
+
+    if (!username || !email || !password || !confirmPassword) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+      const res = await fetch(`${base}/api/v1/auth/register/psychologist`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          username,
+          password,
+          confirm_password: confirmPassword,
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        throw new Error(data?.message ?? `Registration failed (${res.status})`);
+      }
+
+      const { session } = data.data;
+      localStorage.setItem("auth_token", session.access_token);
+
+      router.push("/register/psikolog/onboarding");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="flex flex-col min-h-screen bg-white px-6 pt-16 pb-0 max-w-sm mx-auto w-full border ">
       {/* Logo badge */}
@@ -35,24 +94,43 @@ export default function PsychologistRegisterPage() {
         Join our network of professionals and help restore mental well-being.
       </p>
 
+      {/* Error message */}
+      {error && (
+        <p className="text-red-500 text-sm text-center mb-4 px-2">{error}</p>
+      )}
+
       {/* Input fields */}
       <TextField
         icon={User}
         type="text"
         placeholder="Username"
         containerClassName="mb-4"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
       />
       <TextField
         icon={Mail}
         type="email"
         placeholder="Email"
         containerClassName="mb-4"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
       />
       <TextField
         icon={Lock}
         type="password"
         placeholder="Password"
+        containerClassName="mb-4"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <TextField
+        icon={Lock}
+        type="password"
+        placeholder="Confirm Password"
         containerClassName="mb-8"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
       />
 
       {/* Policy agreement checkbox */}
@@ -61,6 +139,8 @@ export default function PsychologistRegisterPage() {
           <input
             type="checkbox"
             id="privacy-policy"
+            checked={agreedToPolicy}
+            onChange={(e) => setAgreedToPolicy(e.target.checked)}
             className="peer h-4 w-4 cursor-pointer appearance-none rounded border-2 border-gray-300 checked:border-[#2e7d32] checked:bg-[#2e7d32] focus:outline-none transition-colors"
           />
           <svg
@@ -88,9 +168,11 @@ export default function PsychologistRegisterPage() {
       {/* Submit button */}
       <Button
         type="button"
-        onClick={() => router.push("/register/psikolog/onboarding")}
+        disabled={loading}
+        onClick={handleRegister}
+        className="z-90"
       >
-        Register
+        {loading ? "Registering..." : "Register"}
       </Button>
 
       {/* Redirect links */}

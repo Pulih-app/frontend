@@ -101,7 +101,7 @@ export default function SetUpPricingPage() {
                             <div className="mt-2 flex gap-2">
                                 {["30", "60"].map((value) => (
                                     <button key={value} type="button" onClick={() => updateVariant(variant.id, "duration", value)} className="rounded-full bg-[#2e7d32]/10 text-[#2e7d32] hover:bg-[#2e7d32]/25 active:bg-[#2e7d32]/25 px-3 py-1 text-[8px] font-bold">
-                                        {value === "60" ? "1 Jam" : "30 Menit"}
+                                        {value === "60" ? "1 Hour" : "30 Mins"}
                                     </button>
                                 ))}
                             </div>

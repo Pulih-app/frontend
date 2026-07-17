@@ -1,39 +1,86 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { getOnboardingData, saveOnboardingResult } from "@/lib/onboardingStore";
 
 const FACTS = [
-    "Pornografi membajak sistem reward di otak kamu, menjebakmu dalam siklus yang tak berujung",
-    "Otak manusia dapat pulih dan membentuk kebiasaan baru dalam 90 hari",
-    "Lebih dari 200 juta orang di dunia berjuang melawan kecanduan pornografi",
-    "Aktivitas fisik rutin dapat membantu memulihkan sirkuit dopamin di otak",
+    "Pornography hijacks your brain's reward system, trapping you in an endless cycle.",
+    "The human brain can recover and form new habits in 90 days.",
+    "Over 200 million people worldwide struggle with pornography addiction.",
+    "Regular physical activity can help restore dopamine circuits in the brain.",
 ];
+
+const MIN_DURATION_MS = 5000;
 
 export default function AnalysisPage() {
     const [progress, setProgress] = useState(0);
     const [factIndex, setFactIndex] = useState(0);
     const router = useRouter();
+    const timerDoneRef = useRef(false);
+    const apiDoneRef = useRef(false);
+
+    // Navigate only when both the minimum delay and the API call are complete
+    function tryNavigate() {
+        if (timerDoneRef.current && apiDoneRef.current) {
+            router.push("/onboarding/analysis-result");
+        }
+    }
 
     useEffect(() => {
-        const duration = 5000; // 5 seconds total
-        const interval = 50; // update every 50ms
-        const steps = duration / interval;
+        // Progress bar animation
+        const interval = 50;
+        const steps = MIN_DURATION_MS / interval;
         let current = 0;
 
-        const timer = setInterval(() => {
+        const progressTimer = setInterval(() => {
             current += 1;
-            const pct = Math.min(Math.round((current / steps) * 100), 100);
-            setProgress(pct);
+            setProgress(Math.min(Math.round((current / steps) * 100), 100));
 
             if (current >= steps) {
-                clearInterval(timer);
-                router.push("/onboarding/analysis-result");
+                clearInterval(progressTimer);
+                timerDoneRef.current = true;
+                tryNavigate();
             }
         }, interval);
 
-        return () => clearInterval(timer);
+        // API call
+        const data = getOnboardingData();
+        const token =
+            typeof window !== "undefined"
+                ? localStorage.getItem("auth_token")
+                : null;
+        const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+
+        fetch(`${base}/api/v1/auth/onboarding`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({
+                nickname: data.nickname,
+                porn_free_goal: data.porn_free_goal,
+                answers: data.answers,
+            }),
+        })
+            .then((res) => res.json())
+            .then((json) => {
+                if (json?.data) {
+                    saveOnboardingResult(json.data);
+                }
+            })
+            .catch(() => {
+                // Fail silently — analysis-result will display a fallback
+            })
+            .finally(() => {
+                apiDoneRef.current = true;
+                tryNavigate();
+            });
+
+        return () => clearInterval(progressTimer);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router]);
 
     // Rotate facts every ~1.5 seconds
@@ -61,7 +108,7 @@ export default function AnalysisPage() {
 
             {/* Did you know label */}
             <p className="mt-8 text-center text-[#2e7d32] font-bold text-xl">
-                Tahukah kamu?
+                Did you know?
             </p>
 
             {/* Rotating fact */}
@@ -83,7 +130,7 @@ export default function AnalysisPage() {
                     />
                 </div>
                 <p className="mt-3 text-center text-gray-500 text-sm">
-                    Mempersiapkan hasilmu...{progress}%
+                    Preparing your result...{progress}%
                 </p>
             </div>
         </main>
