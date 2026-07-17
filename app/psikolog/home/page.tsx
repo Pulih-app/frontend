@@ -56,10 +56,10 @@ export default function PsychologistHomePage() {
         },
         {
             id: "3",
-            name: "Siti Rahma",
+            name: "Mr. Bu",
             duration: "30 Mins",
             time: "16:00 - 16:30 WIB",
-            complaint: "Needs support to manage sudden panic attacks.",
+            complaint: "Butuh teman cerita karena merasa sangat kesepian dan cemas akhir-akhir ini.",
         },
         {
             id: "4",
@@ -132,7 +132,7 @@ export default function PsychologistHomePage() {
                             {todayPatients.map((patient) => (
                                 <Link 
                                     key={patient.id}
-                                    href="/psikolog/session-detail" 
+                                    href={`/psikolog/session-detail?patient=${encodeURIComponent(patient.name)}&duration=${encodeURIComponent(patient.duration)}&timeSlot=${encodeURIComponent(patient.time)}&complaint=${encodeURIComponent(patient.complaint)}`}
                                     className="block relative overflow-hidden rounded-[28px] bg-[#f5f5f5] border border-gray-200/50 p-6 active:scale-[0.99] transition-transform text-gray-900 text-left w-[285px] shrink-0 snap-start cursor-pointer shadow-sm hover:bg-[#eaeaea]"
                                 >
                                     <span className="relative z-10 flex flex-col items-start min-w-0">
