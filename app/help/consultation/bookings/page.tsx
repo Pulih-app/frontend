@@ -119,7 +119,7 @@ export default function BookingListPage() {
                     type="button"
                     className="mt-3 w-full py-2.5 rounded-2xl bg-[#1B5E4C] text-white text-[14px] font-semibold hover:bg-[#174f3e] transition-colors"
                   >
-                    Join/Chat
+                    Join
                   </button>
                 </div>
               </div>
