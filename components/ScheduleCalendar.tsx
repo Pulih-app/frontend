@@ -100,7 +100,7 @@ export function ScheduleCalendar({
                             className={`h-8 rounded-xl border transition-all ${
                                 selected ? "border-[#2e7d32] bg-[#2e7d32] font-bold text-white shadow-sm shadow-[#2e7d32]/25" : "border-transparent"
                             } ${active ? "bg-[#2e7d32] font-bold text-white shadow-sm shadow-[#2e7d32]/25" : "text-gray-300"} ${
-                                available && !active && !selected ? "border-gray-200 bg-gray-50 text-black hover:bg-gray-100" : ""
+                                available && !active && !selected ? "border-gray-200 bg-[#EFFBF4] !text-black hover:bg-gray-100" : ""
                             } ${onSelectDay ? "cursor-pointer" : "cursor-default"}`}
                         >
                             {day}

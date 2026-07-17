@@ -16,6 +16,26 @@ interface LegalDoc {
     fileName: string;
 }
 
+type PsychologistType = "general" | "clinical";
+
+interface PsychologistProfile {
+    type: PsychologistType;
+    fullName: string;
+    dateOfBirth: string;
+    address: string;
+    photoUrl: string | null;
+    bio: string | null;
+}
+
+type ProfilePayload = {
+    type: PsychologistType;
+    fullName: string;
+    dateOfBirth: string;
+    address: string;
+    photoUrl?: string | null;
+    bio: string | null;
+};
+
 const defaultKlinisDocs: LegalDoc[] = [
     { name: "STRPK", fileName: "STRPK_Dr_Billy.pdf" },
     { name: "SIPPK", fileName: "SIPPK_Dr_Billy.pdf" },
@@ -32,20 +52,36 @@ const defaultUmumDocs: LegalDoc[] = [
 
 export default function PsychologistProfilePage() {
     const router = useRouter();
-    const [profession, setProfession] = useState<"umum" | "klinis">("klinis");
+    const [profession, setProfession] = useState<PsychologistType>("clinical");
     const [isMounted, setIsMounted] = useState(false);
+    const [profile, setProfile] = useState<PsychologistProfile>({
+        type: "clinical",
+        fullName: "Dr. Billy, M.Psi.",
+        dateOfBirth: "1990-01-01",
+        address: "Jl. Demo No. 1",
+        photoUrl: null,
+        bio: "Specialized in anxiety treatment, relapse prevention, cognitive behavioral therapy (CBT), and emotional guidance.",
+    });
+    const [email, setEmail] = useState("dr.billy@pulih.com");
+    const [profileLoading, setProfileLoading] = useState(true);
+    const [saving, setSaving] = useState(false);
 
     // Profile States
-    const [avatar, setAvatar] = useState("/assets/profile.png");
-    const [description, setDescription] = useState(
-        "Specialized in anxiety treatment, relapse prevention, cognitive behavioral therapy (CBT), and emotional guidance."
-    );
+    const avatar = profile.photoUrl || "/assets/psikolog/billy_pusing.png";
+    const description = profile.bio || "No specialization bio yet.";
 
     // Edit Modal States
     const [showEditModal, setShowEditModal] = useState(false);
-    const [tempAvatar, setTempAvatar] = useState("/assets/profile.png");
-    const [tempDescription, setTempDescription] = useState("");
+    const [tempProfile, setTempProfile] = useState<ProfilePayload>({
+        type: "clinical",
+        fullName: "",
+        dateOfBirth: "",
+        address: "",
+        photoUrl: null,
+        bio: "",
+    });
     const [toastMessage, setToastMessage] = useState<string | null>(null);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     // Legal Docs States
     const [showDocsModal, setShowDocsModal] = useState(false);
@@ -54,29 +90,47 @@ export default function PsychologistProfilePage() {
 
     useEffect(() => {
         setIsMounted(true);
-        if (typeof window !== "undefined") {
-            const savedProfession = window.localStorage.getItem("psychologist-profession");
-            const activeProf = (savedProfession === "umum" || savedProfession === "klinis") ? savedProfession : "klinis";
-            setProfession(activeProf);
-
-            const savedAvatar = window.localStorage.getItem("psychologist-avatar");
-            if (savedAvatar) {
-                setAvatar(savedAvatar);
-            }
-
-            const savedDesc = window.localStorage.getItem("psychologist-description");
-            if (savedDesc) {
-                setDescription(savedDesc);
-            }
-
-            const savedDocs = window.localStorage.getItem(`psychologist-docs-${activeProf}`);
-            if (savedDocs) {
-                setLegalDocs(JSON.parse(savedDocs));
-            } else {
-                setLegalDocs(activeProf === "umum" ? defaultUmumDocs : defaultKlinisDocs);
-            }
-        }
+        loadProfile();
     }, []);
+
+    async function loadProfile() {
+        setProfileLoading(true);
+        setErrorMessage(null);
+
+        try {
+            const token = localStorage.getItem("auth_token") ?? process.env.NEXT_PUBLIC_API_TOKEN ?? "";
+            if (!token) throw new Error("Authentication token not found. Please login again.");
+
+            const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+            const res = await fetch(`${base}/api/v1/psychologists/me`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok) throw new Error(data?.message ?? `Failed to load profile (${res.status})`);
+
+            const nextProfile = data.data as PsychologistProfile;
+            setProfile(nextProfile);
+            setProfession(nextProfile.type);
+            setLegalDocs(nextProfile.type === "general" ? defaultUmumDocs : defaultKlinisDocs);
+
+            const userEmail = data?.data?.user?.email ?? data?.data?.email;
+            if (typeof userEmail === "string") setEmail(userEmail);
+
+            window.localStorage.setItem("psychologist-profession", nextProfile.type === "general" ? "umum" : "klinis");
+            if (nextProfile.photoUrl) window.localStorage.setItem("psychologist-avatar", nextProfile.photoUrl);
+            if (nextProfile.bio) window.localStorage.setItem("psychologist-description", nextProfile.bio);
+        } catch (err) {
+            setErrorMessage(err instanceof Error ? err.message : "Failed to load profile.");
+
+            const savedProfession = window.localStorage.getItem("psychologist-profession");
+            const fallbackProfession = savedProfession === "umum" ? "general" : "clinical";
+            setProfession(fallbackProfession);
+            setLegalDocs(fallbackProfession === "general" ? defaultUmumDocs : defaultKlinisDocs);
+        } finally {
+            setProfileLoading(false);
+        }
+    }
 
     const handleLogout = () => {
         if (typeof window !== "undefined") {
@@ -86,8 +140,14 @@ export default function PsychologistProfilePage() {
     };
 
     const handleEditProfileClick = () => {
-        setTempAvatar(avatar);
-        setTempDescription(description);
+        setTempProfile({
+            type: profile.type,
+            fullName: profile.fullName,
+            dateOfBirth: profile.dateOfBirth,
+            address: profile.address,
+            photoUrl: profile.photoUrl,
+            bio: profile.bio ?? "",
+        });
         setShowEditModal(true);
     };
 
@@ -96,22 +156,49 @@ export default function PsychologistProfilePage() {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setTempAvatar(reader.result as string);
+                setTempProfile((current) => ({ ...current, photoUrl: reader.result as string }));
             };
             reader.readAsDataURL(file);
         }
     };
 
-    const handleSaveProfile = () => {
-        setAvatar(tempAvatar);
-        setDescription(tempDescription);
-        if (typeof window !== "undefined") {
-            window.localStorage.setItem("psychologist-avatar", tempAvatar);
-            window.localStorage.setItem("psychologist-description", tempDescription);
+    const handleSaveProfile = async () => {
+        setSaving(true);
+        setErrorMessage(null);
+
+        try {
+            const token = localStorage.getItem("auth_token") ?? process.env.NEXT_PUBLIC_API_TOKEN ?? "";
+            if (!token) throw new Error("Authentication token not found. Please login again.");
+
+            const base = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+            const res = await fetch(`${base}/api/v1/psychologists/me`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                },
+                body: JSON.stringify(tempProfile),
+            });
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok) throw new Error(data?.message ?? `Failed to update profile (${res.status})`);
+
+            const nextProfile = data.data as PsychologistProfile;
+            setProfile(nextProfile);
+            setProfession(nextProfile.type);
+            setLegalDocs(nextProfile.type === "general" ? defaultUmumDocs : defaultKlinisDocs);
+            window.localStorage.setItem("psychologist-profession", nextProfile.type === "general" ? "umum" : "klinis");
+            if (nextProfile.photoUrl) window.localStorage.setItem("psychologist-avatar", nextProfile.photoUrl);
+            if (nextProfile.bio) window.localStorage.setItem("psychologist-description", nextProfile.bio);
+
+            setShowEditModal(false);
+            setToastMessage("Your profile has been successfully updated!");
+            setTimeout(() => setToastMessage(null), 3000);
+        } catch (err) {
+            setErrorMessage(err instanceof Error ? err.message : "Failed to update profile.");
+        } finally {
+            setSaving(false);
         }
-        setShowEditModal(false);
-        setToastMessage("Your profile has been successfully updated!");
-        setTimeout(() => setToastMessage(null), 3000);
     };
 
     // Docs Event Handlers
@@ -126,6 +213,12 @@ export default function PsychologistProfilePage() {
                 <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#0b744f] text-white px-5 py-3.5 rounded-2xl shadow-lg flex items-center gap-2.5 text-xs font-extrabold animate-in fade-in slide-in-from-top-4 duration-200 w-80">
                     <CheckCircle2 size={16} className="shrink-0" />
                     <span>{toastMessage}</span>
+                </div>
+            )}
+
+            {errorMessage && (
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-80 rounded-2xl bg-red-50 px-5 py-3.5 text-xs font-extrabold text-red-600 shadow-lg">
+                    {errorMessage}
                 </div>
             )}
 
@@ -149,13 +242,13 @@ export default function PsychologistProfilePage() {
 
                         <div className="mt-4 text-center">
                             <p className="text-[#effbf4]/80 text-[11px] font-extrabold uppercase tracking-wider">
-                                {isMounted ? (profession === "umum" ? "General Psychologist" : "Clinical Psychologist") : "Psychologist"}
+                                {isMounted ? (profession === "general" ? "General Psychologist" : "Clinical Psychologist") : "Psychologist"}
                             </p>
                             <h2 className="text-white text-xl font-black mt-1">
-                                Dr. Billy, M.Psi.
+                                {profileLoading ? "Loading..." : profile.fullName}
                             </h2>
                             <p className="text-[#effbf4]/75 text-[11px] font-semibold mt-0.5">
-                                dr.billy@pulih.com
+                                {email}
                             </p>
                         </div>
                     </div>
@@ -285,8 +378,8 @@ export default function PsychologistProfilePage() {
                                 Profile Photo
                             </label>
                             <div className="relative group w-24 h-24 rounded-full overflow-hidden border-2 border-gray-100 shadow-sm flex items-center justify-center bg-gray-50">
-                                <Image
-                                    src={tempAvatar}
+                            <Image
+                                    src={tempProfile.photoUrl || "/assets/psikolog/billy_pusing.png"}
                                     alt="Temporary Avatar"
                                     fill
                                     className="object-cover"
@@ -303,14 +396,55 @@ export default function PsychologistProfilePage() {
                             </div>
                         </div>
 
-                        {/* Description edit */}
+                        <div className="grid grid-cols-1 gap-3 text-left">
+                            <label className="flex flex-col gap-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                Full Name
+                                <input
+                                    value={tempProfile.fullName}
+                                    onChange={(e) => setTempProfile((current) => ({ ...current, fullName: e.target.value }))}
+                                    className="rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold normal-case tracking-normal text-gray-800 outline-none transition-colors focus:border-[#0b744f] focus:bg-white"
+                                />
+                            </label>
+
+                            <label className="flex flex-col gap-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                Psychologist Type
+                                <select
+                                    value={tempProfile.type}
+                                    onChange={(e) => setTempProfile((current) => ({ ...current, type: e.target.value as PsychologistType }))}
+                                    className="rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold normal-case tracking-normal text-gray-800 outline-none transition-colors focus:border-[#0b744f] focus:bg-white"
+                                >
+                                    <option value="general">General Psychologist</option>
+                                    <option value="clinical">Clinical Psychologist</option>
+                                </select>
+                            </label>
+
+                            <label className="flex flex-col gap-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                Date of Birth
+                                <input
+                                    type="date"
+                                    value={tempProfile.dateOfBirth}
+                                    onChange={(e) => setTempProfile((current) => ({ ...current, dateOfBirth: e.target.value }))}
+                                    className="rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold normal-case tracking-normal text-gray-800 outline-none transition-colors focus:border-[#0b744f] focus:bg-white"
+                                />
+                            </label>
+
+                            <label className="flex flex-col gap-1 text-[10px] font-bold uppercase tracking-wider text-gray-400">
+                                Address
+                                <input
+                                    value={tempProfile.address}
+                                    onChange={(e) => setTempProfile((current) => ({ ...current, address: e.target.value }))}
+                                    className="rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold normal-case tracking-normal text-gray-800 outline-none transition-colors focus:border-[#0b744f] focus:bg-white"
+                                />
+                            </label>
+                        </div>
+
                         <div className="flex flex-col gap-1 text-left">
                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
                                 Specialization & Fields
                             </label>
                             <textarea
-                                value={tempDescription}
-                                onChange={(e) => setTempDescription(e.target.value)}
+                                value={tempProfile.bio ?? ""}
+                                onChange={(e) => setTempProfile((current) => ({ ...current, bio: e.target.value }))}
                                 placeholder="Describe your specialization and fields of expertise..."
                                 rows={3}
                                 className="w-full rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold outline-none focus:border-[#0b744f] focus:bg-white transition-colors text-gray-800 resize-none leading-relaxed"
@@ -327,9 +461,10 @@ export default function PsychologistProfilePage() {
                             </button>
                             <button
                                 onClick={handleSaveProfile}
-                                className="flex-1 bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.97] text-white font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer text-center shadow-md shadow-[#0b744f]/10"
+                                disabled={saving}
+                                className="flex-1 bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.97] disabled:opacity-60 text-white font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer text-center shadow-md shadow-[#0b744f]/10"
                             >
-                                Save
+                                {saving ? "Saving..." : "Save"}
                             </button>
                         </div>
                     </div>
@@ -449,7 +584,7 @@ export default function PsychologistProfilePage() {
                             <div className="h-px bg-gray-200/50 w-24 my-3" />
 
                             <p className="text-[10px] text-gray-500 font-bold">Awarded To:</p>
-                            <p className="text-xs font-black text-gray-800 mt-0.5">Dr. Billy, M.Psi.</p>
+                            <p className="text-xs font-black text-gray-800 mt-0.5">{profile.fullName}</p>
 
                             <div className="mt-5 flex items-center gap-1.5 bg-[#effbf4] text-[#0b744f] border border-[#d2f3df] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
                                 <ShieldCheck size={12} strokeWidth={3} />

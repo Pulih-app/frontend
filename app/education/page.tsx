@@ -72,18 +72,43 @@ export default function EducationPage() {
     // loading starts true — no synchronous setState inside the effect body
     useEffect(() => { doFetch(); }, []);
 
-    // Group items by category preserving insertion order
-    const categories = items.reduce<{ title: string; items: EducationItem[] }[]>((acc, item) => {
-        const existing = acc.find((g) => g.title === item.category);
-        if (existing) {
-            existing.items.push(item);
-        } else {
-            acc.push({ title: item.category, items: [item] });
-        }
-        return acc;
-    }, []);
+    const toTitleCase = (value: string) =>
+        value
+            .toLowerCase()
+            .split(" ")
+            .filter(Boolean)
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
 
-    console.log(categories)
+    const isVideo = (type: string) => {
+        const normalizedType = type.toLowerCase();
+        return normalizedType === "video" || normalizedType === "videos";
+    };
+
+    const isArticle = (type: string) => {
+        const normalizedType = type.toLowerCase();
+        return normalizedType === "article" || normalizedType === "articles" || normalizedType === "artikel";
+    };
+
+    const groupByCategory = (sectionItems: EducationItem[]) =>
+        sectionItems
+            .reduce<{ key: string; title: string; items: EducationItem[] }[]>((acc, item) => {
+                const title = toTitleCase(item.category);
+                const key = title.toLowerCase();
+                const existing = acc.find((g) => g.key === key);
+                if (existing) {
+                    existing.items.push(item);
+                } else {
+                    acc.push({ key, title, items: [item] });
+                }
+                return acc;
+            }, [])
+            .sort((a, b) => a.title.localeCompare(b.title));
+
+    const sections = [
+        { title: "Videos", categories: groupByCategory(items.filter((item) => isVideo(item.type))) },
+        { title: "Articles", categories: groupByCategory(items.filter((item) => isArticle(item.type))) },
+    ].filter((section) => section.categories.length > 0);
 
     return (
         <div className="flex flex-col min-h-screen bg-white max-w-sm mx-auto pb-10">
@@ -112,8 +137,6 @@ export default function EducationPage() {
 
             {/* ── Content Library ─────────────────────────────────────────────── */}
             <div className="mt-6">
-                <h2 className="px-4 text-2xl font-bold text-gray-900">Education Library</h2>
-
                 {/* Loading */}
                 {loading && (
                     <div className="mt-10 flex justify-center">
@@ -139,53 +162,59 @@ export default function EducationPage() {
                     <p className="mt-10 text-center text-sm text-gray-400">No education content available.</p>
                 )}
 
-                {/* Categories */}
-                {!loading && !error && categories.length > 0 && (
-                    <div className="mt-4 space-y-6">
-                        {categories.map((cat) => (
-                            <section key={cat.title}>
-                                <h3 className="px-4 text-[15px] font-bold text-[#1a5c3a] mb-3">
-                                    {cat.title}
+                {/* Sections */}
+                {!loading && !error && sections.length > 0 && (
+                    <div className="space-y-8">
+                        {sections.map((section) => (
+                            <section key={section.title}>
+                                <h3 className="px-4 text-2xl font-bold text-gray-900 mb-4">
+                                    {section.title}
                                 </h3>
 
-                                {/* Horizontal scroll row */}
-                                <div className="flex gap-3 overflow-x-auto px-4 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                                    {cat.items.map((item) => (
-                                        <a
-                                            key={item.id}
-                                            href={item.url}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-shrink-0 w-[148px] text-left active:scale-[0.97] transition-all duration-150"
-                                        >
-                                            {/* Thumbnail */}
-                                            <div className="w-full h-[84px] rounded-xl overflow-hidden bg-gray-100 relative">
-                                                {item.thumbnailUrl ? (
-                                                    /* eslint-disable-next-line @next/next/no-img-element */
-                                                    <img
-                                                        src={item.thumbnailUrl}
-                                                        alt={item.title}
-                                                        className="w-full h-full object-cover"
-                                                    />
-                                                ) : (
-                                                    <div className="w-full h-full flex items-center justify-center bg-[#e8f5ee]">
-                                                        <BookOpen size={28} className="text-[#1a5c3a] opacity-60" />
-                                                    </div>
-                                                )}
-                                                {/* Type badge */}
-                                                <span className="absolute top-1.5 left-1.5 rounded-md bg-[#1a5c3a]/80 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
-                                                    {item.type}
-                                                </span>
-                                            </div>
+                                <div className="space-y-6">
+                                    {section.categories.map((cat) => (
+                                        <div key={cat.title}>
+                                            <h4 className="px-4 text-[15px] font-bold text-[#1a5c3a] mb-3">
+                                                {cat.title}
+                                            </h4>
 
-                                            {/* Info */}
-                                            <p className="mt-1.5 text-[11px] font-bold text-gray-900 leading-snug line-clamp-2">
-                                                {item.title}
-                                            </p>
-                                            <p className="mt-0.5 text-[10px] font-semibold text-[#1a5c3a] line-clamp-1">
-                                                {item.description}
-                                            </p>
-                                        </a>
+                                            {/* Horizontal scroll row */}
+                                            <div className="flex gap-3 overflow-x-auto px-4 pb-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                                                {cat.items.map((item) => (
+                                                    <a
+                                                        key={item.id}
+                                                        href={item.url}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex-shrink-0 w-[148px] text-left active:scale-[0.97] transition-all duration-150"
+                                                    >
+                                                        {/* Thumbnail */}
+                                                        <div className="w-full h-[84px] rounded-xl overflow-hidden bg-gray-100 relative">
+                                                            {item.thumbnailUrl ? (
+                                                                /* eslint-disable-next-line @next/next/no-img-element */
+                                                                <img
+                                                                    src={item.thumbnailUrl}
+                                                                    alt={item.title}
+                                                                    className="w-full h-full object-cover"
+                                                                />
+                                                            ) : (
+                                                                <div className="w-full h-full flex items-center justify-center bg-[#e8f5ee]">
+                                                                    <BookOpen size={28} className="text-[#1a5c3a] opacity-60" />
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Info */}
+                                                        <p className="mt-1.5 text-[11px] font-bold text-gray-900 leading-snug line-clamp-2">
+                                                            {item.title}
+                                                        </p>
+                                                        <p className="mt-0.5 text-[10px] font-semibold text-[#1a5c3a] line-clamp-1">
+                                                            {item.description}
+                                                        </p>
+                                                    </a>
+                                                ))}
+                                            </div>
+                                        </div>
                                     ))}
                                 </div>
                             </section>
