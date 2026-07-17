@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Video, Calendar, X, ChevronLeft } from "lucide-react";
-import Button from "@/components/Button";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 
 interface Appointment {
@@ -36,23 +35,23 @@ export default function SessionsPage() {
     const [appointments, setAppointments] = useState<Appointment[]>([
         {
             id: "1",
-            patientName: "Nama Pasien",
-            duration: "1 Jam",
-            timeSlot: "13.00 - 14.00 WIB",
+            patientName: "Alex Morgan",
+            duration: "1 Hour",
+            timeSlot: "13:00 - 14:00 WIB",
             status: "pending",
         },
         {
             id: "2",
             patientName: "Budi Santoso",
-            duration: "1 Jam",
-            timeSlot: "14.30 - 15.30 WIB",
+            duration: "1 Hour",
+            timeSlot: "14:30 - 15:30 WIB",
             status: "pending",
         },
         {
             id: "3",
             patientName: "Siti Rahma",
-            duration: "30 Menit",
-            timeSlot: "16.00 - 16.30 WIB",
+            duration: "30 Mins",
+            timeSlot: "16:00 - 16:30 WIB",
             status: "pending",
         },
     ]);
@@ -98,10 +97,10 @@ export default function SessionsPage() {
 
         const detailInfo =
             profession === "klinis"
-                ? `dengan link Google Meet: ${meetLink}`
-                : `pada jadwal: ${selectedSchedule}`;
+                ? `with Google Meet link: ${meetLink}`
+                : `for schedule: ${selectedSchedule}`;
 
-        setToastMessage(`Sesi untuk ${name} berhasil disetujui ${detailInfo}!`);
+        setToastMessage(`Session for ${name} has been successfully approved ${detailInfo}!`);
         setActiveModalApp(null);
         setTimeout(() => setToastMessage(null), 4000);
     };
@@ -111,7 +110,6 @@ export default function SessionsPage() {
         setRescheduleDate("");
         setRescheduleReason("");
 
-        // Parse default start time from timeslot if possible (e.g. "13.00 - 14.00 WIB" -> start "13:00")
         const times = app.timeSlot.replace(/\./g, ":").match(/(\d{2}:\d{2})/g);
         let start = "13:00";
         if (times && times.length >= 1) {
@@ -134,14 +132,14 @@ export default function SessionsPage() {
         if (!activeRescheduleApp) return;
         const { id, patientName } = activeRescheduleApp;
 
-        const formattedDate = new Date(rescheduleDate).toLocaleDateString("id-ID", {
+        const formattedDate = new Date(rescheduleDate).toLocaleDateString("en-US", {
             weekday: "long",
             day: "numeric",
             month: "long",
             year: "numeric",
         });
 
-        const newTimeSlot = `${rescheduleStartTime.replace(/:/g, ".")} - ${rescheduleEndTime.replace(/:/g, ".")} WIB (${formattedDate})`;
+        const newTimeSlot = `${rescheduleStartTime} - ${rescheduleEndTime} WIB (${formattedDate})`;
 
         setAppointments((prev) =>
             prev.map((app) =>
@@ -151,7 +149,7 @@ export default function SessionsPage() {
             )
         );
 
-        setToastMessage(`Reschedule untuk ${patientName} berhasil diajukan ke tanggal ${formattedDate} jam ${rescheduleStartTime} - ${rescheduleEndTime}!`);
+        setToastMessage(`Reschedule for ${patientName} has been successfully submitted to ${formattedDate} at ${rescheduleStartTime} - ${rescheduleEndTime}!`);
         setActiveRescheduleApp(null);
         setTimeout(() => setToastMessage(null), 4000);
     };
@@ -164,13 +162,13 @@ export default function SessionsPage() {
     const isRescheduleFormValid = rescheduleDate !== "" && rescheduleStartTime !== "" && rescheduleEndTime !== "" && rescheduleReason.trim() !== "";
 
     return (
-        <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border pb-8 relative">
+        <main className="flex flex-col min-h-screen bg-white px-6 max-w-sm mx-auto w-full border pb-8 relative text-black">
             {/* Top Navbar */}
             <header className="relative flex items-center justify-center py-4 border-b border-gray-100 -mx-6 px-6">
                 <button
                     onClick={() => router.push("/psikolog/home")}
                     className="absolute left-6 text-gray-800 hover:text-gray-900 transition-colors cursor-pointer"
-                    aria-label="Kembali"
+                    aria-label="Back"
                 >
                     <ChevronLeft size={24} strokeWidth={2.5} />
                 </button>
@@ -181,7 +179,7 @@ export default function SessionsPage() {
 
             {/* Success Toast */}
             {toastMessage && (
-                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#2e7d32] text-white px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 text-xs font-bold animate-fadeIn w-80">
+                <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-[#0b744f] text-white px-4 py-3 rounded-2xl shadow-lg flex items-center gap-2 text-xs font-bold animate-fadeIn w-80">
                     <CheckCircle2 size={16} className="shrink-0" />
                     <span>{toastMessage}</span>
                 </div>
@@ -228,12 +226,12 @@ export default function SessionsPage() {
                         {/* Lower row: Reschedule & Accept buttons */}
                         <div className="relative z-10 grid grid-cols-2 gap-3 border-t border-gray-200/40 pt-4">
                             {app.status === "accepted" ? (
-                                <div className="col-span-2 text-center text-xs font-extrabold text-[#2e7d32] bg-[#effbf4] border border-[#d2f3df]/30 py-2.5 rounded-xl">
-                                    Sesi Disetujui
+                                <div className="col-span-2 text-center text-xs font-extrabold text-[#0b744f] bg-[#effbf4] border border-[#d2f3df]/30 py-2.5 rounded-xl">
+                                    Session Approved
                                 </div>
                             ) : app.status === "rescheduled" ? (
                                 <div className="col-span-2 text-center text-xs font-extrabold text-[#054b37] bg-[#effbf4] border border-[#d2f3df]/30 py-2.5 rounded-xl">
-                                    Jadwal Diubah
+                                    Schedule Rescheduled
                                 </div>
                             ) : (
                                 <>
@@ -241,7 +239,7 @@ export default function SessionsPage() {
                                         onClick={() => handleRescheduleClick(app)}
                                         className="w-full bg-white border border-[#0b744f] text-[#0b744f] hover:bg-gray-50 text-xs font-extrabold py-3.5 rounded-2xl transition-all active:scale-[0.97] cursor-pointer text-center"
                                     >
-                                        Re Schedule
+                                        Reschedule
                                     </button>
                                     <button
                                         onClick={() => handleAcceptClick(app.id, app.patientName)}
@@ -263,7 +261,7 @@ export default function SessionsPage() {
                         {/* Modal Header */}
                         <div className="flex justify-between items-center">
                             <h3 className="text-lg font-bold text-gray-900 leading-tight">
-                                Konfirmasi Sesi
+                                Confirm Session
                             </h3>
                             <button
                                 onClick={() => setActiveModalApp(null)}
@@ -278,7 +276,7 @@ export default function SessionsPage() {
                         {profession === "klinis" ? (
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block px-1">
-                                    Input Link Google Meet
+                                    Enter Google Meet Link
                                 </label>
                                 <div className="relative flex items-center">
                                     <Video size={16} className="absolute left-4 text-gray-400" />
@@ -291,13 +289,13 @@ export default function SessionsPage() {
                                     />
                                 </div>
                                 <p className="text-[10px] text-gray-400 px-1 mt-1 leading-relaxed">
-                                    Link Google Meet ini akan otomatis dikirimkan ke pasien untuk sesi video call online.
+                                    This Google Meet link will be automatically sent to the patient for the online video call session.
                                 </p>
                             </div>
                         ) : (
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block px-1">
-                                    Pilih Jadwal Pertemuan
+                                    Select Appointment Slot
                                 </label>
                                 <div className="relative flex items-center">
                                     <Calendar size={16} className="absolute left-4 text-gray-400" />
@@ -306,20 +304,20 @@ export default function SessionsPage() {
                                         onChange={(e) => setSelectedSchedule(e.target.value)}
                                         className="w-full rounded-2xl border-2 border-transparent bg-gray-100 pl-10 pr-4 py-3 text-sm font-semibold outline-none focus:border-[#2e7d32] focus:bg-white transition-colors appearance-none cursor-pointer text-gray-800"
                                     >
-                                        <option value="">Pilih jadwal...</option>
-                                        <option value="Jumat, 17 Juli 2026 (13.00 - 14.00 WIB)">
-                                            Jumat, 17 Juli (13.00 WIB)
+                                        <option value="">Select schedule...</option>
+                                        <option value="Friday, July 17, 2026 (13:00 - 14:00 WIB)">
+                                            Friday, July 17 (13:00 WIB)
                                         </option>
-                                        <option value="Jumat, 17 Juli 2026 (14.30 - 15.30 WIB)">
-                                            Jumat, 17 Juli (14.30 WIB)
+                                        <option value="Friday, July 17, 2026 (14:30 - 15:30 WIB)">
+                                            Friday, July 17 (14:30 WIB)
                                         </option>
-                                        <option value="Sabtu, 18 Juli 2026 (10.00 - 11.00 WIB)">
-                                            Sabtu, 18 Juli (10.00 WIB)
+                                        <option value="Saturday, July 18, 2026 (10:00 - 11:00 WIB)">
+                                            Saturday, July 18 (10:00 WIB)
                                         </option>
                                     </select>
                                 </div>
                                 <p className="text-[10px] text-gray-400 px-1 mt-1 leading-relaxed">
-                                    Pilih slot waktu praktik offline Anda untuk mengonfirmasi janji temu dengan pasien.
+                                    Choose your offline practice time slot to confirm the appointment with the patient.
                                 </p>
                             </div>
                         )}
@@ -330,14 +328,14 @@ export default function SessionsPage() {
                                 onClick={() => setActiveModalApp(null)}
                                 className="flex-1 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 active:bg-gray-100 font-bold text-sm py-3 rounded-2xl transition-colors cursor-pointer"
                             >
-                                Batal
+                                Cancel
                             </button>
                             <button
                                 onClick={handleConfirmAccept}
                                 disabled={!isAcceptFormValid}
                                 className="flex-1 bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-sm py-3 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-[#2e7d32]/10"
                             >
-                                Setujui
+                                Approve
                             </button>
                         </div>
                     </div>
@@ -352,10 +350,10 @@ export default function SessionsPage() {
                         <div className="flex justify-between items-center">
                             <div className="flex flex-col">
                                 <h3 className="text-lg font-bold text-gray-900 leading-tight">
-                                    Reschedule Sesi
+                                    Reschedule Session
                                 </h3>
                                 <p className="text-[11px] font-semibold text-gray-400 mt-0.5">
-                                    Pasien: {activeRescheduleApp.patientName}
+                                    Patient: {activeRescheduleApp.patientName}
                                 </p>
                             </div>
                             <button
@@ -378,7 +376,7 @@ export default function SessionsPage() {
                         <div className="flex flex-col gap-3">
                             <div className="flex flex-col gap-1">
                                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
-                                    Tanggal Terpilih
+                                    Selected Date
                                 </label>
                                 <input
                                     type="date"
@@ -390,11 +388,11 @@ export default function SessionsPage() {
 
                             <div className="flex flex-col gap-1">
                                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
-                                    Pilih Jam Sesi Baru
+                                    Select New Session Time
                                 </label>
                                 <div className="grid grid-cols-2 gap-3">
                                     <label className="text-[9px] font-semibold text-gray-400">
-                                        Mulai
+                                        Start
                                         <input
                                             type="time"
                                             value={rescheduleStartTime}
@@ -403,7 +401,7 @@ export default function SessionsPage() {
                                         />
                                     </label>
                                     <label className="text-[9px] font-semibold text-gray-400">
-                                        Selesai
+                                        End
                                         <input
                                             type="time"
                                             value={rescheduleEndTime}
@@ -416,12 +414,12 @@ export default function SessionsPage() {
 
                             <div className="flex flex-col gap-1">
                                 <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
-                                    Alasan Reschedule
+                                    Reschedule Reason
                                 </label>
                                 <textarea
                                     value={rescheduleReason}
                                     onChange={(e) => setRescheduleReason(e.target.value)}
-                                    placeholder="Tuliskan alasan perubahan jadwal..."
+                                    placeholder="Write the reason for rescheduling..."
                                     rows={2}
                                     className="w-full rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold outline-none focus:border-[#0b744f] focus:bg-white transition-colors text-gray-800 resize-none"
                                 />
@@ -434,14 +432,14 @@ export default function SessionsPage() {
                                 onClick={() => setActiveRescheduleApp(null)}
                                 className="flex-1 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 active:bg-gray-100 font-bold text-sm py-3 rounded-2xl transition-colors cursor-pointer"
                             >
-                                Batal
+                                Cancel
                             </button>
                             <button
                                 onClick={handleConfirmReschedule}
                                 disabled={!isRescheduleFormValid}
                                 className="flex-1 bg-[#2e7d32] hover:bg-[#1b5e20] active:bg-[#1b5e20] text-white font-bold text-sm py-3 rounded-2xl transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-md shadow-[#2e7d32]/10"
                             >
-                                Simpan
+                                Save
                             </button>
                         </div>
                     </div>

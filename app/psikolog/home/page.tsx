@@ -59,7 +59,7 @@ export default function PsychologistHomePage() {
             name: "Mr. Bu",
             duration: "30 Mins",
             time: "16:00 - 16:30 WIB",
-            complaint: "Butuh teman cerita karena merasa sangat kesepian dan cemas akhir-akhir ini.",
+            complaint: "Needs someone to talk to because of extreme loneliness and anxiety recently.",
         },
         {
             id: "4",
@@ -146,7 +146,7 @@ export default function PsychologistHomePage() {
                                             {patient.time}
                                         </span>
                                         <span className="mt-1 block text-xs font-semibold text-gray-500 max-w-[210px] leading-relaxed line-clamp-2">
-                                            Keluhan: {patient.complaint}
+                                            Complaint: {patient.complaint}
                                         </span>
                                     </span>
 

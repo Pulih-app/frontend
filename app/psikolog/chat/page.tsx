@@ -15,26 +15,26 @@ function ChatContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const patientName = searchParams.get("patient") || "Alex Morgan";
-    const age = searchParams.get("age") || "24 Tahun";
+    const age = searchParams.get("age") || "24 Years";
     const duration = searchParams.get("duration") || "30 Mins";
 
     const [messages, setMessages] = useState<Message[]>([
         {
             id: "1",
             sender: "client",
-            text: "Halo Kak, selamat pagi. Saya mau konsultasi mengenai kecemasan berlebih yang belakangan ini sering muncul.",
+            text: "Hello, good morning. I would like to consult about the excessive anxiety that has been occurring frequently lately.",
             time: "08:00",
         },
         {
             id: "2",
             sender: "psychologist",
-            text: `Selamat pagi, ${patientName.split(" ")[0]}. Tentu, mari kita diskusikan. Sejak kapan kecemasan ini mulai terasa mengganggu aktivitas sehari-hari?`,
+            text: `Good morning, ${patientName.split(" ")[0]}. Of course, let's discuss this. Since when did this anxiety start disrupting your daily activities?`,
             time: "08:02",
         },
         {
             id: "3",
             sender: "client",
-            text: "Sudah sekitar 2 minggu terakhir ini, Kak. Terutama kalau malam hari pas mau tidur atau pas mikirin kerjaan.",
+            text: "It has been about the last 2 weeks. Especially at night when I'm trying to sleep or when I think about work.",
             time: "08:05",
         },
     ]);
@@ -47,7 +47,7 @@ function ChatContent() {
 
     const handleConfirmEndSession = () => {
         setShowEndModal(false);
-        setToastMessage("Sesi konseling telah berhasil diselesaikan.");
+        setToastMessage("Counseling session has been successfully ended.");
         setTimeout(() => {
             setToastMessage(null);
             router.push("/psikolog/home");
@@ -62,9 +62,10 @@ function ChatContent() {
     const handleSendMessage = () => {
         if (!inputText.trim()) return;
 
-        const timeNow = new Date().toLocaleTimeString("id-ID", {
+        const timeNow = new Date().toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
+            hour12: false,
         });
 
         const newMsg: Message = {
@@ -82,10 +83,10 @@ function ChatContent() {
         setTimeout(() => {
             setIsTyping(false);
             const replies = [
-                "Baik Kak, terima kasih atas arahannya. Saya akan coba menerapkan teknik pernapasan itu malam ini.",
-                "Iya betul Kak, rasanya dada saya sesak dan pikiran terus berputar-putar tanpa henti.",
-                "Apakah saya perlu mencatat pemicu cemas tersebut setiap kali muncul?",
-                "Terima kasih penjelasannya Kak, sangat menenangkan mendengar penjelasan dari kakak.",
+                "Alright, thank you for the guidance. I will try to practice that breathing technique tonight.",
+                "Yes indeed, my chest feels tight and my thoughts keep spinning endlessly.",
+                "Do I need to write down the anxiety triggers every time they appear?",
+                "Thank you for the explanation, it is very calming to hear your explanation.",
             ];
             const randomReply = replies[Math.floor(Math.random() * replies.length)];
 
@@ -95,9 +96,10 @@ function ChatContent() {
                     id: (Date.now() + 1).toString(),
                     sender: "client",
                     text: randomReply,
-                    time: new Date().toLocaleTimeString("id-ID", {
+                    time: new Date().toLocaleTimeString("en-US", {
                         hour: "2-digit",
                         minute: "2-digit",
+                        hour12: false,
                     }),
                 },
             ]);
@@ -105,13 +107,13 @@ function ChatContent() {
     };
 
     return (
-        <main className="flex flex-col h-screen max-w-sm mx-auto w-full bg-white border-x relative shadow-sm">
+        <main className="flex flex-col h-screen max-w-sm mx-auto w-full bg-white border-x relative shadow-sm text-black">
             {/* Header */}
             <header className="flex items-center justify-between px-6 py-3.5 border-b border-gray-100 bg-white sticky top-0 z-10 shrink-0">
                 <button
                     onClick={() => router.back()}
                     className="text-gray-800 hover:text-gray-900 transition-colors cursor-pointer"
-                    aria-label="Kembali"
+                    aria-label="Back"
                 >
                     <ArrowLeft size={22} strokeWidth={2.5} />
                 </button>
@@ -144,14 +146,14 @@ function ChatContent() {
             {/* End Session Banner (Snackbar) */}
             <div className="bg-[#effbf4] border-b border-[#d2f3df] px-6 py-3.5 flex items-center justify-between z-10 shrink-0">
                 <div className="flex flex-col text-left">
-                    <span className="text-[11px] font-black text-[#0b744f] uppercase tracking-wider">Sesi Sedang Berlangsung</span>
-                    <span className="text-[9px] font-semibold text-gray-500 mt-0.5">Selesaikan sesi jika konseling telah selesai.</span>
+                    <span className="text-[11px] font-black text-[#0b744f] uppercase tracking-wider">Session in Progress</span>
+                    <span className="text-[9px] font-semibold text-gray-500 mt-0.5">End the session if the counseling has completed.</span>
                 </div>
                 <button
                     onClick={() => setShowEndModal(true)}
                     className="bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.96] text-white text-[10px] font-black uppercase tracking-wider px-3 py-2 rounded-xl transition-all cursor-pointer shadow-md shadow-[#0b744f]/10"
                 >
-                    Akhiri Sesi
+                    End Session
                 </button>
             </div>
 
@@ -200,7 +202,7 @@ function ChatContent() {
                     onKeyDown={(e) => {
                         if (e.key === "Enter") handleSendMessage();
                     }}
-                    placeholder="Tulis pesan..."
+                    placeholder="Write a message..."
                     className="flex-1 bg-gray-100 rounded-2xl px-5 py-4 text-xs font-semibold outline-none border border-transparent focus:border-gray-200 focus:bg-white text-gray-800 transition-all"
                 />
                 <button
@@ -216,23 +218,23 @@ function ChatContent() {
                 <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
                     <div className="bg-white rounded-3xl p-6 w-full max-w-[320px] shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200 text-center">
                         <h3 className="text-base font-black text-gray-900 leading-tight">
-                            Akhiri Sesi Konseling?
+                            End Counseling Session?
                         </h3>
                         <p className="text-xs font-semibold text-gray-500 leading-relaxed">
-                            Apakah Anda yakin ingin menyelesaikan sesi konseling chat dengan {patientName}? Tindakan ini tidak dapat dibatalkan.
+                            Are you sure you want to end the chat counseling session with {patientName}? This action cannot be undone.
                         </p>
                         <div className="flex gap-3 mt-2">
                             <button
                                 onClick={() => setShowEndModal(false)}
                                 className="flex-1 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 active:scale-[0.97] font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer"
                             >
-                                Batal
+                                Cancel
                             </button>
                             <button
                                 onClick={handleConfirmEndSession}
                                 className="flex-1 bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.97] text-white font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer shadow-md shadow-[#0b744f]/10"
                             >
-                                Akhiri Sesi
+                                End Session
                             </button>
                         </div>
                     </div>

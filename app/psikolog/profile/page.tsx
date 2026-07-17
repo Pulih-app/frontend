@@ -38,7 +38,7 @@ export default function PsychologistProfilePage() {
     // Profile States
     const [avatar, setAvatar] = useState("/assets/profile.png");
     const [description, setDescription] = useState(
-        "Penanganan kecemasan, pencegahan relapse, terapi kognitif perilaku (CBT), serta bimbingan emosional."
+        "Specialized in anxiety treatment, relapse prevention, cognitive behavioral therapy (CBT), and emotional guidance."
     );
 
     // Edit Modal States
@@ -110,7 +110,7 @@ export default function PsychologistProfilePage() {
             window.localStorage.setItem("psychologist-description", tempDescription);
         }
         setShowEditModal(false);
-        setToastMessage("Profil Anda berhasil diperbarui!");
+        setToastMessage("Your profile has been successfully updated!");
         setTimeout(() => setToastMessage(null), 3000);
     };
 
@@ -149,7 +149,7 @@ export default function PsychologistProfilePage() {
 
                         <div className="mt-4 text-center">
                             <p className="text-[#effbf4]/80 text-[11px] font-extrabold uppercase tracking-wider">
-                                {isMounted ? (profession === "umum" ? "Psikolog Umum" : "Psikolog Klinis") : "Psikolog"}
+                                {isMounted ? (profession === "umum" ? "General Psychologist" : "Clinical Psychologist") : "Psychologist"}
                             </p>
                             <h2 className="text-white text-xl font-black mt-1">
                                 Dr. Billy, M.Psi.
@@ -162,7 +162,7 @@ export default function PsychologistProfilePage() {
 
                     {/* White bottom info banner */}
                     <div className="bg-white px-6 py-4 border-t border-gray-50 text-left">
-                        <p className="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider mb-1">Spesialisasi & Bidang</p>
+                        <p className="text-[10px] text-gray-400 font-extrabold uppercase tracking-wider mb-1">Specialization & Fields</p>
                         <p className="text-xs font-bold text-gray-800 leading-relaxed">
                             {description}
                         </p>
@@ -172,7 +172,7 @@ export default function PsychologistProfilePage() {
 
             {/* ── Manage ────────────────────────────────────────────────────────── */}
             <div className="px-6 mt-8 flex-1">
-                <h2 className="text-xl font-black text-gray-900 mb-4 text-left">Kelola Akun</h2>
+                <h2 className="text-xl font-black text-gray-900 mb-4 text-left">Manage Account</h2>
                 <div className="space-y-4">
                     {/* Edit Profil */}
                     <button
@@ -180,13 +180,13 @@ export default function PsychologistProfilePage() {
                         className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
                         <div className="flex-1 min-w-0 relative z-10 pr-14">
-                            <p className="text-sm font-black text-gray-900 leading-tight">Edit Profil</p>
-                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Ubah foto profil dan deskripsi spesialisasi Anda</p>
+                            <p className="text-sm font-black text-gray-900 leading-tight">Edit Profile</p>
+                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Change your profile photo and specialization bio</p>
                         </div>
                         <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
                             <Image
                                 src="/assets/billy_editprofile.png"
-                                alt="Billy Edit Profil"
+                                alt="Billy Edit Profile"
                                 width={72}
                                 height={72}
                                 className="object-contain object-bottom w-full h-full"
@@ -200,13 +200,13 @@ export default function PsychologistProfilePage() {
                         className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
                         <div className="flex-1 min-w-0 relative z-10 pr-14">
-                            <p className="text-sm font-black text-gray-900 leading-tight">Dokumen Legalitas</p>
-                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Lihat berkas legalitas STRPK, SIPPK, SIPP, STR, Ijazah Anda</p>
+                            <p className="text-sm font-black text-gray-900 leading-tight">Legal Documents</p>
+                            <p className="text-[10px] font-semibold text-gray-400 mt-1">View your STRPK, SIPPK, SIPP, STR, and Diploma documents</p>
                         </div>
                         <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
                             <Image
                                 src="/assets/billy_dokumen.png"
-                                alt="Billy Dokumen"
+                                alt="Billy Documents"
                                 width={72}
                                 height={72}
                                 className="object-contain object-bottom w-full h-full"
@@ -220,13 +220,13 @@ export default function PsychologistProfilePage() {
                         className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
                         <div className="flex-1 min-w-0 relative z-10 pr-14">
-                            <p className="text-sm font-black text-gray-900 leading-tight">Atur Jadwal Praktik</p>
-                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Kelola hari & jam ketersediaan konseling Anda</p>
+                            <p className="text-sm font-black text-gray-900 leading-tight">Set Practice Schedule</p>
+                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Manage your counseling availability days and hours</p>
                         </div>
                         <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
                             <Image
                                 src="/assets/billy_jadwal.png"
-                                alt="Billy Jadwal"
+                                alt="Billy Schedule"
                                 width={72}
                                 height={72}
                                 className="object-contain object-bottom w-full h-full"
@@ -240,8 +240,8 @@ export default function PsychologistProfilePage() {
                         className="w-full flex items-center justify-between bg-[#effbf4] hover:bg-[#e4f7eb] rounded-[22px] px-5 py-4 text-left active:scale-[0.98] transition-all cursor-pointer border border-[#d2f3df]/35 relative overflow-hidden min-h-[82px]"
                     >
                         <div className="flex-1 min-w-0 relative z-10 pr-14">
-                            <p className="text-sm font-black text-gray-900 leading-tight">Atur Tarif Konseling</p>
-                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Sesuaikan harga layanan sesi konsultasi online</p>
+                            <p className="text-sm font-black text-gray-900 leading-tight">Set Counseling Fees</p>
+                            <p className="text-[10px] font-semibold text-gray-400 mt-1">Adjust your online counseling session pricing</p>
                         </div>
                         <div className="absolute right-2 bottom-0 w-[72px] h-[72px] shrink-0 z-0 select-none pointer-events-none">
                             <Image
@@ -261,7 +261,7 @@ export default function PsychologistProfilePage() {
                     className="w-full flex items-center justify-center gap-2 bg-red-50 hover:bg-red-100/70 active:scale-[0.98] text-red-600 rounded-[20px] px-4 py-4 mt-6 transition-all font-extrabold text-xs cursor-pointer shadow-sm shadow-red-100/50"
                 >
                     <LogOut size={16} strokeWidth={2.5} />
-                    KELUAR AKUN
+                    LOG OUT
                 </button>
             </div>
 
@@ -271,10 +271,10 @@ export default function PsychologistProfilePage() {
                     <div className="bg-white rounded-3xl p-6 w-full max-w-[320px] shadow-2xl border border-gray-100 flex flex-col gap-4 animate-in fade-in zoom-in duration-200">
                         <div className="text-center">
                             <h3 className="text-base font-black text-gray-900 leading-tight">
-                                Edit Profil Psikolog
+                                Edit Psychologist Profile
                             </h3>
                             <p className="text-[10px] font-semibold text-gray-400 mt-0.5">
-                                Perbarui data profil publik Anda
+                                Update your public profile information
                             </p>
                         </div>
                         <div className="h-px bg-gray-100 w-full" />
@@ -282,7 +282,7 @@ export default function PsychologistProfilePage() {
                         {/* Avatar edit */}
                         <div className="flex flex-col items-center gap-2">
                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                                Foto Profil
+                                Profile Photo
                             </label>
                             <div className="relative group w-24 h-24 rounded-full overflow-hidden border-2 border-gray-100 shadow-sm flex items-center justify-center bg-gray-50">
                                 <Image
@@ -292,7 +292,7 @@ export default function PsychologistProfilePage() {
                                     className="object-cover"
                                 />
                                 <label className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[10px] font-black text-white uppercase tracking-wider cursor-pointer">
-                                    Ubah Foto
+                                    Change Photo
                                     <input
                                         type="file"
                                         accept="image/*"
@@ -306,12 +306,12 @@ export default function PsychologistProfilePage() {
                         {/* Description edit */}
                         <div className="flex flex-col gap-1 text-left">
                             <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider px-1">
-                                Spesialisasi & Bidang
+                                Specialization & Fields
                             </label>
                             <textarea
                                 value={tempDescription}
                                 onChange={(e) => setTempDescription(e.target.value)}
-                                placeholder="Tuliskan spesialisasi dan bidang keahlian Anda..."
+                                placeholder="Describe your specialization and fields of expertise..."
                                 rows={3}
                                 className="w-full rounded-2xl border-2 border-transparent bg-[#f5f5f5] px-4 py-3 text-xs font-semibold outline-none focus:border-[#0b744f] focus:bg-white transition-colors text-gray-800 resize-none leading-relaxed"
                             />
@@ -323,13 +323,13 @@ export default function PsychologistProfilePage() {
                                 onClick={() => setShowEditModal(false)}
                                 className="flex-1 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 active:scale-[0.97] font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer text-center"
                             >
-                                Batal
+                                Cancel
                             </button>
                             <button
                                 onClick={handleSaveProfile}
                                 className="flex-1 bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.97] text-white font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer text-center shadow-md shadow-[#0b744f]/10"
                             >
-                                Simpan
+                                Save
                             </button>
                         </div>
                     </div>
@@ -342,7 +342,7 @@ export default function PsychologistProfilePage() {
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-gray-100 pb-4 shrink-0 -mx-6 px-6">
                         <h3 className="text-[17px] font-black text-gray-900 tracking-tight">
-                            Dokumen Legalitas
+                            Legal Documents
                         </h3>
                         <button
                             onClick={() => setShowDocsModal(false)}
@@ -353,7 +353,7 @@ export default function PsychologistProfilePage() {
                     </div>
 
                     <p className="text-xs text-gray-400 font-semibold text-left mt-4 leading-relaxed">
-                        Berikut adalah dokumen legalitas praktik Anda yang telah diverifikasi oleh tim Pulih.
+                        Here are your practice legal documents verified by the Pulih team.
                     </p>
 
                     {/* Docs List */}
@@ -383,7 +383,7 @@ export default function PsychologistProfilePage() {
                                             </div>
                                         </div>
                                         <span className="text-[10px] font-black text-[#0b744f] uppercase tracking-wider bg-[#effbf4] px-2.5 py-1 rounded-xl border border-[#d2f3df] shrink-0">
-                                            Terverifikasi
+                                            Verified
                                         </span>
                                     </div>
 
@@ -393,7 +393,7 @@ export default function PsychologistProfilePage() {
                                             onClick={() => setPreviewDoc(doc)}
                                             className="bg-[#effbf4] hover:bg-[#e4f7eb] text-[#0b744f] active:scale-[0.97] text-[10px] font-black uppercase tracking-wider px-4 py-2 rounded-xl transition-all cursor-pointer border border-[#d2f3df]/30 shadow-sm"
                                         >
-                                            Lihat Dokumen
+                                            View Document
                                         </button>
                                     </div>
                                 </div>
@@ -406,7 +406,7 @@ export default function PsychologistProfilePage() {
                         onClick={() => setShowDocsModal(false)}
                         className="w-full bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.98] text-white font-extrabold text-xs py-4 rounded-2xl transition-all mt-6 cursor-pointer shadow-md shadow-[#0b744f]/10"
                     >
-                        KEMBALI KE PROFIL
+                        BACK TO PROFILE
                     </button>
                 </div>
             )}
@@ -418,7 +418,7 @@ export default function PsychologistProfilePage() {
                         {/* Header */}
                         <div className="flex items-center justify-between border-b border-gray-100 pb-3">
                             <h4 className="text-sm font-black text-gray-900">
-                                Pratinjau Dokumen
+                                Document Preview
                             </h4>
                             <button
                                 onClick={() => setPreviewDoc(null)}
@@ -436,7 +436,7 @@ export default function PsychologistProfilePage() {
                             </div>
 
                             <span className="text-[9px] font-extrabold text-[#0b744f] uppercase tracking-widest border border-[#0b744f]/30 px-2 py-0.5 rounded bg-white">
-                                PULIH LEGALITAS
+                                PULIH LEGALITY
                             </span>
 
                             <h3 className="text-sm font-black text-gray-800 mt-4 uppercase tracking-wide">
@@ -448,12 +448,12 @@ export default function PsychologistProfilePage() {
 
                             <div className="h-px bg-gray-200/50 w-24 my-3" />
 
-                            <p className="text-[10px] text-gray-500 font-bold">Diberikan Kepada:</p>
+                            <p className="text-[10px] text-gray-500 font-bold">Awarded To:</p>
                             <p className="text-xs font-black text-gray-800 mt-0.5">Dr. Billy, M.Psi.</p>
 
                             <div className="mt-5 flex items-center gap-1.5 bg-[#effbf4] text-[#0b744f] border border-[#d2f3df] px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
                                 <ShieldCheck size={12} strokeWidth={3} />
-                                Terverifikasi
+                                Verified
                             </div>
                         </div>
 
@@ -462,7 +462,7 @@ export default function PsychologistProfilePage() {
                             onClick={() => setPreviewDoc(null)}
                             className="w-full bg-[#0b744f] hover:bg-[#095f40] active:scale-[0.98] text-white font-extrabold text-xs py-3.5 rounded-2xl transition-all cursor-pointer shadow-md shadow-[#0b744f]/10"
                         >
-                            Tutup
+                            Close
                         </button>
                     </div>
                 </div>
