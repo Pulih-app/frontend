@@ -12,8 +12,8 @@ export default function BookingSuccessPage() {
       {/* Image */}
       <div className="relative mb-6 flex justify-center">
         <Image
-          src="/assets/succes.png"
-          alt="Payment Successful"
+          src="/assets/billy_editprofile.png"
+          alt="Pulih mascot"
           width={200}
           height={200}
           className="object-contain"
@@ -23,7 +23,7 @@ export default function BookingSuccessPage() {
 
       {/* Description */}
       <p className="text-[13px] text-gray-700 leading-relaxed mb-auto px-2">
-        Please upload your valid practice licenses and certificates. Your data will be kept secure and used strictly for professional verification.
+        Your payment is being verified. Open your booking list to check consultation status and session details.
       </p>
 
       {/* Button */}

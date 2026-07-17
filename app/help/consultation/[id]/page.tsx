@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ArrowLeft, Star, MessageCircle, Video } from "lucide-react";
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ScheduleCalendar } from "@/components/ScheduleCalendar";
 import Button from "@/components/Button";
 
@@ -95,8 +95,6 @@ function channelIcon(channel: string) {
 export default function PsychologistProfilePage() {
   const params = useParams();
   const id = params?.id as string;
-  const router = useRouter();
-
   const [psychologist, setPsychologist] = useState<Psychologist | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -179,12 +177,16 @@ export default function PsychologistProfilePage() {
       }
 
       if (json.data?.paymentUrl) {
-        router.push(json.data.paymentUrl);
+        const paymentUrl = new URL(json.data.paymentUrl);
+        if (!["http:", "https:"].includes(paymentUrl.protocol)) {
+          throw new Error("Invalid payment URL returned by server");
+        }
+        window.location.assign(paymentUrl.toString());
       } else {
         alert("Booking successful, but no payment URL returned.");
       }
-    } catch (err: any) {
-      alert(err.message || "An error occurred while booking.");
+    } catch (err: unknown) {
+      alert(err instanceof Error ? err.message : "An error occurred while booking.");
     } finally {
       setBookingLoading(false);
     }
@@ -219,6 +221,7 @@ export default function PsychologistProfilePage() {
   );
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (id) doFetch();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
